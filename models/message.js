@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         id_message: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            primaryKey: true
         },
         content: {
             type: DataTypes.STRING(1234),
