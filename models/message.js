@@ -4,11 +4,12 @@ module.exports = (sequelize, DataTypes) => {
         {
         id_message: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true
+            // allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
         },
         content: {
-            type: DataTypes.STRING(1234),
+            type: DataTypes.STRING(2000),
         },
         from: {
             type: DataTypes.INTEGER,
