@@ -1,22 +1,21 @@
-const db = require('../models/index')
-const Message = db.message //יחיד או רבים???
+const db = require('../models/qst_in_questionnaire')
+const Qst = db.qst_in_questionnaire //יחיד או רבים???
 
-class MessageController {
+class QstInQuestionnaireController {
 
-    createNewMessage = async (req, res) => {
+    createNewQst = async (req, res) => {
         const contents = req.body;
-        const message = await Message.create(contents)
-        if (message)
-            return res.status(201).json({ message: 'New message created' })
-        else
-            return res.status(400)
+        const qst = await Qst.create(contents)
+        if (qst)
+            return res.status(201).json({ message: 'New question created' })
+        return res.status(400)
     }
 
     //localhost:3600/api/messages
-    getAllMessages = async (req, res) => {
-        const messages = await Message.findAll({});
+    getAllQst = async (req, res) => {
+        var messages = await Message.findAll({});
         if (!messages?.length)
-            return res.status(400).json({ message: 'No messages found' })
+            return res.status(204).json({ message: 'No messages found' });//למה לא שולח את ההודעה?
 
         //מורה שולחת ,מורה מקבלת, האם בוצע
         const parameters = req.query;
@@ -28,13 +27,25 @@ class MessageController {
             });
         }
 
-        if (parameters.to) {
-
+        if (parameters.to) {// != null
+            messages = await Message.findAll({
+                where: {
+                    to: parameters.to
+                }
+            });
         }
 
-        if (parameters.isCommit) {
+        // if (parameters.isCommit) {
+        //     messages = await Message.findAll({
+        //         where: {
+        //             isCommit: parameters.isCommit
+        //         }
+        //     });
+        // }
 
-        }
+        if (!messages.length)
+            return res.status(204).json({ message: 'No messages found' });
+
         res.json(messages);
     }
 
@@ -46,12 +57,31 @@ class MessageController {
             where: {
                 id_message: id
             }
-        })
+        });
+
+        if (!message)
+            return res.status(204).json({ message: `Message ID ${id} not found` });
+
         res.json(message);
     }
+
+    deleteQst = async (req, res) => { 
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ message: 'question ID required' });
+        }
+        await Message.destroy({
+            where: {
+                id_message: id
+            }
+        });
+
+        res.json(`Message ID ${id} deleted`);
+    }
+
 }
 
-const messageController = new MessageController();
+const qstInQuestionnaireController = new QstInQuestionnaireController();
 
 
-module.exports = messageController;
+module.exports = qstInQuestionnaireController;
