@@ -18,7 +18,7 @@ app.use('/', require('./routes/root'))
 
 //api
 app.use('/api/courses', require("./routes/courseRoutes"));
-app.use('/api/messages', require('./routes/messageRoutes'));
+// app.use('/api/messages', require('./routes/messageRoutes'));
 
 app.all('*', (req, res) => {
     res.status(404)
