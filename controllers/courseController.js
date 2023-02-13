@@ -2,10 +2,9 @@ const courseDal = require("../dal/courseDal");
 
 class CourseController {
 
-    //localhost:3600/api/messages
     getAllCourses = async (req, res) => {
         const courses = await courseDal.getAllCourses();
-        if (!courses?.length)
+        if (!courses?.length)//איך יכול להיות null??
             return res.status(400).json({ message: 'No messages found' })
         res.json(courses);
     }

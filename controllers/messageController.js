@@ -2,8 +2,7 @@ const messageDal = require("../dal/messageDal");
 
 class MessageController {
 
-    //localhost:3600/api/messages
-    getAllMessages = async (req, res) => {
+    getAllMessages = async (req, res) => {//איך עושים חיפוש???
         const parameters = req.query;
         const messages = await messageDal.getAllMessages(parameters);
         if(!messages?.length)
@@ -19,7 +18,6 @@ class MessageController {
         return res.status(400);
     }
 
-    // //localhost:3600/api/messages/1
     getMessageById = async (req, res) => {
         const id = req.params.id;
         var message = await messageDal.getMessageById(id);

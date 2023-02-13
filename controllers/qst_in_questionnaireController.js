@@ -1,9 +1,7 @@
 const QstDal = require('../dal/qst_in_questionnaireDal');
 
-
 class QstInQuestionnaireController {
 
-// localhost:3600/api/messages
     getAllQst = async (req, res) => {
         var questinos = await QstDal.getAllQst();
         if (!questinos?.length)
@@ -11,7 +9,6 @@ class QstInQuestionnaireController {
         res.json(questinos);
     }
 
-    //localhost:3600/api/messages/:1
     getMessageById = async (req, res) => {
         const id = req.params.id;
         const question = await QstDal.getMessageById(id);
