@@ -28,11 +28,14 @@ const db = {}
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
+
+//////start bringing tables
 db.course = require('./course')(sequelize, DataTypes)
 db.message = require('./message')(sequelize, DataTypes)
-db.qst_in_questionnaire = require('./qst_in_questionnaire')(sequelize, DataTypes)
+ db.qst_in_questionnaire = require('./qst_in_questionnaire')(sequelize, DataTypes)
+//////////end bringing tables
 
-db.sequelize.sync({ force: false })
+db.sequelize.sync({ force:false })//change to alter:true
   .then(() => {
     console.log('yes re-sync done!')
   })
