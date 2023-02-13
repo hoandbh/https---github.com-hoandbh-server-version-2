@@ -32,8 +32,14 @@ db.sequelize = sequelize
 //////start bringing tables
 db.course = require('./course')(sequelize, DataTypes)
 db.message = require('./message')(sequelize, DataTypes)
- db.qst_in_questionnaire = require('./qst_in_questionnaire')(sequelize, DataTypes)
+db.qst_in_questionnaire = require('./qst_in_questionnaire')(sequelize, DataTypes)
 //////////end bringing tables
+
+db.qst_in_questionnaire.belongsTo(category, { foreignKey: "cateogry_id", as: "category" });
+book.belongsTo(author, { foreignKey: "author_id", as: "author" });
+author.hasMany(book, { foreignKey: "author_id", as: "books" });
+category.hasMany(book, { foreignKey: "cateogry_id", as: "books" });
+
 
 db.sequelize.sync({ force:false })//change to alter:true
   .then(() => {
