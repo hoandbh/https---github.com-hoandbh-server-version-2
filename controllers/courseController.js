@@ -17,7 +17,6 @@ class CourseController {
         return res.status(400);
     }
 
-
 }
 
 const courseController = new CourseController();
