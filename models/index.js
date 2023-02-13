@@ -31,6 +31,8 @@ db.sequelize = sequelize
 db.course = require('./course')(sequelize, DataTypes)
 db.message = require('./message')(sequelize, DataTypes)
 db.qst_in_questionnaire = require('./qst_in_questionnaire')(sequelize, DataTypes)
+db.questionnaire = require('./questionnaire')(sequelize,DataTypes)
+
 
 db.sequelize.sync({ force: false })
   .then(() => {
