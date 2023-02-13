@@ -4,15 +4,7 @@ const Message = db.message
 class MessageDal {
 
     getAllMessages = async (parameters) => {
-        var messages = await Message.findAll({
-            where:
-            {
-                (parameters.from)? from :parameters.from，
-               FirstName:["John","Jane"],
-               Age:{
-                 gt:18
-               }
-        });
+        var messages = await Message.findAll();
         //מורה שולחת ,מורה מקבלת, האם בוצע      
         // if(parameters.from){
         //     messages = await messages.findAll({
@@ -29,7 +21,7 @@ class MessageDal {
         // if(parameters.isCommit){
             
         // }
-        console.log(`hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh${typeof(messages)}${messages}`);
+
         return messages;
     }
 
@@ -37,6 +29,16 @@ class MessageDal {
         const message = await Message.create(content);
         return message;
     }
+
+    getMessageById = async (id) => {
+        var message = await Message.findOne({
+            where: {
+                id_message: id
+            }
+           })
+        return message;
+    }
+
 }
 
 const messageDal = new MessageDal();
