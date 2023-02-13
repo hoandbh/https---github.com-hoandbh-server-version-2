@@ -6,4 +6,7 @@ courseRoutes.route('/')
     .get(courseController.getAllCourses)
     .post(courseController.createNewCourse);
 
+courseRoutes.route('/:id')
+    .get(courseController.getCourseById);
+
 module.exports = courseRoutes;
