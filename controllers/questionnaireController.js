@@ -1,20 +1,48 @@
+const questionnaireDal = require("../dal/questionnaireDal");
 const questoinnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
 
     //localhost:3600/api/messages
 
-    getAllQuestionnaires = async(req,res)=>{
+    getAllQuestionnaires = async (req, res) => {
         const questionnaires = await questoinnaireDal.getAllQuestionnaires();
-        if(!messages?.length)
-            return res.status(400).json({message:'No questionnaires found'})
+        if (!messages?.length)
+            return res.status(400).json({ message: 'No questionnaires found' })
         res.json(questionnaires)
-        
+
     }
-    getQuestionnaire = async(req,res)=>{
-        const parameters = req.query;
-        const questionnaires = await questoinnaireDal.getAllQuestionnaires();
+    getQuestionnaireById = async (req, res) => {
+        const id = req.params.id;
+        const questionnaire = await questoinnaireDal.getQuestionnaireById(id);
+        if (questionnaire)
+            res.json(questionnaire)
+        else
+            res.status(204).send();
+    }
+    createQuestionnaire = async (req, res) => {
+        const content = req.body;
+        const questionnaire = questionnaireDal.createNewQuestionnaire(content);
+        if (questionnaire)
+            return res.status(201).json({ message: 'new questionnaire created' })
+
+    }
+    deleteQuestionnaire = async (req, res) => {
+        const id = req.params.id;
+        //the way I think: 
+        qstnr = this.getQuestionnaireById(id);
+        if(!qstnr)
+            return res.status(400).json({message:'no questionnaire with this ID'});
+        else
+            await questionnaireDal.deleteQuestionnaire(id);
+            res.json(`Questionnaire with ID ${id} was deleted`);
+        //what we did in msg controller
+        // if (!id) {
+        //     return res.status(400).json({ message: 'questionnaire id required' });
+        // } 
+        // await questionnaireDal.deleteQuestionnaire(id);
         
+
     }
 }
 
