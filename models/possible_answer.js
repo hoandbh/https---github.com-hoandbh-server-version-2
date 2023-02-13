@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const { sequelize, DataTypes } = require("./sequelize");
     const Possible_answer = sequelize.define(
         "possible_answers",
         {
@@ -28,5 +28,4 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false,
         }
     );
-    return Possible_answer;
-};
+module.exports = Possible_answer;
