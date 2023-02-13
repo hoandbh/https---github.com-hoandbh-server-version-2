@@ -4,11 +4,11 @@ const messageController = require('../controllers/messageController');
 
 messageRouter.route('/')
 .get(messageController.getAllMessages)
-.post(messageController.createNewMessage);
+// .post(messageController.createNewMessage);
 
 //localhost:3600/message/3
-messageRouter.route('/:id')
-.get(messageController.getMessageById)
-.delete(messageController.deleteMessage)
+// messageRouter.route('/:id')
+// .get(messageController.getMessageById)
+// .delete(messageController.deleteMessage)
 
 module.exports = messageRouter;

@@ -16,7 +16,6 @@ class CourseController {
         if (course)
             return res.status(201).json({ message: 'New course created' });
         return res.status(400);
-
     }
 
 

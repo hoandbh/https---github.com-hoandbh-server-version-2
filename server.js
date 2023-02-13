@@ -17,8 +17,8 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
 
 //api
-app.use('/api/courses', require("./routes/courseRoutes"));
-// app.use('/api/messages', require('./routes/messageRoutes'));
+app.use('/api/course', require("./routes/courseRoutes"));
+app.use('/api/message', require('./routes/messageRoutes'));
 
 app.all('*', (req, res) => {
     res.status(404)
