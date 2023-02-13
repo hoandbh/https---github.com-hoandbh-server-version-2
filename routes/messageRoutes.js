@@ -9,6 +9,6 @@ messageRouter.route('/')
 //localhost:3600/message/3
 messageRouter.route('/:id')
 .get(messageController.getMessageById)
-// .delete(messageController.deleteMessage)
+.delete(messageController.deleteMessage)
 
 module.exports = messageRouter;

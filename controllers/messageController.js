@@ -23,7 +23,17 @@ class MessageController {
         var message = await messageDal.getMessageById(id);
         if(message)
             res.json(message);
-        res.status(204).json({ message: `Message ID ${id} not found` });
+        else
+            res.status(204).send();
+    }
+
+    deleteMessage = async (req, res) => { 
+        const id = req.params.id;
+        if (!id) {//id can't be null??
+            return res.status(400).json({ message: 'question ID required' });
+        }
+        await messageDal.deleteMassage(id);//if not exist???
+        res.json(`Message ID ${id} deleted`);
     }
 }
 

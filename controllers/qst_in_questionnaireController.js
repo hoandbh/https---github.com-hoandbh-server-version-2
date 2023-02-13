@@ -14,7 +14,8 @@ class QstInQuestionnaireController {
         const question = await QstDal.getMessageById(id);
         if (question)
             res.json(question);
-        res.status(204).json({ message: `Message ID ${id} not found` });
+        else
+            res.status(204).json({ message: `Message ID ${id} not found` });
     }
 
     deleteQst = async (req, res) => { 

@@ -10,13 +10,22 @@ class CourseController {
     }
     
     createNewCourse = async (req, res) => {
-        const content = req.body;
+        const content = req.body;//חייבים לעשות וליציה
         const course = courseDal.createNewCourse(content);
-        if (course)
-            return res.status(201).json({ message: 'New course created' });
-        return res.status(400);
+        if (course)//how can be null????
+            res.status(201).json({ message: 'New course created' });
+        else
+            res.status(400);
     }
 
+    getCourseById =  async (req, res) => {
+        const id = req.params.id;
+        var course = await courseDal.getCourseById(id);
+        if(course)
+            res.json(course);
+        else
+            res.status(204).send();//!!!!
+    }
 
 }
 

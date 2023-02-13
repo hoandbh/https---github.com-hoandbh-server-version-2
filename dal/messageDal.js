@@ -5,23 +5,6 @@ class MessageDal {
 
     getAllMessages = async (parameters) => {
         var messages = await Message.findAll();
-        //מורה שולחת ,מורה מקבלת, האם בוצע      
-        // if(parameters.from){
-        //     messages = await messages.findAll({
-        //         where: {
-        //             from: parameters.from
-        //         }
-        //     });
-        // }
-
-        // if(parameters.to){
-            
-        // }
-
-        // if(parameters.isCommit){
-            
-        // }
-
         return messages;
     }
 
@@ -39,6 +22,13 @@ class MessageDal {
         return message;
     }
 
+    deleteMassage = async (id) => { 
+        await Message.destroy({
+            where: {
+                id_message: id
+            }
+        });
+    }
 }
 
 const messageDal = new MessageDal();

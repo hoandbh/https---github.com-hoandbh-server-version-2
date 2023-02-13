@@ -8,8 +8,17 @@ class CourseDal {
         return courses;
     }
 
-    createNewCourse = async (content) => {
+    createNewCourse = async (content) => { 
         const course = await Course.create(content);
+        return course;
+    }
+
+    getCourseById = async (id) => {
+        var course = await Course.findOne({
+            where: {
+                id_course: id
+            }
+           })
         return course;
     }
 }
