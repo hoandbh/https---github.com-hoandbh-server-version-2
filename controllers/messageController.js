@@ -30,7 +30,7 @@ class MessageController {
     deleteMessage = async (req, res) => { 
         const id = req.params.id;
         if (!id) {//id can't be null??
-            return res.status(400).json({ message: 'question ID required' });
+            return res.status(400).json({ message: 'message ID required' });
         }
         await messageDal.deleteMassage(id);//if not exist???
         res.json(`Message ID ${id} deleted`);
