@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const { sequelize, DataTypes } = require("./sequelize");
     const Qst_in_version= sequelize.define(
         "qst_in_versions",
         {
@@ -25,5 +25,4 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false,
         }
     );
-    return Qst_in_version;
-};
+module.exports = Qst_in_version;

@@ -32,14 +32,15 @@ class MessageDal {
         });
     }
 
-    search = async (where_) => { 
-        var messages = await Message.findAll({
+    search = async (whereCon) => { 
+        const messages = await Message.findAll({
             where:{
-                where_
+                [Op.and]:whereCon
             }
         })
         return messages;
     }
+    
 }
 
 const messageDal = new MessageDal();
