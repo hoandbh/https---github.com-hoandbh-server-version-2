@@ -8,8 +8,8 @@ const applyExtraSetup = () => {
         //  book.belongsTo(author, { foreignKey: "author_id", as: "author" });
         //  author.hasMany(book, { foreignKey: "author_id", as: "books" });
         //  category.hasMany(book, { foreignKey: "cateogry_id", as: "books" });
-        message.belongsTo(user)
-        user.hasMany(message)     
+        // message.belongsTo(user)
+        // user.hasMany(message)     
 
 }
 
