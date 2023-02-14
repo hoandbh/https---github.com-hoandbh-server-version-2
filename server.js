@@ -19,6 +19,7 @@ app.use('/', require('./routes/root'))
 //api
 app.use('/api/course', require("./routes/courseRoutes"));
 app.use('/api/message', require('./routes/messageRoutes'));
+app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
 
 app.all('*', (req, res) => {
     res.status(404)

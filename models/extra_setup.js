@@ -13,8 +13,8 @@ const applyExtraSetup = () => {
 //   foreignKey: "tutorialId",
 //   as: "tutorial",
 // });
-        message.belongsTo(user)
-        user.hasMany(message)     
+        // message.belongsTo(user)
+        // user.hasMany(message)     
 
 }
 
