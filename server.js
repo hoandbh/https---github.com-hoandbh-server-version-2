@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
 const PORT = process.env.PORT || 3600
-
+const questionnaire=require('./routes/questionnaireRoutes');
 //middleware
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -20,6 +20,7 @@ app.use('/', require('./routes/root'))
 app.use('/api/course', require("./routes/courseRoutes"));
 app.use('/api/message', require('./routes/messageRoutes'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
+app.use('/api/questionnaire',require('./routes/questionnaireRoutes') )
 
 app.all('*', (req, res) => {
     res.status(404)

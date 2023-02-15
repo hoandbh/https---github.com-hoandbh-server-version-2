@@ -1,6 +1,5 @@
 const questionnaireDal = require("../dal/questionnaireDal");
-const questoinnaireDal = require("../dal/questionnaireDal");
-const Questionnaire = require("../models/questionnaire");
+const questoinnaireDal = require('../dal/questionnaireDal')
 
 class QuestionnaireController {
 
