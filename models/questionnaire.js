@@ -4,9 +4,8 @@ const { sequelize, DataTypes } = require("./sequelize");
         {
             id_questionnaire: {
                 type: DataTypes.INTEGER,
-                //,allowNull:
-                //autoIncrement: true,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             owner: {
                 type: DataTypes.INTEGER
