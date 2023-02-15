@@ -1,6 +1,5 @@
 const questionnaireDal = require("../dal/questionnaireDal");
-const questoinnaireDal = require("../dal/questionnaireDal");
-const Questionnaire = require("../models/questionnaire");
+const questoinnaireDal = require('../dal/questionnaireDal')
 
 class QuestionnaireController {
 
@@ -8,7 +7,7 @@ class QuestionnaireController {
 
     getAllQuestionnaires = async (req, res) => {
         const questionnaires = await questoinnaireDal.getAllQuestionnaires();
-        if (!messages?.length)
+        if (!questionnaires?.length)
             return res.status(400).json({ message: 'No questionnaires found' })
         res.json(questionnaires)
 
