@@ -15,21 +15,10 @@ const applyExtraSetup = () => {
         // });
         // message.belongsTo(user)
         // user.hasMany(message)
-<<<<<<< HEAD
-         
-        // qst_in_questionnaire.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire"});
-        // questionnaire.hasMany(qst_in_questionnaire,{foreignKey:"questionnaire", as: "questions"});
-
-
-        // possible_answer.belongsTo(qst_in_questionnaire,{foreignKey:"qst", as: "question"});
-        // qst_in_questionnaire.hasMany(possible_answer,{foreignKey:"qst", as: "answers" });
-
-=======
         // qst_in_questionnaire.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire"});
         // questionnaire.hasMany(qst_in_questionnaire,{foreignKey:"questionnaire", as: "questions"});
         // possible_answer.belongsTo(qst_in_questionnaire,{foreignKey:"qst", as: "question"});
         // qst_in_questionnaire.hasMany(possible_answer,{foreignKey:"qst", as: "answers" });
->>>>>>> 13c9222374e1301103e7597dc0e718a2b024663f
 }
 
 module.exports = { applyExtraSetup };

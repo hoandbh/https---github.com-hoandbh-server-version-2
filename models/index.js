@@ -25,11 +25,7 @@ db.version = require('./version')
 
 
 applyExtraSetup();
-<<<<<<< HEAD
 db.sequelize.sync({ alter:true })//change to alter:true
-=======
-db.sequelize.sync({ alter:true })//change to force: false
->>>>>>> 13c9222374e1301103e7597dc0e718a2b024663f
   .then(() => {
     console.log('yes re-sync done!')
   })
