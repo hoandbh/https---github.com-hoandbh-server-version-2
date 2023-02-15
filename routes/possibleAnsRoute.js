@@ -13,4 +13,6 @@ possibleAnsRouter.route('/')
 //localhost:3600/possible_answer/444
 possibleAnsRouter.route('/:id')
 .get(pAnsController.getPossibleAnsById)
-.delete(pAnsController.delete)
+// .delete(pAnsController.delete)
+
+module.exports = possibleAnsRouter;

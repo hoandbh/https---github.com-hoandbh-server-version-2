@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 const db = require('../models/index')
 const Message = db.message 
 
@@ -29,6 +31,16 @@ class MessageDal {
             }
         });
     }
+
+    search = async (whereCon) => { 
+        const messages = await Message.findAll({
+            where:{
+                [Op.and]:whereCon
+            }
+        })
+        return messages;
+    }
+    
 }
 
 const messageDal = new MessageDal();
