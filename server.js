@@ -5,12 +5,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
-<<<<<<< HEAD
 const PORT =  4000//||process.env.PORT 
-=======
-const PORT = process.env.PORT || 3600
-
->>>>>>> e0a0fe8b7acad9ba4e49f076603574f224d0a9c2
 //middleware
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -24,7 +19,7 @@ app.use('/', require('./routes/root'))
 app.use('/api/course', require("./routes/courseRoutes"));
 app.use('/api/message', require('./routes/messageRoutes'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
-
+app.use('/api/questionnaire',require('./routes/questionnaireRoutes'))
 app.all('*', (req, res) => {
     res.status(404)
     if (req.accepts('html')) {
