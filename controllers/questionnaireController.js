@@ -13,6 +13,8 @@ class QuestionnaireController {
 
     }
     getQuestionnaireById = async (req, res) => {
+
+        //this function really brings all the questions that belong to this questionnaire 
         const id = req.params.id;
         const questionnaire = await questoinnaireDal.getQuestionnaireById(id);
         if (questionnaire)
