@@ -23,4 +23,5 @@ qstInQestionnaireRouter.route('/')
 // .get(pAnsController.getPossibleAnsById)
 // // .delete(pAnsController.delete)
 
-// module.exports = possibleAnsRouter;
+// module.exports = questionnaireRouter;
+module.exports = qstInQestionnaireRouter;

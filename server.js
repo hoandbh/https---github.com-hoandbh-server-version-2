@@ -20,7 +20,8 @@ app.use('/api/course', require("./routes/courseRoutes"));
 app.use('/api/message', require('./routes/messageRoutes'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
 app.use('/api/questionnaire',require('./routes/questionnaireRoutes'))
-app.use('/api/qst_in_questionnaire',require('./routes/qstInQuestionnaireRoute'))
+app.use('/api/qst_in_questionnaire',require('./routes/qstInQuestionnaireRoutes'))
+
 app.all('*', (req, res) => {
     res.status(404)
     if (req.accepts('html')) {

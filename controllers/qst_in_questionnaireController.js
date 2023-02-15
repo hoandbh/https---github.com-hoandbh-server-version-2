@@ -20,11 +20,16 @@ class QstInQuestionnaireController {
 
 
     createQstInAnswer = async(req,res)=>{
+        console.log("innnnnnn1111111");
         const content = req.body;
+        console.log("aaaaaaaaa "+content);
         const qst = QstDal.createNewQst(content);
+        console.log("aaaaaaaaa "+qst);
         if(qst)
             return res.status(201).json({message:"new question in questionnaire created"})
     }
+
+    
     deleteQst = async (req, res) => { 
         const id = req.params.id;
         if (!id) {//לעשות את הבדיקה הזו תמיד??
