@@ -20,6 +20,10 @@ class AnsInVersionDal {
         return ans;
     }
 
+    // updateAnsInVersion = async(content)=>{
+    //     const ans = await AnsInVersion.update({})
+    // }
+
     // deleteAnsInVersion = async(id)=>{
     //     await
     // }
