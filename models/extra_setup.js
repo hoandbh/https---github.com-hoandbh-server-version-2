@@ -2,8 +2,8 @@ const { sequelize } = require("./sequelize");
 
 const applyExtraSetup = () => {
 
-    const {course, message, qst_in_questionnaire, ans_in_version, possible_answer,
-           qst_in_version,questionnaire,score, test, user, version} = sequelize.models;
+    const {course, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
+           qst_in_versions,questionnaire,scores, test, users, versions} = sequelize.models;
         //  book.belongsTo(category, { foreignKey: "cateogry_id", as: "category" });
         //  book.belongsTo(author, { foreignKey: "author_id", as: "author" });
         //  author.hasMany(book, { foreignKey: "author_id", as: "books" });
@@ -15,21 +15,14 @@ const applyExtraSetup = () => {
         // });
         // message.belongsTo(user)
         // user.hasMany(message)
-<<<<<<< HEAD
          
-        // qst_in_questionnaire.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire"});
-        // questionnaire.hasMany(qst_in_questionnaire,{foreignKey:"questionnaire", as: "questions"});
+        qst_in_questionnaires.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire_id"});
+        questionnaire.hasMany(qst_in_questionnaires,{foreignKey:"questionnaire", as: "questions"});
 
 
         // possible_answer.belongsTo(qst_in_questionnaire,{foreignKey:"qst", as: "question"});
         // qst_in_questionnaire.hasMany(possible_answer,{foreignKey:"qst", as: "answers" });
 
-=======
-        // qst_in_questionnaire.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire"});
-        // questionnaire.hasMany(qst_in_questionnaire,{foreignKey:"questionnaire", as: "questions"});
-        // possible_answer.belongsTo(qst_in_questionnaire,{foreignKey:"qst", as: "question"});
-        // qst_in_questionnaire.hasMany(possible_answer,{foreignKey:"qst", as: "answers" });
->>>>>>> 13c9222374e1301103e7597dc0e718a2b024663f
 }
 
 module.exports = { applyExtraSetup };
