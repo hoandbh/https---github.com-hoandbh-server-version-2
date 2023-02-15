@@ -4,10 +4,8 @@ const Questionnaire = sequelize.define(
     {
         id_questionnaire: {
             type: DataTypes.INTEGER,
-            //,allowNull:
             primaryKey: true,
-            //autoIncrement: true,
-
+            autoIncrement: true,
         },
         owner: {
             type: DataTypes.INTEGER
