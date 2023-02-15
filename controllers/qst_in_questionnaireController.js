@@ -9,15 +9,22 @@ class QstInQuestionnaireController {
         res.json(questinos);
     }
 
-    getMessageById = async (req, res) => {
-        const id = req.params.id;
-        const question = await QstDal.getMessageById(id);
-        if (question)
-            res.json(question);
-        else
-            res.status(204).json({ message: `Message ID ${id} not found` });
-    }
+    // getMessageById = async (req, res) => {
+    //     const id = req.params.id;
+    //     const question = await QstDal.getMessageById(id);
+    //     if (question)
+    //         res.json(question);
+    //     else
+    //         res.status(204).json({ message: `Message ID ${id} not found` });
+    // }
 
+
+    createQstInAnswer = async(req,res)=>{
+        const content = req.body;
+        const qst = QstDal.createNewQst(content);
+        if(qst)
+            return res.status(201).json({message:"new question in questionnaire created"})
+    }
     deleteQst = async (req, res) => { 
         const id = req.params.id;
         if (!id) {//לעשות את הבדיקה הזו תמיד??
