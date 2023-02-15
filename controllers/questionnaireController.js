@@ -22,6 +22,11 @@ class QuestionnaireController {
         else
             res.status(204).send();
     }
+
+    getFullQuestionnaire = async(req,res)=>{
+        const id = req.params.id;
+        const questionnaire
+    }
     createQuestionnaire = async (req, res) => {
         const content = req.body;
         const questionnaire = questionnaireDal.createNewQuestionnaire(content);
