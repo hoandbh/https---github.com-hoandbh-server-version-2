@@ -8,7 +8,7 @@ const applyExtraSetup = () => {
         //  book.belongsTo(author, { foreignKey: "author_id", as: "author" });
         //  author.hasMany(book, { foreignKey: "author_id", as: "books" });
         //  category.hasMany(book, { foreignKey: "cateogry_id", as: "books" });
-//         Tutorial.hasMany(Comment, { as: "comments" });
+        // Tutorial.hasMany(Comment, { as: "comments" });
         // Comment.belongsTo(Tutorial, {
         //   foreignKey: "tutorialId",
         //   as: "tutorial",
