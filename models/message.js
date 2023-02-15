@@ -1,7 +1,7 @@
 const { sequelize, DataTypes } = require("./sequelize");
-    const Message = sequelize.define(
-        "messages",
-        {
+const Message = sequelize.define(
+    "messages",
+    {
         id_message: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -19,11 +19,10 @@ const { sequelize, DataTypes } = require("./sequelize");
         date: {
             type: DataTypes.DATE,
         }
-        },
-        {
+    },
+    {
         timestamps: false,
-        });
+    });
 module.exports = Message;
-    
 
-    
+
