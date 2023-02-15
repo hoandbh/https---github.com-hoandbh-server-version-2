@@ -1,5 +1,6 @@
 const questionnaireDal = require("../dal/questionnaireDal");
 const questoinnaireDal = require("../dal/questionnaireDal");
+const Questionnaire = require("../models/questionnaire");
 
 class QuestionnaireController {
 
@@ -13,12 +14,24 @@ class QuestionnaireController {
 
     }
     getQuestionnaireById = async (req, res) => {
+
+        //this function really brings all the questions that belong to this questionnaire 
         const id = req.params.id;
         const questionnaire = await questoinnaireDal.getQuestionnaireById(id);
         if (questionnaire)
             res.json(questionnaire)
         else
             res.status(204).send();
+    }
+
+    getFullQuestionnaire = async (req, res) => {
+        const id = req.params.id;
+        const fullQuestionnaire = await questionnaireDal.getFullQuestionnaireById(id);
+        if (fullQuestionnaire)
+            res.json(fullQuestionnaire)
+        else
+            res.status(204).send()
+
     }
     createQuestionnaire = async (req, res) => {
         const content = req.body;
@@ -31,17 +44,17 @@ class QuestionnaireController {
         const id = req.params.id;
         //the way I think: 
         qstnr = this.getQuestionnaireById(id);
-        if(!qstnr)
-            return res.status(400).json({message:'no questionnaire with this ID'});
+        if (!qstnr)
+            return res.status(400).json({ message: 'no questionnaire with this ID' });
         else
             await questionnaireDal.deleteQuestionnaire(id);
-            res.json(`Questionnaire with ID ${id} was deleted`);
+        res.json(`Questionnaire with ID ${id} was deleted`);
         //what we did in msg controller
         // if (!id) {
         //     return res.status(400).json({ message: 'questionnaire id required' });
         // } 
         // await questionnaireDal.deleteQuestionnaire(id);
-        
+
 
     }
 }
