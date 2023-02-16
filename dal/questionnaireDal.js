@@ -1,3 +1,5 @@
+const { model } = require('sequelize');
+const { possible_answer } = require('../models/index');
 const db = require('../models/index');
 const Questionnaire = db.questionnaire
 
@@ -28,10 +30,21 @@ class QuestionnaireDal {
             {
                 where:{id_questionnaire:id},
                 attributes:['owner','date'],
-                include:'questions'
+                 include:'questions'
+                //include:[model:Questions]
+
+                // include:[{questions,include :[possible_answer]}]
+
             }
         )
         return fullQuestoinnare;
+
+
+        /*
+        const data = await User.findAll({
+    where: { id: 1 },
+    include: [{ model: Invoice, include: [City] }],
+    })*/
     }
     createNewQuestionnaire = async (content) => {
         const quest = await Questionnaire.create(content);

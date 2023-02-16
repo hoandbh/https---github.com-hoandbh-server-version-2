@@ -19,7 +19,6 @@ const applyExtraSetup = () => {
         qst_in_questionnaires.belongsTo(questionnaire, {foreignKey: "questionnaire", as: "questionnaire_id"});
         questionnaire.hasMany(qst_in_questionnaires,{foreignKey:"questionnaire", as: "questions"});
 
-
         possible_answers.belongsTo(qst_in_questionnaires,{foreignKey:"qst", as: "question"});
         qst_in_questionnaires.hasMany(possible_answers,{foreignKey:"qst", as: "answers" });
 

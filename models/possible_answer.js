@@ -5,8 +5,16 @@ const { sequelize, DataTypes } = require("./sequelize");
             id_ans: {
                 type: DataTypes.INTEGER,
                 //,allowNull:
-                //autoIncrement: true,
+                autoIncrement: true,
                 primaryKey: true
+
+
+                //auto increment didn't work
+                //i ran this in sql only:
+                /*
+                ALTER TABLE `try`.`possible_answers` 
+                CHANGE COLUMN `id_ans` `id_ans` INT NOT NULL AUTO_INCREMENT ;
+                */
             },
             qst: {
                 type: DataTypes.INTEGER
@@ -17,8 +25,8 @@ const { sequelize, DataTypes } = require("./sequelize");
                 //,allowNull:
             },
             pic_path: {
-                type: DataTypes.STRING
-                //,allowNull:
+                type: DataTypes.STRING,
+                allowNull:true
             },
             is_correct:{
                 type:DataTypes.BOOLEAN

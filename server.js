@@ -5,7 +5,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
-const PORT =  4000//||process.env.PORT 
+const PORT =  3600//||process.env.PORT 
 //middleware
 app.use(cors(corsOptions))
 app.use(express.json())
