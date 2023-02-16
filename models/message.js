@@ -18,6 +18,7 @@ const Message = sequelize.define(
         },
         date: {
             type: DataTypes.DATE,
+            allowNull:true
         }
     },
     {
