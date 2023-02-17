@@ -27,7 +27,7 @@ class QuestionnaireController {
         const id = req.params.id;
         const fullQuestionnaire = await questionnaireDal.getFullQuestionnaireById(id);
         if (fullQuestionnaire)
-            res.json(fullQuestionnaire)
+            return res.json(fullQuestionnaire)
         else
             res.status(204).send()
 
@@ -36,7 +36,7 @@ class QuestionnaireController {
         const content = req.body;
         const questionnaire = questionnaireDal.createNewQuestionnaire(content);
         if (questionnaire)
-            return res.status(201).json({ message: 'new questionnaire created' })
+            return res.status(201).json(questionnaire)
 
     }
     deleteQuestionnaire = async (req, res) => {

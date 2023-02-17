@@ -17,6 +17,8 @@ app.use('/', require('./routes/root'))
 
 //api
 app.use('/api/course', require("./routes/courseRoutes"));
+app.use('/api/version', require("./routes/versionRoutes"));
+app.use('/api/score', require("./routes/scoreRoutes"));
 app.use('/api/message', require('./routes/messageRoutes'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
 app.use('/api/questionnaire',require('./routes/questionnaireRoutes'))

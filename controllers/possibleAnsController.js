@@ -22,7 +22,7 @@ class PossibleAnsController {
         const content = req.body;
         const pAns = possibleAnsDal.createPossibleAns(content);
         if (pAns)
-            return res.status(201).json({ message: 'New possible answer created' });
+            return res.status(201).json(pAns);
         return res.status(400)
     }
 

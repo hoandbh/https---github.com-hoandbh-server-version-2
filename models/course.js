@@ -1,4 +1,6 @@
+//V
 module.exports = (sequelize, DataTypes) => {
+
   const Course = sequelize.define(
     "courses",
     {
@@ -7,12 +9,13 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true
       },
       course_name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
     },
     {
 
-      timestamps: false,      
+      timestamps: false,
     }
   );
 

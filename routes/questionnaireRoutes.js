@@ -2,7 +2,6 @@ const express = require('express');
 const questionnaireRouter = express.Router();
 const qstnrController = require('../controllers/questionnaireController');
 
-
 questionnaireRouter.route('/')
 .get(qstnrController.getAllQuestionnaires)
 .post(qstnrController.createQuestionnaire);

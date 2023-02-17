@@ -26,7 +26,7 @@ class QstInQuestionnaireController {
         const qst = QstDal.createNewQst(content);
         console.log("aaaaaaaaa "+qst);
         if(qst)
-            return res.status(201).json({message:"new question in questionnaire created"})
+            return res.status(201).json(qst)
     }
 
     

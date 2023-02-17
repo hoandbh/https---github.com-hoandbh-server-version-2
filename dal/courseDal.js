@@ -1,27 +1,36 @@
-const db = require('../models/index')
-const Course = db.course
+//V
+const { course: Course } = require('../models');
+
+const where = (id) => ({
+    where: {
+      id_course: id
+    }
+  });
 
 class CourseDal {
 
-    // getAllCourses = async () => {
-    //     const courses = await Course.findAll({});
-    //     return courses;
-    // }
+    getAllCourses = async () => {
+        const courses = await Course.findAll({});
+        return courses;
+    }
+
+    getCourseById = async (id) => {
+        var course = await Course.findOne(where(id));
+        return course;
+    }
 
     createNewCourse = async (content) => { 
         const course = await Course.create(content);
         return course;
     }
-
-    getCourseById = async (id) => {
-        var course = await Course.findOne({
-            where: {
-                id_course: id
-            }
-           })
-        return course;
+    
+    deleteCourse =  async (id) => { 
+        await Course.destroy(where(id));
     }
+
 }
 
 const courseDal = new CourseDal();
 module.exports  = courseDal;
+
+

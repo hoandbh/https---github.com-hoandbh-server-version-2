@@ -1,20 +1,21 @@
+//V
 const { sequelize, DataTypes } = require("./sequelize");
+
     const Version = sequelize.define(
         "versions",
         {
             id_version: {
                 type: DataTypes.INTEGER,
-                //,allowNull:
-                //autoIncrement: true,
+                autoIncrement: true,
                 primaryKey: true
             },
             questionnaire_id: {
-                type: DataTypes.INTEGER
-                //,allowNull:
+                type: DataTypes.INTEGER,
+                allowNull:false
             },
             pdf_path: {
-                type: DataTypes.STRING
-                //,allowNull:
+                type: DataTypes.STRING,
+                defaultValue:null
             }
         },
         {

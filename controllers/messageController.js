@@ -1,23 +1,26 @@
+//V
 const messageDal = require("../dal/messageDal");
 
 class MessageController {
 
     getAllMessages = async (req, res) => {
-        const parameters = req.query;
-        const messages = await messageDal.getAllMessages(parameters);
+        const messages = await messageDal.getAllMessages();
         if (!messages?.length)
-            return res.status(400).json({ message: 'No messages found' })
+            return res.status(400).json({ message: 'No messages found' });
         res.json(messages);
     }
 
     createNewMessage = async (req, res) => {
-        const content = req.body;
-        const message = messageDal.createNewMessages(content);
+        const {content, from, to, isCommit} = req.body;
+        if(!content || !from || !to || !isCommit)
+            return res.status(400).json({ message: 'All fields are required' });
+        const message = await messageDal.createNewMessage({ content, from, to, isCommit });
         if (message)
-            return res.status(201).json({ message: 'New message created' });
-        return res.status(400);
+            return res.status(201).json(message);
+        return res.status(500).json({ message: 'Failed to create new message' });
     }
 
+    
     getMessageById = async (req, res) => {
         const id = req.params.id;
         var message = await messageDal.getMessageById(id);
@@ -29,36 +32,31 @@ class MessageController {
 
     deleteMessage = async (req, res) => {
         const id = req.params.id;
-        if (!id) {//id can't be null??
-            return res.status(400).json({ message: 'message ID required' });
+        if (!id) {
+            return res.status(400).json({ message: 'Message ID required' });
         }
-        await messageDal.deleteMassage(id);//if not exist???
+        const result = await messageDal.deleteMessage(id);
+        if (result === 0) {
+            return res.status(404).json({ message: 'Message not found' });
+        }
         res.json(`Message ID ${id} deleted`);
     }
 
     search = async (req, res) => {
-        // if(!req.query) so return 400
-        var { from, to, isCommit } = req.query;
-        var where = {}
-        from = parseInt(from);
-        to = parseInt(to);
-        if (from) where.from = from;
-        if (to) where.to = to;
+        const { from, to, isCommit, content } = req.query;
+        const where = {};
+        if (from) where.from = parseInt(from);
+        if (to) where.to = parseInt(to);
         if (isCommit) where.isCommit = isCommit;
-
-        const messages = messageDal.search(where)
-        // if (!messages?.length)
-        //     return res.status(400).json({ message: 'No messages found' })
-        res.json(messages)
+        if (content) where.content = { [Op.like]: `%${content}%` };
+        const messages = await messageDal.search(where);
+        if (!messages?.length) {
+            return res.status(204).send();
+        }
+        res.json(messages);
     }
-
-
-
-
-
+    
 }
-
 const messageController = new MessageController();
-
 
 module.exports = messageController;

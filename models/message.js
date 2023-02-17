@@ -1,4 +1,6 @@
+//V
 const { sequelize, DataTypes } = require("./sequelize");
+
 const Message = sequelize.define(
     "messages",
     {
@@ -9,17 +11,24 @@ const Message = sequelize.define(
         },
         content: {
             type: DataTypes.STRING(2000),
+            defaultValue: ""
         },
         from: {
             type: DataTypes.INTEGER,
+            allowNull: false
         },
         to: {
             type: DataTypes.INTEGER,
+            allowNull: false
         },
         date: {
             type: DataTypes.DATE,
-            allowNull:true
-        }
+            allowNull: false
+        },
+        isCommit: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
     },
     {
         timestamps: false,
