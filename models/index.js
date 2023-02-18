@@ -20,6 +20,7 @@ db.score = require('./score')
 db.test = require('./ans_selected_in_test')
 db.user = require('./user')
 db.version = require('./version')
+db.ans_selected_in_test = require('./ans_selected_in_test')
 
 //////////end bringing tables
 

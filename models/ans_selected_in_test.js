@@ -1,10 +1,33 @@
 const { sequelize, DataTypes } = require("./sequelize");
-    const Test = sequelize.define(
-        "test",
-        {
-            //not correct, 
-            //we need to call this q_in_test
-        }
+const Ans_selected_in_test = sequelize.define(
+    "ans_selected_in_test",
+    {
 
-    );
-module.exports =  Test;
+        //we might need ID here because PK doesn't work!
+
+
+        // id_ans: {
+        //     type: DataTypes.INTEGER,
+        //     //,allowNull:
+        //     autoIncrement: true,
+        //     primaryKey: true
+        //     
+        // },
+        student_id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true
+        },
+        qst_in_questionnaire: {
+            type: DataTypes.INTEGER,
+            primaryKey: true
+        },
+        ans_selected: {
+            type: DataTypes.INTEGER
+        }
+    },
+    {
+        timestamps: false,
+    }
+
+);
+module.exports = Ans_selected_in_test;
