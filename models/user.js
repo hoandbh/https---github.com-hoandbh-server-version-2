@@ -1,4 +1,5 @@
 const { sequelize, DataTypes } = require("./sequelize");
+
 const User = sequelize.define(
     "users",
     {
@@ -9,8 +10,8 @@ const User = sequelize.define(
             primaryKey: true
         },
         user_name: {
-            type: DataTypes.STRING(1000)
-            //,allowNull:
+            type: DataTypes.STRING(1000),
+            allowNull:false
         },
         password: {
             type: DataTypes.STRING(1000)
@@ -18,20 +19,20 @@ const User = sequelize.define(
         },
         email: {
             type: DataTypes.STRING(1000)
-            //,allowNull:
         },
         permission: {
-            type: DataTypes.INTEGER
-            //,allowNull:
+            type:DataTypes.ENUM('TEACHER', 'COORDINATOR','ADMIN'),
+            // allowNull:false,//??
+            defaultValue:'TEACHER'
         },
         course: {
-            type: DataTypes.INTEGER
-            //,allowNull:
+            type: DataTypes.INTEGER,
+            defaultValue:1
         }
     },
     {
         timestamps: false,
-    }
+    }//necessary?
 );
 module.exports = User;
 
