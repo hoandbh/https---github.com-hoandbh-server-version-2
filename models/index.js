@@ -17,7 +17,7 @@ db.possible_answer = require('./possible_answer')
 db.qst_in_version = require('./qst_in_version')
 db.questionnaire = require('./questionnaire')
 db.score = require('./score')
-db.test = require('./test')
+db.test = require('./ans_selected_in_test')
 db.user = require('./user')
 db.version = require('./version')
 
