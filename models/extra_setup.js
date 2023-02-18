@@ -3,8 +3,8 @@ const { sequelize } = require("./sequelize");
 
 const applyExtraSetup = () => {
 
-    const {course, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
-           qst_in_versions,questionnaire,scores, test, users, versions} = sequelize.models;
+    const {versions, course, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
+           qst_in_versions,questionnaire,scores, test, users, ans_selected_in_test} = sequelize.models;
         //  book.belongsTo(category, { foreignKey: "cateogry_id", as: "category" });
         //  book.belongsTo(author, { foreignKey: "author_id", as: "author" });
         //  author.hasMany(book, { foreignKey: "author_id", as: "books" });
