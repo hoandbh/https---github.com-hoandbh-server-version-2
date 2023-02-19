@@ -43,8 +43,10 @@ const applyExtraSetup = () => {
         ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id"});
         qst_in_questionnaires.hasMany(ans_selected_in_test, {foreignKey:"qst_in_questionnaire", as: "answers_selected"});
 
-        
+        possible_answers.belongsTo(qst_in_questionnaires, {foreignKey:"qst", as: "qst_in_questionnaire_id"} );
+        qst_in_questionnaires.hasMany(possible_answers, {foreignKey:"qst", as: "possible_answers"});
 
+        ans_selected_in_test.belongsTo(possible_answers)
 }
 
 
