@@ -1,12 +1,13 @@
 //V
-module.exports = (sequelize, DataTypes) => {
+const { sequelize, DataTypes } = require("./sequelize");
 
-  const Course = sequelize.define(
+const Course = sequelize.define(
     "courses",
     {
       id_course: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       course_name: {
         type: DataTypes.STRING,
@@ -14,10 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-
-      timestamps: false,
+      timestamps: false
     }
   );
 
-  return Course;
-};
+module.exports = Course;
+

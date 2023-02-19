@@ -9,7 +9,7 @@ const { sequelize, DataTypes } = require("./sequelize");
                 autoIncrement: true,
                 primaryKey: true
             },
-            questionnaire_id: {
+            questionnaire: {
                 type: DataTypes.INTEGER,
                 allowNull:false
             },

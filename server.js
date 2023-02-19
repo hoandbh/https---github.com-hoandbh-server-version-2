@@ -16,6 +16,7 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
 
 //api
+app.use("/api/auth", require("./routes/authRoutes"))
 app.use('/api/course', require("./routes/courseRoutes"));
 app.use('/api/version', require("./routes/versionRoutes"));
 app.use('/api/score', require("./routes/scoreRoutes"));
