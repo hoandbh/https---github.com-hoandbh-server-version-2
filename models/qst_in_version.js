@@ -12,7 +12,7 @@ const { sequelize, DataTypes } = require("./sequelize");
                 type: DataTypes.INTEGER
                 //,allowNull:
             },
-            qst_in_questionnaire_id: {
+            qst_in_questionnaire: {
                 type: DataTypes.INTEGER
                 //,allowNull:
             },

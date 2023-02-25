@@ -3,12 +3,14 @@ const { sequelize } = require("./sequelize");
 
 const applyExtraSetup = () => {
 
-    const {versions, course, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
-           qst_in_versions,questionnaire,scores, test, users, ans_selected_in_test,part_in_questionnaire} = sequelize.models;
+    const {versions, courses, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
+           qst_in_versions,questionnaire,scores, users, ans_selected_in_test,part_in_questionnaire} = sequelize.models;
 
 
 
-        course.hasMany
+        courses.hasMany(users,{foreignKey:"course", as: "course_id"});
+        users.belongsTo(courses,{foreignKey:"course", as: "teachers_in_course"});
+
 
         qst_in_questionnaires.belongsTo(part_in_questionnaire, {foreignKey: "part_in_questionnaire", as: "questionnaire_part_id"});
         part_in_questionnaire.hasMany(qst_in_questionnaires,{foreignKey:"part_in_questionnaire", as: "questions_for_this_part"});
@@ -33,7 +35,7 @@ const applyExtraSetup = () => {
         users.hasMany(messages, {foreignKey:"to", as: "messages recieved"});
 
 
-        ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id"});
+         ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id1"});
         qst_in_questionnaires.hasMany(ans_selected_in_test, {foreignKey:"qst_in_questionnaire", as: "answers_selected"});
 
         possible_answers.belongsTo(qst_in_questionnaires, {foreignKey:"qst", as: "qst_in_questionnaire_id"} );
@@ -49,6 +51,18 @@ const applyExtraSetup = () => {
 
         part_in_questionnaire.belongsTo(questionnaire, {foreignKey:"questionnaire", as: "questionnaire_id"});
         questionnaire.hasMany(part_in_questionnaire,{foreignKey:"questionnaire", as: "parts_in_questionnaire"} );
+
+        ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as:"qst_in_questionnaire_id"});
+        qst_in_questionnaires.hasMany(ans_selected_in_test,{foreignKey:"qst_in_questionnaire", as: "answers_in_tests_for_question"});
+
+
+        ans_in_versions.belongsTo(qst_in_versions, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id"});
+        qst_in_versions.hasMany(ans_in_versions,{foreignKey:"qst_in_questionnaire", as: "answers_in_versions"});
+
+
+
+
+
 }
 
 
