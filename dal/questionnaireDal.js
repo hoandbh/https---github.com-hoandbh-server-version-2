@@ -2,6 +2,8 @@ const { model } = require('sequelize');
 const { possible_answer } = require('../models/index');
 const db = require('../models/index');
 const Questionnaire = db.questionnaire
+const QQ = db.qst_in_questionnaire
+
 
 
 class QuestionnaireDal {
@@ -30,8 +32,16 @@ class QuestionnaireDal {
             {
                 where:{id_questionnaire:id},
                 attributes:['owner','date'],
-                 include:'questions'
-                //include:[model:Questions]
+                //  include:'questions'
+                include : [{
+                    model: QQ,
+                    attributes:['id'],
+                    as: 'questions',
+                    // include : [{
+                    // model: Book,
+                    // as: 'book',
+                    // }]
+                    }]
 
                 // include:[{questions,include :[possible_answer]}]
 
