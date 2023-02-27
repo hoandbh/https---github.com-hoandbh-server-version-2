@@ -22,6 +22,7 @@ db.user = require('./user')
 db.version = require('./version')
 db.user = require('./user')
 db.ans_selected_in_test = require('./ans_selected_in_test')
+db.part_in_questionnaire = require('./part_in_questionnaire')
 
 //////////end bringing tables
 
