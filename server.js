@@ -24,6 +24,7 @@ app.use('/api/message', require('./routes/messageRoutes'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRoute'))
 app.use('/api/questionnaire',require('./routes/questionnaireRoutes'))
 app.use('/api/qst_in_questionnaire',require('./routes/qstInQuestionnaireRoutes'))
+app.use('/api/check-test',require('./routes/testRoutes'));
 
 app.all('*', (req, res) => {
     res.status(404)
