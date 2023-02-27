@@ -11,10 +11,10 @@ class MessageController {
     }
 
     createNewMessage = async (req, res) => {
-        const {content, from, to, isCommit} = req.body;
-        if(!content || !from || !to || !isCommit)
+        const {content, from, to, date, isCommit} = req.body;
+        if(!content || !from || !to || !date || isCommit==null)
             return res.status(400).json({ message: 'All fields are required' });
-        const message = await messageDal.createNewMessage({ content, from, to, isCommit });
+        const message = await messageDal.createNewMessage({ content, from, to, date, isCommit });
         if (message)
             return res.status(201).json(message);
         return res.status(500).json({ message: 'Failed to create new message' });
