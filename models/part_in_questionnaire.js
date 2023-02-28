@@ -23,5 +23,8 @@ const Part_in_Questoinnare = sequelize.define(
             defaultValue:false
         }
 
+    },
+    {
+        timestamps: false,
     }
 )
