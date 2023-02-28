@@ -25,3 +25,5 @@ const Part_in_Questoinnare = sequelize.define(
 
     }
 )
+
+module.exports = Part_in_Questoinnare;

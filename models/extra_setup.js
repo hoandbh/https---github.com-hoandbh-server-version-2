@@ -7,10 +7,8 @@ const applyExtraSetup = () => {
            qst_in_versions,questionnaire,scores, users, ans_selected_in_test,part_in_questionnaire} = sequelize.models;
 
 
-
         courses.hasMany(users,{foreignKey:"course", as: "course_id"});
         users.belongsTo(courses,{foreignKey:"course", as: "teachers_in_course"});
-
 
         qst_in_questionnaires.belongsTo(part_in_questionnaire, {foreignKey: "part_in_questionnaire", as: "questionnaire_part_id"});
         part_in_questionnaire.hasMany(qst_in_questionnaires,{foreignKey:"part_in_questionnaire", as: "questions_for_this_part"});
@@ -20,7 +18,6 @@ const applyExtraSetup = () => {
 
         qst_in_versions.belongsTo(versions,{foreignKey:"version", as: "version_id"});
         versions.hasMany(qst_in_versions,{foreignKey:"version", as: "questions_in_version"});
-
 
         versions.belongsTo(questionnaire, {foreignKey:"questionnaire", as: "questionnaire_id"});
         questionnaire.hasMany(versions, {foreignKey:"questionnaire", as: "versions"});
@@ -35,7 +32,7 @@ const applyExtraSetup = () => {
         users.hasMany(messages, {foreignKey:"to", as: "messages recieved"});
 
 
-         ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id1"});
+        ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as: "qst_in_questionnaire_id1"});
         qst_in_questionnaires.hasMany(ans_selected_in_test, {foreignKey:"qst_in_questionnaire", as: "answers_selected"});
 
         possible_answers.belongsTo(qst_in_questionnaires, {foreignKey:"qst", as: "qst_in_questionnaire_id"} );
