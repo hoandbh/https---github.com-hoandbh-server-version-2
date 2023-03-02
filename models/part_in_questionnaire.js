@@ -28,3 +28,4 @@ const Part_in_Questoinnare = sequelize.define(
         timestamps: false,
     }
 )
+module.exports=Part_in_Questoinnare;

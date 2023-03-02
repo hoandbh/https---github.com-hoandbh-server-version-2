@@ -33,6 +33,7 @@ class QuestionnaireController {
     }
     createQuestionnaire = async (req, res) => {
         const content = req.body;
+        console.log("content in createquestionnaire: "+content)
         const questionnaire = questionnaireDal.createNewQuestionnaire(content);
         if (questionnaire)
             return res.status(201).json(questionnaire)

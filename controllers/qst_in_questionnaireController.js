@@ -22,6 +22,7 @@ class QstInQuestionnaireController {
     createQstInAnswer = async(req,res)=>{
         console.log("innnnnnn1111111");
         const content = req.body;
+        console.log(content);
         console.log("aaaaaaaaa "+content);
         const qst = QstDal.createNewQst(content);
         console.log("aaaaaaaaa "+qst);
