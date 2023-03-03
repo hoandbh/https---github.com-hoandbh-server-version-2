@@ -25,7 +25,7 @@ const Message = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false
         },
-        isCommit: {
+        isCommited: {
             type: DataTypes.BOOLEAN,
             allowNull: false
         },

@@ -1,12 +1,11 @@
 const questionnaireDal = require("../dal/questionnaireDal");
-const questoinnaireDal = require('../dal/questionnaireDal')
 
 class QuestionnaireController {
 
     //localhost:3600/api/messages
 
     getAllQuestionnaires = async (req, res) => {
-        const questionnaires = await questoinnaireDal.getAllQuestionnaires();
+        const questionnaires = await questionnaireDal.getAllQuestionnaires();
         if (!questionnaires?.length)
             return res.status(400).json({ message: 'No questionnaires found' })
         res.json(questionnaires)
@@ -16,7 +15,7 @@ class QuestionnaireController {
 
         //this function really brings all the questions that belong to this questionnaire 
         const id = req.params.id;
-        const questionnaire = await questoinnaireDal.getQuestionnaireById(id);
+        const questionnaire = await questionnaireDal.getQuestionnaireById(id);
         if (questionnaire)
             res.json(questionnaire)
         else
@@ -34,6 +33,7 @@ class QuestionnaireController {
     }
     createQuestionnaire = async (req, res) => {
         const content = req.body;
+        console.log("content in createquestionnaire: "+content)
         const questionnaire = questionnaireDal.createNewQuestionnaire(content);
         if (questionnaire)
             return res.status(201).json(questionnaire)

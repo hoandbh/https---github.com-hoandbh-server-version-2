@@ -9,7 +9,7 @@ const Questionnaire = sequelize.define(
         },
         owner: {
             type: DataTypes.INTEGER
-            //,allowNull:
+            //forign key to user!!
         },
         date: {
             type: DataTypes.DATE

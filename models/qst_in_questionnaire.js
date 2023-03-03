@@ -15,7 +15,7 @@ const Qst_in_questionnaire = sequelize.define(
 
 
 
-        questionnaire: {
+        part_in_questionnaire: {
             type: DataTypes.INTEGER
             //,allowNull:
         },

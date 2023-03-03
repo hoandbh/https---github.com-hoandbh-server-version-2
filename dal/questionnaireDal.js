@@ -1,9 +1,11 @@
 const { model } = require('sequelize');
 const { possible_answer } = require('../models/index');
 const db = require('../models/index');
-const Questionnaire = db.questionnaire
-const QQ = db.qst_in_questionnaire
 
+
+const Questionnaire = db.questionnaire
+const PartInQuestionnaire = db.part_in_questionnaire
+const QuestionsInQuestionnaire = db.qst_in_questionnaire
 
 
 class QuestionnaireDal {
@@ -28,20 +30,20 @@ class QuestionnaireDal {
         //const quest = this.getQuestionnaireById(id);
         //const questionsInQuestionnaire = 
 
-        const fullQuestoinnare = await Questionnaire.findOne(
+        const fullQuestoinnare = await Questionnaire.findAll(
             {
                 where:{id_questionnaire:id},
                 attributes:['owner','date'],
-                //  include:'questions'
-                include : [{
-                    model: QQ,
-                    attributes:['id'],
-                    as: 'questions',
-                    // include : [{
-                    // model: Book,
-                    // as: 'book',
-                    // }]
+                 include:[{
+                    model:PartInQuestionnaire,
+                    as: 'parts',
+                    where:{questionnaire:id},
+                    include:[{
+                        model:QuestionsInQuestionnaire, 
+                        as: 'questions'
                     }]
+                 }]
+                //include:[model:Questions]
 
                 // include:[{questions,include :[possible_answer]}]
 
