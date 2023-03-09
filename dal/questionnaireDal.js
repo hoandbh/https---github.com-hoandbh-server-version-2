@@ -62,6 +62,7 @@ class QuestionnaireDal {
         const quest = await Questionnaire.create(content);
         return quest;
     }
+    
     deleteQuestionnaire = async (id) => {
         await Questionnaire.destroy({
             where: {

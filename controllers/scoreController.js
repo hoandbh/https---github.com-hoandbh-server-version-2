@@ -13,7 +13,7 @@ class ScoreController {
     createNewScore = async (req, res) => {
         const {student_id, questionnaire_id, score_} = req.body;
         if(!student_id || !questionnaire_id)
-            return res.status(400).json({ score: 'All fields are required' });
+            return res.status(400).json({ message: 'All fields are required' });
         if  ( !score_)
             {}//calc score
         const score = await scoreDal.createNewScore({student_id, questionnaire_id, score_});
