@@ -1,6 +1,6 @@
 const db = require('../models/index');
 const bcrypt = require('bcrypt');
-const jwt= require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const User = db.user;
 
 const checkRequiredFields = (requiredFields, requestBody) => {
