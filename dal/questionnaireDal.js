@@ -33,11 +33,11 @@ class QuestionnaireDal {
         const fullQuestoinnare = await Questionnaire.findAll(
             {
                 where:{id_questionnaire:id},
-                attributes:['owner','date'],
+                // attributes:['owner','date'],
                  include:[{
                     model:PartInQuestionnaire,
                     as: 'parts_in_questionnaire',
-                    attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
+                    // attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
                         as: 'questions_in_part'
