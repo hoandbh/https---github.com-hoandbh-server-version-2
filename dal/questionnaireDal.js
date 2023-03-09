@@ -36,27 +36,18 @@ class QuestionnaireDal {
                 attributes:['owner','date'],
                  include:[{
                     model:PartInQuestionnaire,
-                    as: 'parts',
-                    where:{questionnaire:id},
+                    as: 'parts_in_questionnaire',
+                    attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
-                        as: 'questions'
+                        as: 'questions_in_part'
                     }]
                  }]
-                //include:[model:Questions]
-
-                // include:[{questions,include :[possible_answer]}]
-
+   
             }
         )
         return fullQuestoinnare;
 
-
-        /*
-        const data = await User.findAll({
-    where: { id: 1 },
-    include: [{ model: Invoice, include: [City] }],
-    })*/
     }
     createNewQuestionnaire = async (content) => {
         const quest = await Questionnaire.create(content);

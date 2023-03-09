@@ -1,4 +1,5 @@
 const { version } = require(".");
+const Qst_in_questionnaire = require("./qst_in_questionnaire");
 const { sequelize } = require("./sequelize");
 
 const applyExtraSetup = () => {
@@ -49,6 +50,9 @@ const applyExtraSetup = () => {
         part_in_questionnaire.belongsTo(questionnaire, {foreignKey:"questionnaire", as: "questionnaire_id"});
         questionnaire.hasMany(part_in_questionnaire,{foreignKey:"questionnaire", as: "parts_in_questionnaire"} );
 
+        Qst_in_questionnaire.belongsTo(part_in_questionnaire, {foreignKey:"part_in_questionnaire",as: "part_in_qstnre"});
+        part_in_questionnaire.hasMany(qst_in_questionnaires, {foreignKey:"part_in_questionnaire",as: "questions_in_part"});
+        
         ans_selected_in_test.belongsTo(qst_in_questionnaires, {foreignKey:"qst_in_questionnaire", as:"qst_in_questionnaire_id"});
         qst_in_questionnaires.hasMany(ans_selected_in_test,{foreignKey:"qst_in_questionnaire", as: "answers_in_tests_for_question"});
 
