@@ -10,6 +10,8 @@ const QuestionsInQuestionnaire = db.qst_in_questionnaire
 
 class QuestionnaireDal {
 
+    
+
     getAllQuestionnaires = async () => {
         const quests = await Questionnaire.findAll({});
         return quests;

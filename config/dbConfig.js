@@ -1,3 +1,4 @@
+//seminar
 // module.exports = {
 //     HOST: process.env.DATABASE_HOST,
 //     USER: process.env.DATABASE_USER,
@@ -12,6 +13,7 @@
 //     }
 // }
 
+//home
 module.exports = {
     HOST: 'localhost',
     USER: process.env.DATABASE_USER,
