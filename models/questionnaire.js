@@ -15,7 +15,10 @@ const Questionnaire = sequelize.define(
             type: DataTypes.DATE
             //,allowNull:
 
-        }
+        },
+        // term: {
+        
+        // }
 
     },
     {
