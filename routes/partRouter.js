@@ -1,14 +1,14 @@
 const express = require('express');
-const partQstnrRouter = express.Router();
-const partQstnrController = require('../controllers/partQuestionnaireController');
+const partController = require('../controllers/partController');
 
+const partRouter = express.Router({ mergeParams: true });
 
-partQstnrRouter.route('/')
-.get(partQstnrController.getAllParts)
+partRouter.route('/')
+.get(partController.getAllPartsForQuestionnaire)
+.post(partController.createPartForQuestionnaire);
 
-partQstnrRouter.route('/:id')
-.get(partQstnrController.getPartById)
+partRouter.route('/:id')
+.get(partController.getPartById);
+//need to implement delete and put
 
-
-
-module.exports = partQstnrRouter;
+module.exports = partRouter;

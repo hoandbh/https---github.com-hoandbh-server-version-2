@@ -21,7 +21,8 @@ class MessageDal {
     }
 
     getMessageById = async (id) => {
-        var message = await Message.findOne(where(id));
+        // var message = await Message.findOne(where(id));
+        var message = await Message.findByPk(id);
         return message;
     }
 

@@ -13,7 +13,7 @@ questionnaireRouter.route('/:id')
 questionnaireRouter.route('/full/:id')
 .get(qstnrController.getFullQuestionnaire)
 
-// const partsRouter = require('./partsRouter');
-// questionnaireRouter.use('/:questionnaireId/parts', partsRouter);
+const partRouter = require('./partRouter');
+questionnaireRouter.use('/:questionnaireId/parts', partRouter);
 
 module.exports = questionnaireRouter;

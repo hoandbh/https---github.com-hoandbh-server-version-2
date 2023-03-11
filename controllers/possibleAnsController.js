@@ -36,6 +36,5 @@ class PossibleAnsController {
 
 }
 
-
 const possibleAnsController = new PossibleAnsController();
 module.exports = possibleAnsController;

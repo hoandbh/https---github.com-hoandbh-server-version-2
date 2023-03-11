@@ -23,7 +23,7 @@ app.use('/api/score', require("./routes/scoreRouter"));
 app.use('/api/message', require('./routes/messageRouter'));
 app.use('/api/possible_answer',require('./routes/possibleAnsRouter'))
 app.use('/api/questionnaire',require('./routes/questionnaireRouter'))
-app.use('/api/qst_in_questionnaire',require('./routes/qstInQuestionnaireRouter'))
+app.use('/api/question',require('./routes/questionRouter'))
 app.use('/api/part_in_questionnaire', require('./routes/partRouter'));
 app.use('/api/check-test',require('./routes/testRouter'));
 

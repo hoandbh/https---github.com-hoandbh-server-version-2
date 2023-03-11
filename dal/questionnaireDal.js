@@ -18,11 +18,7 @@ class QuestionnaireDal {
     }
 
     getQuestionnaireById = async (id) => {
-        var quest = await Questionnaire.findOne({
-            where: {
-                id_questionnaire: id
-            }
-        })
+        var quest = await Questionnaire.findByPk(id);
         return quest;
     }
 
