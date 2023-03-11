@@ -16,7 +16,8 @@ class ScoreDal {
     }
 
     getScoreById = async (id) => {
-        var score = await Score.findOne(where(id));
+        // var score = await Score.findOne(where(id));
+        var score = await Score.findByPk(id);
         return score;
     }
 

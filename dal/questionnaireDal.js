@@ -10,17 +10,16 @@ const QuestionsInQuestionnaire = db.qst_in_questionnaire
 
 class QuestionnaireDal {
 
+    
+
     getAllQuestionnaires = async () => {
+        //to add the name of course??
         const quests = await Questionnaire.findAll({});
         return quests;
     }
 
     getQuestionnaireById = async (id) => {
-        var quest = await Questionnaire.findOne({
-            where: {
-                id_questionnaire: id
-            }
-        })
+        var quest = await Questionnaire.findByPk(id);
         return quest;
     }
 

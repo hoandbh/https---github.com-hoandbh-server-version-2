@@ -16,7 +16,8 @@ class VersionDal {
     }
 
     getVersionById = async (id) => {
-        var version = await Version.findOne(where(id));
+        // var version = await Version.findOne(where(id));
+        var version = await Version.findByPk(id);
         return version;
     }
 

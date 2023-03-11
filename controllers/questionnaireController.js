@@ -62,7 +62,5 @@ class QuestionnaireController {
     }
 }
 
-
 const questionnaireController = new QuestionnaireController();
-
 module.exports = questionnaireController;

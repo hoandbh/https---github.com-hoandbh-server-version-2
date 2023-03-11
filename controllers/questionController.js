@@ -1,9 +1,9 @@
-const QstDal = require('../dal/qst_in_questionnaireDal');
+const QuestionDal = require('../dal/qst_in_questionnaireDal');
 
-class QstInQuestionnaireController {
+class QuestionController {
 
     getAllQst = async (req, res) => {
-        var questinos = await QstDal.getAllQst();
+        var questinos = await QuestionDal.getAllQst();
         if (!questinos?.length)
             return res.status(204).json({ message: 'No questinos found' });//למה לא שולח את ההודעה?
         res.json(questinos);
@@ -19,28 +19,24 @@ class QstInQuestionnaireController {
     // }
 
 
-    createQstInAnswer = async(req,res)=>{
-        console.log("innnnnnn1111111");
+    createNewQst = async(req,res) => {
         const content = req.body;
         console.log(content);
-        console.log("aaaaaaaaa "+content);
-        const qst = QstDal.createNewQst(content);
-        console.log("aaaaaaaaa "+qst);
+        const qst = await QuestionDal.createNewQst(content);
         if(qst)
             return res.status(201).json(qst)
     }
-
     
     deleteQst = async (req, res) => { 
         const id = req.params.id;
         if (!id) {//לעשות את הבדיקה הזו תמיד??
             return res.status(400).json({ message: 'question ID required' });
         }
-        await QstDal.deleteQst(id);
+        await QuestionDal.deleteQst(id);
         res.json(`Message ID ${id} deleted`);
     }
 
 }
 
-const qstInQuestionnaireController = new QstInQuestionnaireController();
-module.exports = qstInQuestionnaireController;
+const questionController = new QuestionController();
+module.exports = questionController;
