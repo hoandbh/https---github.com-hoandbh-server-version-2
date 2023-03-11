@@ -13,6 +13,7 @@ class QuestionnaireDal {
     
 
     getAllQuestionnaires = async () => {
+        //to add the name of course??
         const quests = await Questionnaire.findAll({});
         return quests;
     }
