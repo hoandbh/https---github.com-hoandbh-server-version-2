@@ -16,13 +16,13 @@ const Questionnaire = sequelize.define(
             //,allowNull:
 
         },
-        term: {
+        // term: {
         
-            type: DataTypes.ENUM('A','B','C','D','E')
-            ,defaultValue:'A'
+        //     type: DataTypes.ENUM('A','B','C','D','E')
+        //     ,defaultValue:'A'
             
 
-        }
+        // }
 
     },
     {
