@@ -22,6 +22,15 @@ class QuestionnaireDal {
         var quest = await Questionnaire.findByPk(id);
         return quest;
     }
+    
+    getQuestionnairesByOwner = async(ow)=>{
+        var quest = await Questionnaire.findAll({
+            where: {owner:ow}
+        });
+        return quest;
+    
+    }
+
 
     //add more functions for getting according to certain paramters
 
