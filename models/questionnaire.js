@@ -15,6 +15,13 @@ const Questionnaire = sequelize.define(
             type: DataTypes.DATE
             //,allowNull:
 
+        },
+        term: {
+        
+            type: DataTypes.ENUM('A','B','C','D','E')
+            ,defaultValue:'A'
+            
+
         }
 
     },
