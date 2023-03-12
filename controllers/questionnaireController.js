@@ -60,6 +60,15 @@ class QuestionnaireController {
 
 
     }
+    getQuestionnairesByOwner = async (req,res)=>{
+        const owner = req.params.ownerId;
+        var qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
+        if (qstnr)
+            res.json(qstnr);
+        else
+            res.status(204).send();
+        
+    }
 }
 
 const questionnaireController = new QuestionnaireController();
