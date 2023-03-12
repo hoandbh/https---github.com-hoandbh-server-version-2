@@ -6,4 +6,8 @@ questionRouter.route('/')
 .get(questionController.getAllQst)
 .post(questionController.createNewQst)
 
+questionRouter.route('/ofPart/:partId')
+.get(questionController.getAllQstOfPart)
+
+
 module.exports = questionRouter;

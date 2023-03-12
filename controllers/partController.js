@@ -32,7 +32,7 @@ class PartController {
         //to get the part number form the user????
         const questionnaireId = req.params.questionnaireId;
         const {serial_number, headline, mix} = req.body;
-        if (!serial_number || (!headline && typeof(headline)!='string') )//mix is boolean!!!
+        if ((!serial_number && serial_number!=0) || (!headline && typeof(headline)!='string') || (!mix && mix!=false))//mix is boolean!!!
             return res.status(400).json({ message: 'All fields are required' });
         const part = await partDal.createNewPart({serial_number, headline, mix, questionnaire: questionnaireId});
         if (part)

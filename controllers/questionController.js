@@ -2,6 +2,15 @@ const QuestionDal = require('../dal/qst_in_questionnaireDal');
 
 class QuestionController {
 
+    getAllQstOfPart = async (req, res) => {
+        const partId = req.params.partId;
+        const questinos = await QuestionDal.getAllQstOfPart(partId);
+        if (!questinos?.length)
+            return res.status(204).json({ message: 'No questinos found' });
+        res.json(questinos);
+    }
+
+
     getAllQst = async (req, res) => {
         var questinos = await QuestionDal.getAllQst();
         if (!questinos?.length)
