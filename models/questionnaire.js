@@ -16,12 +16,15 @@ const Questionnaire = sequelize.define(
             //,allowNull:
 
         },
-        // term: {
-        
+
+        //isComplete: {
+        //
+        //       
+        //}
+
+        // term: { 
         //     type: DataTypes.ENUM('A','B','C','D','E')
         //     ,defaultValue:'A'
-            
-
         // }
 
     },
@@ -29,3 +32,4 @@ const Questionnaire = sequelize.define(
         timestamps: false,
     });
 module.exports = Questionnaire;
+
