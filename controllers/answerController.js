@@ -10,14 +10,14 @@ class AnswerController {
         res.json(answers);
     }
 
-
     createNewAns = async(req,res) => {
-        const {content} = req.body;//to get all the feilds
-        const answer = await AnswerDal.createNewAns({content});
+        const {content,is_correct} = req.body;//to get all the feilds
+        const qst = req.params.qstId;
+        const answer = await AnswerDal.createNewAns({content,is_correct,qst});
         if(answer)
             return res.status(201).json(answer);
     }
-    
+         
     getAnsById = async (req, res) => {
         const id = req.params.id;
         const pAns = await AnswerDal.getPossibleAnsById(id);
