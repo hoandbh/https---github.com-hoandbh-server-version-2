@@ -10,7 +10,13 @@ questionnaireRouter.route('/:id')
 .get(qstnrController.getQuestionnaireById)
 .delete(qstnrController.deleteQuestionnaire)
 
+questionnaireRouter.route('/owner/:ownerId')
+.get(qstnrController.getQuestionnairesByOwner)
+
 questionnaireRouter.route('/full/:id')
 .get(qstnrController.getFullQuestionnaire)
+
+const partRouter = require('./partRouter');
+questionnaireRouter.use('/:questionnaireId/part', partRouter);
 
 module.exports = questionnaireRouter;

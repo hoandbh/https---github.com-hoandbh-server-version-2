@@ -1,3 +1,8 @@
+//content
+//if int needed - int
+//
+
+
 const questionnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
@@ -33,8 +38,7 @@ class QuestionnaireController {
     }
     createQuestionnaire = async (req, res) => {
         const content = req.body;
-        console.log("content in createquestionnaire: "+content)
-        const questionnaire = questionnaireDal.createNewQuestionnaire(content);
+        const questionnaire = await questionnaireDal.createNewQuestionnaire(content);
         if (questionnaire)
             return res.status(201).json(questionnaire)
 
@@ -56,9 +60,16 @@ class QuestionnaireController {
 
 
     }
+    getQuestionnairesByOwner = async (req,res)=>{
+        const owner = req.params.ownerId;
+        var qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
+        if (qstnr)
+            res.json(qstnr);
+        else
+            res.status(204).send();
+        
+    }
 }
 
-
 const questionnaireController = new QuestionnaireController();
-
 module.exports = questionnaireController;

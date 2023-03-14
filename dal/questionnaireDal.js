@@ -10,19 +10,27 @@ const QuestionsInQuestionnaire = db.qst_in_questionnaire
 
 class QuestionnaireDal {
 
+    
+
     getAllQuestionnaires = async () => {
+        //to add the name of course??
         const quests = await Questionnaire.findAll({});
         return quests;
     }
 
     getQuestionnaireById = async (id) => {
-        var quest = await Questionnaire.findOne({
-            where: {
-                id_questionnaire: id
-            }
-        })
+        var quest = await Questionnaire.findByPk(id);
         return quest;
     }
+    
+    getQuestionnairesByOwner = async(ow)=>{
+        var quest = await Questionnaire.findAll({
+            where: {owner:ow}
+        });
+        return quest;
+    
+    }
+
 
     //add more functions for getting according to certain paramters
 
@@ -33,35 +41,27 @@ class QuestionnaireDal {
         const fullQuestoinnare = await Questionnaire.findAll(
             {
                 where:{id_questionnaire:id},
-                attributes:['owner','date'],
+                // attributes:['owner','date'],
                  include:[{
                     model:PartInQuestionnaire,
-                    as: 'parts',
-                    where:{questionnaire:id},
+                    as: 'parts_in_questionnaire',
+                    // attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
-                        as: 'questions'
+                        as: 'questions_in_part'
                     }]
                  }]
-                //include:[model:Questions]
-
-                // include:[{questions,include :[possible_answer]}]
-
+   
             }
         )
         return fullQuestoinnare;
 
-
-        /*
-        const data = await User.findAll({
-    where: { id: 1 },
-    include: [{ model: Invoice, include: [City] }],
-    })*/
     }
     createNewQuestionnaire = async (content) => {
         const quest = await Questionnaire.create(content);
         return quest;
     }
+    
     deleteQuestionnaire = async (id) => {
         await Questionnaire.destroy({
             where: {

@@ -44,6 +44,5 @@ class CourseController {
 }
 
 const courseController = new CourseController();
-
 module.exports = courseController;
 

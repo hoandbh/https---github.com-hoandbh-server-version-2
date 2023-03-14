@@ -15,7 +15,8 @@ class CourseDal {
     }
 
     getCourseById = async (id) => {
-        var course = await Course.findOne(where(id));
+        // var course = await Course.findOne(where(id));
+        var course = await Course.findByPk(id);
         return course;
     }
 
