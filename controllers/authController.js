@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 // const db = require('../models/index');
 // const bcrypt = require('bcrypt');
 // const jwt= require('jsonwebtoken');
 // const User = db.user;
-=======
-const db = require('../models/index');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = db.user;
->>>>>>> 97648c7b87bd7a482f169e04c8fe93fab258879a
 
 // const checkRequiredFields = (requiredFields, requestBody) => {
 //     const missingFields = [];

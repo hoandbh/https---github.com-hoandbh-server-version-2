@@ -6,6 +6,8 @@ const {sequelize} = require('../models/sequelize');
 const Questionnaire = db.questionnaire;
 const Version = db.version;
 const QuestionsInQuestionnaire = db.qst_in_questionnaire
+const PartInQuestionnaire = db.part_in_questionnaire
+const PossibleAnswers = db.possible_answer
 
 class VersionCreator {
     
@@ -32,6 +34,7 @@ class VersionCreator {
                 where:{id_questionnaire: questionnaireId},
                 include:[{
                     model: QuestionsInQuestionnaire,
+
                 
                 }]
             }

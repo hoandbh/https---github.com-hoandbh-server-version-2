@@ -6,6 +6,7 @@ const db = require('../models/index');
 const Questionnaire = db.questionnaire
 const PartInQuestionnaire = db.part_in_questionnaire
 const QuestionsInQuestionnaire = db.qst_in_questionnaire
+const PossibleAnswers = db.possible_answer
 
 
 class QuestionnaireDal {
@@ -48,7 +49,11 @@ class QuestionnaireDal {
                     // attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
-                        as: 'questions_in_part'
+                        as: 'questions_in_part',
+                        include:[{
+                            model:PossibleAnswers, 
+                            as: 'possible_answers'
+                        }]
                     }]
                  }]
    

@@ -6,6 +6,9 @@ versionRouter.route('/')
 .get(versionController.getAllVersions)
 .post(versionController.createVersions);
 
+versionRouter.route('/one')
+.post(versionController.createOneVersion)
+
 versionRouter.route('/questionnaire/:id')
 .get(versionController.getVersionsByQuestionnaire);
 
