@@ -24,6 +24,12 @@ class VersionController {
         return res.status(500).json({ version: 'Failed to create new version' });
     }
 
+    createOneVersion = async(req,res)=>{
+        const v = await versionDal.createVersion();
+        if(v)
+            return res.status(201).json(v);
+    }
+
     getVersionById = async (req, res) => {
         const id = req.params.id;
         var version = await versionDal.getVersionById(id);

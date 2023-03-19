@@ -26,6 +26,11 @@ class VersionDal {
         return versions;
     }
 
+    createVersion = async(q_id)=>{
+        const version = await Version.create({'questionnaire':1, 'pdf_path':'/localhost/333'});
+        return version;
+    }
+
     deleteVersion = async (id) => {
         await Version.destroy(where(id));
     }
