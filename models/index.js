@@ -34,3 +34,4 @@ db.sequelize.sync({ alter:true })//change to alter:true
   })
 
 module.exports = db
+       

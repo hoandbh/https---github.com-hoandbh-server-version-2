@@ -35,10 +35,10 @@ class QuestionController {
         if(qst)
             return res.status(201).json(qst)
     }
-    
+                
     deleteQst = async (req, res) => { 
         const id = req.params.id;
-        if (!id) {//לעשות את הבדיקה הזו תמיד??
+        if (!id) {
             return res.status(400).json({ message: 'question ID required' });
         }
         await QuestionDal.deleteQst(id);

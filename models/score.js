@@ -20,8 +20,7 @@ const Score = sequelize.define(
         score_: {
             type: DataTypes.INTEGER,
             defaultValue: 0
-        },
-
+        }
     },
     {
         timestamps: false,
