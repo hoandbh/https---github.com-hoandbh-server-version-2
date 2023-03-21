@@ -38,7 +38,7 @@ class QuestionnaireDal {
         //const quest = this.getQuestionnaireById(id);
         //const questionsInQuestionnaire = 
 
-        const fullQuestoinnare = await Questionnaire.findAll(
+        const fullQuestoinnare = await Questionnaire.findOne(
             {
                 where:{id_questionnaire:id},
                 // attributes:['owner','date'],

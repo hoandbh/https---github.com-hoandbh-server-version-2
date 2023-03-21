@@ -12,8 +12,8 @@ const { sequelize, DataTypes } = require("./sequelize");
             },
             content: {
                 type: DataTypes.STRING(1000)
-            },
-            pic_path: {
+            },      
+            pic_path: {   
                 type: DataTypes.STRING,
                 allowNull:true
             },

@@ -29,8 +29,7 @@ class QuestionController {
 
 
     createNewQst = async(req,res) => {
-        const {content} = req.body;
-        const part_in_questionnaire = req.params.partId;
+        const {content,part_in_questionnaire} = req.body;
         const qst = await QuestionDal.createNewQst({content,part_in_questionnaire});
         if(qst)
             return res.status(201).json(qst)
