@@ -16,7 +16,7 @@ class QstInQuestionnaireDal {
     getAllQstOfPart = async(partId)=>{
         const qsts = await Qst.findAll({
             where:{
-                part_in_questionnaire:partId
+                part_id:partId
             }
         })
         return qsts;

@@ -13,7 +13,7 @@ const Score = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull:false
         },
-        questionnaire: {
+        questionnaire_id: {
             type: DataTypes.INTEGER,
             allowNull:false
         },

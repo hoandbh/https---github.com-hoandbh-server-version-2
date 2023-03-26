@@ -13,8 +13,6 @@ const Questionnaire = sequelize.define(
         },
         date: {
             type: DataTypes.DATE
-            //,allowNull:
-
         },
 
         //isComplete: {

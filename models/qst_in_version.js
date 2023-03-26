@@ -7,17 +7,14 @@ const { sequelize, DataTypes } = require("./sequelize");
                 primaryKey: true,
                 autoIncrement: true
             },
-            version: {
+            version_id: {
                 type: DataTypes.INTEGER
-                //,allowNull:
             },
-            qst_in_questionnaire: {
+            question_id: {
                 type: DataTypes.INTEGER
-                //,allowNull:
             },
             serial_number: {
                 type: DataTypes.INTEGER
-                //,allowNull:
             }
         },
         {

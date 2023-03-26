@@ -8,13 +8,11 @@ const Qst_in_questionnaire = sequelize.define(
             autoIncrement: true
         },
 
-        part_in_questionnaire: {
+        part_id: {
             type: DataTypes.INTEGER
-            //,allowNull:
         },
         content: {
             type: DataTypes.STRING(1000)
-            //,allowNull:
         },
         pic_path: {
             type: DataTypes.STRING,

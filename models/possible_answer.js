@@ -7,7 +7,7 @@ const { sequelize, DataTypes } = require("./sequelize");
                 autoIncrement: true,
                 primaryKey: true
             },
-            qst: {
+            question_id: {
                 type: DataTypes.INTEGER
             },
             content: {

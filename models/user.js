@@ -19,7 +19,7 @@ const { sequelize, DataTypes } = require("./sequelize");
             permission:{
                 type:DataTypes.INTEGER                
             },
-            course:{    
+            course_id:{    
                 type:DataTypes.INTEGER                
             }   
         },
