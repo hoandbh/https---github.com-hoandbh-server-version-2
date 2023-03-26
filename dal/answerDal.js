@@ -23,7 +23,7 @@ class AnswerDal {
 
     //TODO
     possibleAnsSearch = async (req, res) => {
-        const { id_ans, qst, content, is_correct } = req.query
+        const { id, qst, content, is_correct } = req.query
         //maybe the content we need to search only according to beginning! or not at all
         const possible_anss = await PossibleAns.findAll({
             //TODO
@@ -43,11 +43,11 @@ class AnswerDal {
     deletePossibleAnsbyId = async(id)=>{
         await PossibleAns.destroy({
             where :{
-                id_ans:id
+                id:id
             }
         })
     }
-
+  
 }
 
 const answerDal = new AnswerDal();

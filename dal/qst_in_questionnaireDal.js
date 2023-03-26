@@ -12,16 +12,6 @@ class QstInQuestionnaireDal {
         const question = await Qst.create(content);
         return question;
     }
-    
-//maybe extra, not used in controller yet :
-    getAllQstInQuestionnaire = async(QuestionnaireId)=>{
-        const qsts = await Qst.findAll({
-            where:{
-                id_qst:QuestionnaireId//what is it?
-            }
-        })
-        return qsts;
-    }
 
     getAllQstOfPart = async(partId)=>{
         const qsts = await Qst.findAll({
@@ -34,7 +24,7 @@ class QstInQuestionnaireDal {
 
     // const fullQuestoinnare = await Questionnaire.findOne(
     //     {
-    //         where:{id_questionnaire:id},
+    //         where:{id:id},
     //         attributes:['owner','date'],
     //         include:'questions'
     //     }
@@ -43,7 +33,7 @@ class QstInQuestionnaireDal {
     deleteQst = async (id) => { 
         await Qst.destroy({
             where: {
-                id_qst: id
+                id: id
             }
         });
     }

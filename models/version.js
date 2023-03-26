@@ -4,7 +4,7 @@ const { sequelize, DataTypes } = require("./sequelize");
     const Version = sequelize.define(
         "versions",
         {
-            id_version: {
+            id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true

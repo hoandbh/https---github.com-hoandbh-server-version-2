@@ -1,20 +1,16 @@
 const { sequelize, DataTypes } = require("./sequelize");
 const Ans_in_version = sequelize.define("ans_in_versions",
     {
-        qst_in_version_id: {
+        id: {
             type: DataTypes.INTEGER,
-            //,allowNull:
-            //autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         serial_number: {
             type: DataTypes.INTEGER
-            //,allowNull:
-            //primaryKey:true
         },
-        original_ans: {
+        answer_id: {
             type: DataTypes.INTEGER
-            //,allowNull:
         }
     },
     {

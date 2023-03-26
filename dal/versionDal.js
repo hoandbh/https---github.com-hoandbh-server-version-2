@@ -4,7 +4,7 @@ const { version: Version } = require('../models');
 
 const where = (id) => ({
     where: {
-        id_version: id
+        id: id
     }
 });
 

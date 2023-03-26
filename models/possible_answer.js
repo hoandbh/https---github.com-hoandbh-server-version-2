@@ -2,7 +2,7 @@ const { sequelize, DataTypes } = require("./sequelize");
     const Possible_answer = sequelize.define(
         "possible_answers",
         {
-            id_ans: {
+            id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true

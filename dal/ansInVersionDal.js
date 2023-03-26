@@ -8,12 +8,11 @@ class AnsInVersionDal {
         //returns all answers for this question 
         var answersForQuestion = await AnsInVersion.findAll({
             where: {
-                qst_in_version_id: qId
+                id: qId
             }
         })
         return answersForQuestion;
-
-    }
+    }   
 
     createNewAnsInVersion = async (content) => {
         const ans = await AnsInVersion.create(content);
@@ -33,20 +32,3 @@ class AnsInVersionDal {
 
 const ansInVersionDal = new AnsInVersionDal();
 module.exports = ansInVersionDal;
-
-
-// qst_in_version_id: {
-//     type: DataTypes.INTEGER,
-//         //,allowNull:
-//         //autoIncrement: true,
-//         primaryKey: true
-// },
-// serial_number: {
-//     type: DataTypes.INTEGER
-//     //,allowNull:
-//     //primaryKey:true
-// },
-// original_ans: {
-//     type: DataTypes.INTEGER
-//     //,allowNull:
-// }
