@@ -10,10 +10,10 @@ const Ans_selected_in_test = sequelize.define(
         student_id: {
             type: DataTypes.INTEGER   
         },
-        qst_in_questionnaire: {
+        question_id: {
             type: DataTypes.INTEGER
         },
-        ans_selected: {
+        answer_id: {
             type: DataTypes.INTEGER
         }
     },  

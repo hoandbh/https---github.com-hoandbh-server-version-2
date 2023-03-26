@@ -8,7 +8,7 @@ const Part_in_Questoinnare = sequelize.define(
             primaryKey:true,
             autoIncrement:true
         },
-        questionnaire:{
+        questionnaire_id:{
             type:DataTypes.INTEGER
         },
         serial_number:{
