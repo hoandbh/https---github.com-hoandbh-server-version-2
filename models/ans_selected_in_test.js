@@ -8,7 +8,7 @@ const Ans_selected_in_test = sequelize.define(
             primaryKey: true
         },
         student_id: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER   
         },
         qst_in_questionnaire: {
             type: DataTypes.INTEGER
