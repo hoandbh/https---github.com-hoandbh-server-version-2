@@ -6,7 +6,10 @@ const applyExtraSetup = () => {
 
     const {versions, courses, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
            qst_in_versions,questionnaire,scores, users, ans_selected_in_test,part_in_questionnaire} = sequelize.models;
-  
+              
+        users.hasMany(questionnaire,{foreignKey:"owner", as:"user_of_qst", onDelete:'cascade'})
+        questionnaire.belongsTo(users,{foreignKey:"owner", as: "questionnaire_of_user", onDelete:'cascade'});
+
         courses.hasMany(users,{foreignKey:"course_id", as: "course_id", onDelete:'cascade'});
         users.belongsTo(courses,{foreignKey:"course_id", as: "teachers_in_course", onDelete:'cascade'});
    
