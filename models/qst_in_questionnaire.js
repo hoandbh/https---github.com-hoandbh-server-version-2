@@ -7,7 +7,6 @@ const Qst_in_questionnaire = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-
         part_id: {
             type: DataTypes.INTEGER
         },

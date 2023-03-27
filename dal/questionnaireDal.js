@@ -29,7 +29,7 @@ class QuestionnaireDal {
         });
         return quest;
     
-    }
+    }    
 
 
     //add more functions for getting according to certain paramters
@@ -42,7 +42,7 @@ class QuestionnaireDal {
             {
                 where:{id:id},
                 // attributes:['owner','date'],
-                 include:[{
+                  include:[{
                     model:PartInQuestionnaire,
                     as: 'parts_in_questionnaire',
                     // attributes:['id','questionnaire','number_in_questionnaire','headline'],
@@ -50,7 +50,7 @@ class QuestionnaireDal {
                         model:QuestionsInQuestionnaire, 
                         as: 'questions_in_part'
                     }]
-                 }]
+                  }]
    
             }   
         )

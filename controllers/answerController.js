@@ -6,7 +6,7 @@ class AnswerController {
         const qstId = req.params.qstId;
         const answers = await AnswerDal.getAllAnsOfQst(qstId);
         if (!answers?.length)
-            return res.status(204).json({ message: 'No questinos found' });
+            return res.status(204).send();
         res.json(answers);
     }
 

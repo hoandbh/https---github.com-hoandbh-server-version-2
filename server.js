@@ -21,14 +21,16 @@ app.use('/api/course', require("./routes/courseRouter"));
 app.use('/api/version', require("./routes/versionRouter"));
 app.use('/api/score', require("./routes/scoreRouter"));
 app.use('/api/message', require('./routes/messageRouter'));
-// app.use('/api/possible_answer',require('./routes/possibleAnsRouter'))
 app.use('/api/questionnaire',require('./routes/questionnaireRouter'))
 app.use('/api/question',require('./routes/questionRouter'))
 app.use('/api/part', require('./routes/partRouter'));
-app.use('/api/check-test',require('./routes/testRouter'));
 app.use('/api/answer',require('./routes/answerRouter'));
 
-app.all('*', (req, res) => {
+//services
+app.use('/api/check-test',require('./routes/testRouter'));
+
+//to ask Riki how to export it
+app.all('*',(req, res) => {
     res.status(404)
     if (req.accepts('html')) {
         res.sendFile(path.join(__dirname, 'views', '404.html'))
@@ -37,6 +39,6 @@ app.all('*', (req, res) => {
     } else {
         res.type('txt').send('404 Not Found')
     }
-})
+});   
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));     

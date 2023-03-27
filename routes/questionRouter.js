@@ -8,6 +8,7 @@ questionRouter.route('/')
 
 questionRouter.route('/:id')
 .delete(questionController.deleteQst)
+.put(questionController.updateQst)
 
 const answerRouter = require('./answerRouter')
 questionRouter.use('/:qstId/answer', answerRouter);
