@@ -1,13 +1,15 @@
 const express = require('express')
-const questionRouter = express.Router();
+const questionRouter = express.Router({ mergeParams: true });
 const questionController = require('../controllers/questionController');
 
 questionRouter.route('/')
-.get(questionController.getAllQst)
+.get(questionController.getAllQstOfPart)
 .post(questionController.createNewQst)
 
-questionRouter.route('/ofPart/:partId')
-.get(questionController.getAllQstOfPart)
+questionRouter.route('/:id')
+.delete(questionController.deleteQst)
 
+const answerRouter = require('./answerRouter')
+questionRouter.use('/:qstId/answer', answerRouter);
 
 module.exports = questionRouter;

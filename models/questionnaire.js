@@ -2,7 +2,7 @@ const { sequelize, DataTypes } = require("./sequelize");
 const Questionnaire = sequelize.define(
     "questionnaire",
     {
-        id_questionnaire: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
@@ -13,15 +13,16 @@ const Questionnaire = sequelize.define(
         },
         date: {
             type: DataTypes.DATE
-            //,allowNull:
-
         },
-        // term: {
-        
+
+        //isComplete: {
+        //
+        //       
+        //}
+
+        // term: { 
         //     type: DataTypes.ENUM('A','B','C','D','E')
         //     ,defaultValue:'A'
-            
-
         // }
 
     },
@@ -29,3 +30,4 @@ const Questionnaire = sequelize.define(
         timestamps: false,
     });
 module.exports = Questionnaire;
+

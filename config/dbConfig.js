@@ -13,7 +13,7 @@
 //     }
 // }
 
-//home
+// home
 module.exports = {
     HOST: 'localhost',
     USER: process.env.DATABASE_USER,

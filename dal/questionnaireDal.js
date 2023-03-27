@@ -39,14 +39,14 @@ class QuestionnaireDal {
         //const quest = this.getQuestionnaireById(id);
         //const questionsInQuestionnaire = 
 
-        const fullQuestoinnare = await Questionnaire.findAll(
+        const fullQuestoinnare = await Questionnaire.findOne(
             {
-                where:{id_questionnaire:id},
+                where:{id:id},
                 // attributes:['owner','date'],
                  include:[{
                     model:PartInQuestionnaire,
                     as: 'parts_in_questionnaire',
-                    // attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
+                    // attributes:['id','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
                         as: 'questions_in_part'//,
@@ -57,7 +57,7 @@ class QuestionnaireDal {
                     }]
                  }]
    
-            }
+            }   
         )
         return fullQuestoinnare;
 
@@ -70,7 +70,7 @@ class QuestionnaireDal {
     deleteQuestionnaire = async (id) => {
         await Questionnaire.destroy({
             where: {
-                id_questionnaire: id
+                id: id
             }
         })
     }

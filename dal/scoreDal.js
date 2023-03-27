@@ -4,7 +4,7 @@ const { score: Score } = require('../models');
 
 const where = (id) => ({
     where: {
-      id_score: id
+      id: id
     }
   });
 

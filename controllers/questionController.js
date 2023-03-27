@@ -29,16 +29,15 @@ class QuestionController {
 
 
     createNewQst = async(req,res) => {
-        const content = req.body;
-        console.log(content);
-        const qst = await QuestionDal.createNewQst(content);
+        const {content,part_id} = req.body;
+        const qst = await QuestionDal.createNewQst({content,part_id});
         if(qst)
             return res.status(201).json(qst)
     }
-    
+                
     deleteQst = async (req, res) => { 
         const id = req.params.id;
-        if (!id) {//לעשות את הבדיקה הזו תמיד??
+        if (!id) {
             return res.status(400).json({ message: 'question ID required' });
         }
         await QuestionDal.deleteQst(id);

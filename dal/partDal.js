@@ -12,7 +12,7 @@ class PartDal {
 
         const parts = await Part.findAll({
             where:{
-                questionnaire:questionnaireId
+                questionnaire_id:questionnaireId
             }
         })
         return parts;

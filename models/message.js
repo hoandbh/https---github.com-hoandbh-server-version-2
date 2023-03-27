@@ -4,7 +4,7 @@ const { sequelize, DataTypes } = require("./sequelize");
 const Message = sequelize.define(
     "messages",
     {
-        id_message: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true

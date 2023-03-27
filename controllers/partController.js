@@ -34,7 +34,7 @@ class PartController {
         const {serial_number, headline, mix} = req.body;
         if ((!serial_number && serial_number!=0) || (!headline && typeof(headline)!='string') || (!mix && mix!=false))//mix is boolean!!!
             return res.status(400).json({ message: 'All fields are required' });
-        const part = await partDal.createNewPart({serial_number, headline, mix, questionnaire: questionnaireId});
+        const part = await partDal.createNewPart({serial_number, headline, mix, questionnaire_id: questionnaireId});
         if (part)
             return res.status(201).json(part);
         return res.status(500).json({ message: 'Failed to create new message' });
