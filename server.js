@@ -28,6 +28,7 @@ app.use('/api/answer',require('./routes/answerRouter'));
 
 //services
 app.use('/api/check-test',require('./routes/testRouter'));
+app.use('/api/print_version', require('./routes/servicesRouter'))
 
 //to ask Riki how to export it
 app.all('*',(req, res) => {
