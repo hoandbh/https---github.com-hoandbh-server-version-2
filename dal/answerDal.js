@@ -19,7 +19,13 @@ class AnswerDal {
     }
 
 
-
+    deleteAnswersOfQuestion = async (qstId) => {
+        await Answer.destroy({
+            where: {
+                question_id: qstId
+            }
+        });
+    }
 
     //TODO
     possibleAnsSearch = async (req, res) => {
