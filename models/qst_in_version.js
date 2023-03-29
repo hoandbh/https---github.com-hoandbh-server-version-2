@@ -13,7 +13,7 @@ const { sequelize, DataTypes } = require("./sequelize");
             question_id: {
                 type: DataTypes.INTEGER
             },
-            serial_number_in_part: {
+            serial_number: {
                 type: DataTypes.INTEGER
             }
         },
