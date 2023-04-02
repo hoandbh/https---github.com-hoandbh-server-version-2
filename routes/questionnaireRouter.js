@@ -10,8 +10,8 @@ questionnaireRouter.route('/:id')
 .get(qstnrController.getQuestionnaireById)
 .delete(qstnrController.deleteQuestionnaire)
 
-questionnaireRouter.route('/owner/:ownerId')
-.get(qstnrController.getQuestionnairesByOwner)
+// questionnaireRouter.route('/owner/:ownerId')
+// .get(qstnrController.getQuestionnairesByOwner)
 
 questionnaireRouter.route('/full/:id')
 .get(qstnrController.getFullQuestionnaire)
