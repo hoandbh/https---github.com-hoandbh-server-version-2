@@ -16,6 +16,9 @@ const Qst_in_questionnaire = sequelize.define(
         pic_path: {
             type: DataTypes.STRING,
             allowNull: true
+        },
+        serial_number: {
+            type: DataTypes.INTEGER
         }
     },
     {

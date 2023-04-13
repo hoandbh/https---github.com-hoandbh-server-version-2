@@ -16,6 +16,7 @@ const { sequelize, DataTypes } = require("./sequelize");
             email: {
                 type: DataTypes.STRING(200)
             },
+            //the permission should be enum of 1,2 and 3
             permission:{
                 type:DataTypes.INTEGER                
             },

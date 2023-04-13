@@ -19,7 +19,10 @@ const { sequelize, DataTypes } = require("./sequelize");
             },
             is_correct:{
                 type:DataTypes.BOOLEAN
-            }
+            },
+            serial_number: {
+                type: DataTypes.INTEGER
+            },
         },
         {
             timestamps: false,
