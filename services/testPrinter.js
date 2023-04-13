@@ -60,16 +60,16 @@ const orderPartsByDesc = (questionnaire) => {
     return questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 
 }
-const getSerialNumberOfAnswer = async(answer, versionId) =>{
+const getSerialNumberOfAnswer = async (answer, versionId) => {
     try {
         const aInVersion = await Ans_in_version.findOne({
-            where:{
-                version_id:versionId,
+            where: {
+                version_id: versionId,
                 answer_id: answer.id
             }
         });
-        return aInVersion.get({plain:true}).serial_number;
-        
+        return aInVersion.get({ plain: true }).serial_number;
+
     } catch (error) {
         console.log(`Caught Error - no matching answer in version: \n ${error}`);
         const message = `missing answer in version: \n answer: ${answer}, version: ${versionId}`;
@@ -84,14 +84,14 @@ const getSerialNumberOfAnswer = async(answer, versionId) =>{
 
     }
 }
-const orderAnswersForVersion = async (question, versionId) =>{
-    for(let i in question.answers){
-        const serialNumberOfAns = await getSerialNumberOfAnswer(question.answers[i],versionId);
+const orderAnswersForVersion = async (question, versionId) => {
+    for (let i in question.answers) {
+        const serialNumberOfAns = await getSerialNumberOfAnswer(question.answers[i], versionId);
         question.answers[i].serial_number = serialNumberOfAns;
         // console.log(question.answers[i]);
     }
 
-    return question.answers.sort((a,b)=>(a.serial_number >b.serial_number)?1:-1);
+    return question.answers.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
 const getSerialNumberOfQuestion = async (question, versionId) => {
     try {
@@ -125,7 +125,7 @@ const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
         const serialNumOfQ = await getSerialNumberOfQuestion(questionsArr[i], versionId);
         questionsArr[i]['serial_number'] = serialNumOfQ;
         // console.log(questionsArr[i]);
-        questionsArr[i].answers = await orderAnswersForVersion(questionsArr[i],versionId);
+        questionsArr[i].answers = await orderAnswersForVersion(questionsArr[i], versionId);
     }
     return questionsArr.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 
@@ -137,6 +137,15 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
         questionnaire.parts_in_questionnaire[i].questions_in_part = m;
     }
     return questionnaire;
+}
+const printHeaders = async (detailsDic, doc)=>{
+    // doc.image('./files/Header.PNG');
+    doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
+
+    
+    doc.text(`\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`);
+    doc.text(`version: ${detailsDic.versionNum}`);
+    doc.text(`date: ${detailsDic.date}`);
 }
 const printParts = async (partsArr, doc) => {
 
@@ -151,7 +160,7 @@ const printParts = async (partsArr, doc) => {
             // console.log('ANSWERS');
             // console.log(qs[q].answers);
             let as = qs[q].answers;
-            for(let a in as){
+            for (let a in as) {
                 console.log(a);
                 // doc.text(`\n ${a.serial_number}: ${a.content}`)
             }
@@ -170,20 +179,18 @@ class TestPrinter {
         const ownerId = fullQuestoinnaire.owner;
         const courseName = await getQuestionnaireCourse(ownerId);
         orderPartsByDesc(fullQuestoinnaire);
-        // console.log('hi\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-
         await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
         //כותרות למבחן פה
 
-        // doc.image('./files/Header.PNG');
-        doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350],align: 'center'}).stroke();
-    
-        doc.text(`\n\n\n\n\n\n questionnaire in ${courseName}. \n Good Luck!!!`);
-        doc.text(`version: ${versionId}`);
-        doc.text(`date: ${fullQuestoinnaire.date.toLocaleDateString()}`);
+        let headers = {
+            courseN:courseName,
+            versionNum:versionId,
+            date:fullQuestoinnaire.date.toLocaleDateString()
+        }
+        await printHeaders(headers,doc);
+        
         await printParts(fullQuestoinnaire.parts_in_questionnaire, doc);
 
-        //מכאן השאלות
         doc.end();
         return fullQuestoinnaire;
     }
@@ -270,7 +277,7 @@ module.exports = new TestPrinter();
 //         doc.end();
 //         return fullVersion;
 
-//         // id:  questionnaire_id:     pdf_path: 
+//         // id:  questionnaire_id:     pdf_path:
 //     }
 
 //     //return url to pdf!!!
