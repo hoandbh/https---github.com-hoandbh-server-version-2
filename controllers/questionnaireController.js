@@ -2,7 +2,7 @@
 //if int needed - int
 //
 
-
+const versionCreator = require('../services/versionCreator')
 const questionnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
@@ -68,6 +68,15 @@ class QuestionnaireController {
         else
             res.status(204).send();
         
+    }
+    createVersionForQuestionnaire = async(req,res)=>{
+
+        const id = req.params.id;
+        const amount = req.body.amount;
+        const a = await versionCreator.createVersions(id,amount);
+        return res.status(200).json({version: "hi, success!!!"});
+
+
     }
 }
 

@@ -19,4 +19,8 @@ questionnaireRouter.route('/full/:id')
 const partRouter = require('./partRouter');
 questionnaireRouter.use('/:questionnaireId/part', partRouter);
 
+
+questionnaireRouter.route('/mixQuestionnaire/:id')
+.post(qstnrController.createVersionForQuestionnaire)
+
 module.exports = questionnaireRouter;
