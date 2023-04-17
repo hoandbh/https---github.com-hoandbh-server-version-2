@@ -7,11 +7,9 @@ const Questionnaire = db.questionnaire;
 const Part_In_Questionnaire = db.part_in_questionnaire;
 const Qst_from_questionnaire = db.qst_in_questionnaire;
 const Possible_Answer = db.possible_answer;
-
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
-
 const Courses = db.course;
 const Owners = db.user;
 const getQuestionnaireCourse = async (ownerId) => {
@@ -29,7 +27,6 @@ const getQuestionnaireCourse = async (ownerId) => {
     return o.teachers_in_course.name;
 
 }
-
 const getFullQuestionnaireOfVersion = async (versionId) => {
     const versionDetails = await Version.findByPk(versionId);
     const questionnaireId = versionDetails.questionnaire_id;
@@ -54,22 +51,21 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
     )
     return fullQuestionnaire.get({ plain: true });
 }
-
 const orderPartsByDesc = (questionnaire) => {
     const questionnaireParts = questionnaire.parts_in_questionnaire
     return questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 
 }
-const getSerialNumberOfAnswer = async(answer, versionId) =>{
+const getSerialNumberOfAnswer = async (answer, versionId) => {
     try {
         const aInVersion = await Ans_in_version.findOne({
-            where:{
-                version_id:versionId,
+            where: {
+                version_id: versionId,
                 answer_id: answer.id
             }
         });
-        return aInVersion.get({plain:true}).serial_number;
-        
+        return aInVersion.get({ plain: true }).serial_number;
+
     } catch (error) {
         console.log(`Caught Error - no matching answer in version: \n ${error}`);
         const message = `missing answer in version: \n answer: ${answer}, version: ${versionId}`;
@@ -84,14 +80,14 @@ const getSerialNumberOfAnswer = async(answer, versionId) =>{
 
     }
 }
-const orderAnswersForVersion = async (question, versionId) =>{
-    for(let i in question.answers){
-        const serialNumberOfAns = await getSerialNumberOfAnswer(question.answers[i],versionId);
+const orderAnswersForVersion = async (question, versionId) => {
+    for (let i in question.answers) {
+        const serialNumberOfAns = await getSerialNumberOfAnswer(question.answers[i], versionId);
         question.answers[i].serial_number = serialNumberOfAns;
         // console.log(question.answers[i]);
     }
 
-    return question.answers.sort((a,b)=>(a.serial_number >b.serial_number)?1:-1);
+    return question.answers.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
 const getSerialNumberOfQuestion = async (question, versionId) => {
     try {
@@ -125,7 +121,7 @@ const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
         const serialNumOfQ = await getSerialNumberOfQuestion(questionsArr[i], versionId);
         questionsArr[i]['serial_number'] = serialNumOfQ;
         // console.log(questionsArr[i]);
-        questionsArr[i].answers = await orderAnswersForVersion(questionsArr[i],versionId);
+        questionsArr[i].answers = await orderAnswersForVersion(questionsArr[i], versionId);
     }
     return questionsArr.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 
@@ -137,6 +133,15 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
         questionnaire.parts_in_questionnaire[i].questions_in_part = m;
     }
     return questionnaire;
+}
+const printHeaders = async (detailsDic, doc)=>{
+    // doc.image('./files/Header.PNG');
+    doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
+
+    
+    doc.text(`\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`);
+    doc.text(`version: ${detailsDic.versionNum}`);
+    doc.text(`date: ${detailsDic.date}`);
 }
 const printParts = async (partsArr, doc) => {
 
@@ -151,7 +156,7 @@ const printParts = async (partsArr, doc) => {
             // console.log('ANSWERS');
             // console.log(qs[q].answers);
             let as = qs[q].answers;
-            for(let a in as){
+            for (let a in as) {
                 console.log(a);
                 // doc.text(`\n ${a.serial_number}: ${a.content}`)
             }
@@ -170,20 +175,18 @@ class TestPrinter {
         const ownerId = fullQuestoinnaire.owner;
         const courseName = await getQuestionnaireCourse(ownerId);
         orderPartsByDesc(fullQuestoinnaire);
-        // console.log('hi\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-
         await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
         //כותרות למבחן פה
 
-        // doc.image('./files/Header.PNG');
-        doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350],align: 'center'}).stroke();
-    
-        doc.text(`\n\n\n\n\n\n questionnaire in ${courseName}. \n Good Luck!!!`);
-        doc.text(`version: ${versionId}`);
-        doc.text(`date: ${fullQuestoinnaire.date.toLocaleDateString()}`);
+        let headers = {
+            courseN:courseName,
+            versionNum:versionId,
+            date:fullQuestoinnaire.date.toLocaleDateString()
+        }
+        await printHeaders(headers,doc);
+        
         await printParts(fullQuestoinnaire.parts_in_questionnaire, doc);
 
-        //מכאן השאלות
         doc.end();
         return fullQuestoinnaire;
     }
@@ -192,90 +195,3 @@ class TestPrinter {
 }
 
 module.exports = new TestPrinter();
-
-
-
-
-
-
-
-
-// const PDFDocument = require('pdfkit');
-// const fs = require('fs');
-
-// const db = require('../models/index');
-// const { KeyObject } = require('crypto');
-
-// const Version = db.version;
-// const Qst_in_version = db.qst_in_version;
-// const Qst_from_questionnaire = db.qst_in_questionnaire;
-// // const Ans_in_version = db.ans_in_version;
-
-
-// class TestPrinter {
-
-
-//     convertVersionToPdf = async (versionId, filePath) => {
-
-//         const fullVersion = await Version.findOne(
-//             {
-//                 where: { id: versionId },
-//                 include: [{
-//                     model: Qst_in_version,
-//                     as: 'questions_in_version',
-//                     include:[{
-//                         model:Qst_from_questionnaire,
-//                         as: 'question_version'
-//                     }]
-
-//                 }]
-//             }
-//         )
-//         const questionsInVersion = fullVersion.dataValues.questions_in_version
-//         const questionsInVersionBig = [];
-//         for (let i in questionsInVersion) {
-//             questionsInVersionBig.push(questionsInVersion[i].dataValues);
-//         }
-//         console.log(questionsInVersion);
-
-//         //creates array of questions with content of questions example:
-//         //        {
-//         //     "id": 1,
-//         //     "version_id": 1,
-//         //     "question_id": 1,
-//         //     "serial_number_in_part": 3,
-//         //     "question_version": {"id": 1, "part_id": 1,"content": "what's your name", "pic_path": "" }
-//         // },
-//         const qIv = [];
-//         for(let i in questionsInVersionBig){
-//             const newObj = {
-//                 id:questionsInVersionBig[i].id,
-//                 version_id:questionsInVersionBig[i].version_id,
-//                 question_id:questionsInVersionBig[i].question_id,
-//                 serial_number_in_part:questionsInVersionBig[i].serial_number_in_part,
-//                 questionContent:questionsInVersionBig[i].question_version.dataValues
-//             }
-//             qIv.push(newObj);
-//         }
-
-//         console.log(qIv);
-//         // const sortedQIV = qIv.sort((a, b) => (a.serial_number > b.serial_number)? 1:-1)
-//         // console.log(sortedQIV);
-//         console.log("here \n\n\n\n\n\n")
-
-//         const doc = new PDFDocument();
-//         doc.pipe(fs.createWriteStream(`./files/${versionId}.pdf`, 'utf8'));
-//         doc.text(`version: ${versionId}`);
-//         doc.text(fullVersion);
-//         doc.end();
-//         return fullVersion;
-
-//         // id:  questionnaire_id:     pdf_path: 
-//     }
-
-//     //return url to pdf!!!
-
-// }
-// module.exports = new TestPrinter();
-
-
