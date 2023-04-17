@@ -49,6 +49,9 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
 
         }
     )
+    const a = fullQuestionnaire.get({plain:true});
+    console.log(a.parts_in_questionnaire[0].questions_in_part)
+    console.log("here \n\n\n\n\n\n\n\n")
     return fullQuestionnaire.get({ plain: true });
 }
 const orderPartsByDesc = (questionnaire) => {

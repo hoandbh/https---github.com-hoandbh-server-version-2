@@ -17,7 +17,7 @@ const Qst_in_questionnaire = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true
         },
-        serial_number: {
+        serial_number_in_part: {
             type: DataTypes.INTEGER
         }
     },
