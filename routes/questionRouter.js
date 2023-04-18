@@ -7,6 +7,7 @@ questionRouter.route('/')
 .post(questionController.createNewQst)
 
 questionRouter.route('/:id')
+.get(questionController.getQstById)
 .delete(questionController.deleteQst)
 .put(questionController.updateQst)
 

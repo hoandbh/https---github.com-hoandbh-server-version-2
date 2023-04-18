@@ -20,12 +20,23 @@ class QstInQuestionnaireDal {
         if (!question) {
             return null;
         }
-        // const question = await Qst.update(content,{where:{id:id}})
-
         await question.update({content});
         return question;
     }
 
+    getQstById = async (id) => {
+        const question = await Qst.findOne({
+            where: {    
+                id
+            },
+            include: [{
+                model: Answer,
+                as: 'answers'
+            }]
+        })
+        return question;
+    }
+    
     getAllQstOfPart = async (partId) => {
         const qsts = await Qst.findAll({
             where: {
