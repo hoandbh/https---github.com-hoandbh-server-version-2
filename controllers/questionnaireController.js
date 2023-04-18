@@ -2,7 +2,7 @@
 //if int needed - int
 //
 
-
+const versionCreator = require('../services/versionCreator')
 const questionnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
@@ -10,14 +10,22 @@ class QuestionnaireController {
     //localhost:3600/api/messages
 
     getAllQuestionnaires = async (req, res) => {
-        const questionnaires = await questionnaireDal.getAllQuestionnaires();
-        if (!questionnaires?.length)
-            return res.status(400).json({ message: 'No questionnaires found' })
-        res.json(questionnaires)
-
+        const {owner} = req.query;
+        if (owner) {
+            const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
+            if (qstnr)
+                res.json(qstnr);
+            else
+                res.status(204).send();
+        } else {
+            const questionnaires = await questionnaireDal.getAllQuestionnaires(owner);
+            if (!questionnaires?.length)   
+                return res.status(400).json({ message: 'No questionnaires found' })
+            res.json(questionnaires)
+        }
     }
-    getQuestionnaireById = async (req, res) => {
 
+    getQuestionnaireById = async (req, res) => {
         //this function really brings all the questions that belong to this questionnaire 
         const id = req.params.id;
         const questionnaire = await questionnaireDal.getQuestionnaireById(id);
@@ -34,15 +42,15 @@ class QuestionnaireController {
             return res.json(fullQuestionnaire)
         else
             res.status(204).send()
-
     }
+
     createQuestionnaire = async (req, res) => {
         const content = req.body;
         const questionnaire = await questionnaireDal.createNewQuestionnaire(content);
         if (questionnaire)
             return res.status(201).json(questionnaire)
-
     }
+
     deleteQuestionnaire = async (req, res) => {
         const id = req.params.id;
         //the way I think: 
@@ -56,18 +64,25 @@ class QuestionnaireController {
         // if (!id) {
         //     return res.status(400).json({ message: 'questionnaire id required' });
         // } 
-        // await questionnaireDal.deleteQuestionnaire(id);
-
-
+        // await questionnaireDal.deleteQuestionnaire(id);    
     }
+
     getQuestionnairesByOwner = async (req,res)=>{
         const owner = req.params.ownerId;
-        var qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
+        const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
         if (qstnr)
             res.json(qstnr);
         else
             res.status(204).send();
-        
+    }
+    createVersionForQuestionnaire = async(req,res)=>{
+
+        const id = req.params.id;
+        const amount = req.body.amount;
+        const a = await versionCreator.createVersions(id,amount);
+        return res.status(200).json({version: "hi, success!!!"});
+
+
     }
 }
 

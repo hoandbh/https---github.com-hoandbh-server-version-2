@@ -7,7 +7,10 @@ const { sequelize, DataTypes } = require("./sequelize");
                 autoIncrement: true,
                 primaryKey: true
             },
-            user_name: {
+            first_name: {
+                type: DataTypes.STRING(200)
+            },
+            last_name: {
                 type: DataTypes.STRING(200)
             },
             password: {

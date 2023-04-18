@@ -6,22 +6,26 @@ const User = db.user;
 const checkRequiredFields = (requiredFields, requestBody) => {
     const missingFields = [];
     for (const field of requiredFields) {
-        if (!requestBody[field])
+        if (requestBody[field]==undefined)
             missingFields.push(field);
     }
+    // console.log('missingFields')
+    // console.log(missingFields)
     return missingFields.length == 0;
 };
 
 const login = async (req, res) => {
-    const requiredFields = ['user_name', 'password'];
+    console.log(req.body)
+
+    const requiredFields = ['email', 'password'];
     const allFieldsPresent = checkRequiredFields(requiredFields, req.body);
     if (!allFieldsPresent) {
         return res.status(400).json({
             message: 'All fields are required'
         });
     }           
-    const { user_name, password } = req.body;
-    const foundUser = await User.findOne({ where: { user_name } });
+    const { email, password } = req.body;
+    const foundUser = await User.findOne({ where: { email } });
     if (!foundUser) //|| !is_exist.active //if field activ is exist
         return res.status(401).json({ message: 'No user found'});
     const passwordMatch = await bcrypt.compare(password, foundUser.password);
@@ -29,20 +33,20 @@ const login = async (req, res) => {
         return res.status(401).json({ message: 'Incorrect password' });
     const userInfo = {
         id: foundUser.id,
-        username: foundUser.username,
+        username: foundUser.username,//??
         permission: foundUser.permission   
     };
     //email?course??
     const accessToken = jwt.sign(userInfo,process.env.ACCESS_TOKEN_SECRET);
     //res.setHeader('Authorization', `Bearer ${accessToken}`)//???
     // res.json({accessToken});
-    res.json({ user:{ name:foundUser.user_name, id:foundUser.id, permission:foundUser.permission}, accessToken:accessToken})
+    res.json({ user:{ firstName:foundUser.first_name, lastName:foundUser.last_name, id:foundUser.id, permission:foundUser.permission}, accessToken:accessToken})
 
 }
 
 const register = async (req, res) => {
 
-    const requiredFields = ['user_name', 'email', 'password','permission'];
+    const requiredFields = ['first_name', 'last_name', 'email', 'password','permission'];
     const allFieldsPresent = checkRequiredFields(requiredFields, req.body);
 
     if (!allFieldsPresent) {
@@ -50,13 +54,13 @@ const register = async (req, res) => {
             message: 'All fields are required'
         });
     }
-    const { user_name, email, password, permission } = req.body;
-    const duplicateUsername = await User.findOne({ where: { user_name} });
-    if (duplicateUsername)
-        return res.status(409).json({ message: 'Username already taken' });
+    const { first_name, last_name, email, password, permission} = req.body;
+    const duplicateEmail = await User.findOne({ where: { email} });
+    if (duplicateEmail)
+        return res.status(409).json({ message: 'Your email is associated with an existing account.' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ user_name, email, permission, password: hashedPassword });
+    const user = await User.create({ first_name, last_name, email, permission, password: hashedPassword });
 
     if (user)
         return res.status(201).json(user);

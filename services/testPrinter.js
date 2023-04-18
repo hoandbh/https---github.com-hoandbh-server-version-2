@@ -7,11 +7,9 @@ const Questionnaire = db.questionnaire;
 const Part_In_Questionnaire = db.part_in_questionnaire;
 const Qst_from_questionnaire = db.qst_in_questionnaire;
 const Possible_Answer = db.possible_answer;
-
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
-
 const Courses = db.course;
 const Owners = db.user;
 const getQuestionnaireCourse = async (ownerId) => {
@@ -29,7 +27,6 @@ const getQuestionnaireCourse = async (ownerId) => {
     return o.teachers_in_course.name;
 
 }
-
 const getFullQuestionnaireOfVersion = async (versionId) => {
     const versionDetails = await Version.findByPk(versionId);
     const questionnaireId = versionDetails.questionnaire_id;
@@ -52,9 +49,11 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
 
         }
     )
+    const a = fullQuestionnaire.get({plain:true});
+    console.log(a.parts_in_questionnaire[0].questions_in_part)
+    console.log("here \n\n\n\n\n\n\n\n")
     return fullQuestionnaire.get({ plain: true });
 }
-
 const orderPartsByDesc = (questionnaire) => {
     const questionnaireParts = questionnaire.parts_in_questionnaire
     return questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
@@ -199,90 +198,3 @@ class TestPrinter {
 }
 
 module.exports = new TestPrinter();
-
-
-
-
-
-
-
-
-// const PDFDocument = require('pdfkit');
-// const fs = require('fs');
-
-// const db = require('../models/index');
-// const { KeyObject } = require('crypto');
-
-// const Version = db.version;
-// const Qst_in_version = db.qst_in_version;
-// const Qst_from_questionnaire = db.qst_in_questionnaire;
-// // const Ans_in_version = db.ans_in_version;
-
-
-// class TestPrinter {
-
-
-//     convertVersionToPdf = async (versionId, filePath) => {
-
-//         const fullVersion = await Version.findOne(
-//             {
-//                 where: { id: versionId },
-//                 include: [{
-//                     model: Qst_in_version,
-//                     as: 'questions_in_version',
-//                     include:[{
-//                         model:Qst_from_questionnaire,
-//                         as: 'question_version'
-//                     }]
-
-//                 }]
-//             }
-//         )
-//         const questionsInVersion = fullVersion.dataValues.questions_in_version
-//         const questionsInVersionBig = [];
-//         for (let i in questionsInVersion) {
-//             questionsInVersionBig.push(questionsInVersion[i].dataValues);
-//         }
-//         console.log(questionsInVersion);
-
-//         //creates array of questions with content of questions example:
-//         //        {
-//         //     "id": 1,
-//         //     "version_id": 1,
-//         //     "question_id": 1,
-//         //     "serial_number_in_part": 3,
-//         //     "question_version": {"id": 1, "part_id": 1,"content": "what's your name", "pic_path": "" }
-//         // },
-//         const qIv = [];
-//         for(let i in questionsInVersionBig){
-//             const newObj = {
-//                 id:questionsInVersionBig[i].id,
-//                 version_id:questionsInVersionBig[i].version_id,
-//                 question_id:questionsInVersionBig[i].question_id,
-//                 serial_number_in_part:questionsInVersionBig[i].serial_number_in_part,
-//                 questionContent:questionsInVersionBig[i].question_version.dataValues
-//             }
-//             qIv.push(newObj);
-//         }
-
-//         console.log(qIv);
-//         // const sortedQIV = qIv.sort((a, b) => (a.serial_number > b.serial_number)? 1:-1)
-//         // console.log(sortedQIV);
-//         console.log("here \n\n\n\n\n\n")
-
-//         const doc = new PDFDocument();
-//         doc.pipe(fs.createWriteStream(`./files/${versionId}.pdf`, 'utf8'));
-//         doc.text(`version: ${versionId}`);
-//         doc.text(fullVersion);
-//         doc.end();
-//         return fullVersion;
-
-//         // id:  questionnaire_id:     pdf_path:
-//     }
-
-//     //return url to pdf!!!
-
-// }
-// module.exports = new TestPrinter();
-
-
