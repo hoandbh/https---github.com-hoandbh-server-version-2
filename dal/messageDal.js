@@ -4,8 +4,8 @@ const { message: Message } = require('../models');
 
 const where = (id) => ({
     where: {
-      id_message: id
-    }
+      id: id
+    }  
   });
 
 class MessageDal {

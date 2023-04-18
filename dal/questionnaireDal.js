@@ -6,7 +6,7 @@ const db = require('../models/index');
 const Questionnaire = db.questionnaire
 const PartInQuestionnaire = db.part_in_questionnaire
 const QuestionsInQuestionnaire = db.qst_in_questionnaire
-const PossibleAnswers = db.possible_answer
+const Answer = db.possible_answer;
 
 
 class QuestionnaireDal {
@@ -30,7 +30,7 @@ class QuestionnaireDal {
         });
         return quest;
     
-    }
+    }    
 
 
     //add more functions for getting according to certain paramters
@@ -39,25 +39,25 @@ class QuestionnaireDal {
         //const quest = this.getQuestionnaireById(id);
         //const questionsInQuestionnaire = 
 
-        const fullQuestoinnare = await Questionnaire.findAll(
+        const fullQuestoinnare = await Questionnaire.findOne(
             {
-                where:{id_questionnaire:id},
+                where:{id:id},
                 // attributes:['owner','date'],
-                 include:[{
+                  include:[{
                     model:PartInQuestionnaire,
                     as: 'parts_in_questionnaire',
-                    // attributes:['id_part','questionnaire','number_in_questionnaire','headline'],
+                    // attributes:['id','questionnaire','number_in_questionnaire','headline'],
                     include:[{
                         model:QuestionsInQuestionnaire, 
                         as: 'questions_in_part',
-                        include:[{
-                            model:PossibleAnswers, 
-                            as: 'possible_answers'
+                        include: [{
+                            model: Answer,
+                            as: 'answers'
                         }]
                     }]
-                 }]
+                  }]
    
-            }
+            }   
         )
         return fullQuestoinnare;
 
@@ -70,7 +70,7 @@ class QuestionnaireDal {
     deleteQuestionnaire = async (id) => {
         await Questionnaire.destroy({
             where: {
-                id_questionnaire: id
+                id: id
             }
         })
     }

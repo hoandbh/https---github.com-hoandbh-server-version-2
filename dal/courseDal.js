@@ -3,7 +3,7 @@ const { course: Course } = require('../models');
 
 const where = (id) => ({
     where: {
-      id_course: id
+      id: id
     }
   });
 

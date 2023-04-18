@@ -3,12 +3,12 @@ const { sequelize, DataTypes } = require("./sequelize");
 const Part_in_Questoinnare = sequelize.define(
     "part_in_questionnaire",
     {
-        id_part: {
+        id: {
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
-        questionnaire:{
+        questionnaire_id:{
             type:DataTypes.INTEGER
         },
         serial_number:{

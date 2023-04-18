@@ -23,11 +23,11 @@ class TestsService {
           FROM 
             ans_selected_in_tests ast
             JOIN qst_in_questionnaires qiq ON qiq.id = ast.qst_in_questionnaire
-            JOIN possible_answers pa ON pa.id = ast.ans_selected AND pa.qst = qiq.id
+            JOIN possible_answers pa ON pa.id = ast.answer_id AND pa.qst = qiq.id
             JOIN scores s ON s.questionnaire = qiq.questionnaire_id AND s.student_id = :studentId
           WHERE 
             qiq.questionnaire_id = :questionnaireId AND pa.is_correct = 1
-          `,
+          `,   
           {
             replacements: {
               studentId,
@@ -45,7 +45,7 @@ class TestsService {
         });
         
         return score;
-        //my code!!
+        // my code!!
         // //filter by studentId
         // const ansSelctedOfThisStudent = await testDal.getByStudent(studentId);
         // //return ansSelctedOfThisStudent;

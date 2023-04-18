@@ -1,5 +1,7 @@
-const db = require('../models/index')
-const Qst = db.qst_in_questionnaire
+const db = require('../models/index');
+const Qst = db.qst_in_questionnaire;
+const Answer = db.possible_answer;
+
 
 class QstInQuestionnaireDal {
 
@@ -8,42 +10,47 @@ class QstInQuestionnaireDal {
         return questions;
     }
 
-    createNewQst= async (content) => {
+    createNewQst = async (content) => {
         const question = await Qst.create(content);
         return question;
     }
-    
-//maybe extra, not used in controller yet :
-    getAllQstInQuestionnaire = async(QuestionnaireId)=>{
-        const qsts = await Qst.findAll({
-            where:{
-                id_qst:QuestionnaireId//what is it?
-            }
-        })
-        return qsts;
+
+    updateQst = async (id, content) => {
+        const question = await Qst.findByPk(id);
+        if (!question) {
+            return null;
+        }
+        // const question = await Qst.update(content,{where:{id:id}})
+
+        await question.update({content});
+        return question;
     }
 
-    getAllQstOfPart = async(partId)=>{
+    getAllQstOfPart = async (partId) => {
         const qsts = await Qst.findAll({
-            where:{
-                part_in_questionnaire:partId
-            }
+            where: {
+                part_id: partId
+            },
+            include: [{
+                model: Answer,
+                as: 'answers'
+            }]
         })
         return qsts;
     }
 
     // const fullQuestoinnare = await Questionnaire.findOne(
     //     {
-    //         where:{id_questionnaire:id},
+    //         where:{id:id},
     //         attributes:['owner','date'],
     //         include:'questions'
     //     }
     // )
 
-    deleteQst = async (id) => { 
+    deleteQst = async (id) => {
         await Qst.destroy({
             where: {
-                id_qst: id
+                id: id
             }
         });
     }
@@ -51,4 +58,4 @@ class QstInQuestionnaireDal {
 }
 
 const qstInQuestionnaireDal = new QstInQuestionnaireDal();
-module.exports  = qstInQuestionnaireDal;
+module.exports = qstInQuestionnaireDal;

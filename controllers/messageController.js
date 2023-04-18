@@ -41,7 +41,7 @@ class MessageController {
         }
         res.json(`Message ID ${id} deleted`);
     }
-
+  
     search = async (req, res) => {
         const { from, to, isCommit, content } = req.query;
         const where = {};

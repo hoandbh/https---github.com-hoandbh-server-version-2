@@ -14,12 +14,12 @@ class TestDal {
 
     search = async (where) => {
         const result = await Test.findAll({
-            attributes:['student_id', 'qst_in_questionnaire', 'ans_selected'],
+            attributes:['student_id', 'qst_in_questionnaire', 'answer_id'],
             include: [
-              { model: Questionnaire, as: 'questionnaire', attributes: ['id_questionnaire'] },
+              { model: Questionnaire, as: 'questionnaire', attributes: ['id'] },
             ],
             where: {
-              where//[Op.and]: 
+              where//[Op.and]:    
             }
           })
         return result;  

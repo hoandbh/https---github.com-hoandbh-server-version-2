@@ -4,12 +4,12 @@ const { sequelize, DataTypes } = require("./sequelize");
 const Course = sequelize.define(
     "courses",
     {
-      id_course: {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      course_name: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false
       },

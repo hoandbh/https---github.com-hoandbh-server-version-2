@@ -4,7 +4,7 @@ const { sequelize, DataTypes } = require("./sequelize");
 const Score = sequelize.define(
     "scores",
     {
-        id_score: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
@@ -13,15 +13,14 @@ const Score = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull:false
         },
-        questionnaire: {
+        questionnaire_id: {
             type: DataTypes.INTEGER,
             allowNull:false
         },
         score_: {
             type: DataTypes.INTEGER,
             defaultValue: 0
-        },
-
+        }
     },
     {
         timestamps: false,
