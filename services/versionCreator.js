@@ -64,13 +64,13 @@ const createOneVersion = async (questionnaireId, pdfPath) => {
 
 const createPartInVersionNotMixed = async (part, versionId) => {
     const questionsInVersionArr = []
-    for(let i in part.questions_in_part){
+    for (let i in part.questions_in_part) {
         const q = part.questions_in_part[i];
         const question = await Qst_in_version.create({ 'question_id': q.id, 'version_id': versionId, 'serial_number_in_part': q.serial_number_in_part })
         const qst = question.get({ plain: true });
         questionsInVersionArr.push(qst);
     }
-    return questionsInVersionArr ;
+    return questionsInVersionArr;
 }
 const getShuffledArr = arr => {
     const newArr = arr.slice()
@@ -83,45 +83,48 @@ const getShuffledArr = arr => {
 const createMixedPartInVersion = async (part, versionId) => {
     const questionsInVersionArr = []
     const l = part.questions_in_part.length;
-    const numbers = Array(l).fill().map((_, i) => i+1);
+    const numbers = Array(l).fill().map((_, i) => i + 1);
     const n = getShuffledArr(numbers);
-    for(let i in part.questions_in_part){
+    for (let i in part.questions_in_part) {
         const q = part.questions_in_part[i];
         const question = await Qst_in_version.create({ 'question_id': q.id, 'version_id': versionId, 'serial_number_in_part': n[i] })
         const qst = question.get({ plain: true });
         questionsInVersionArr.push(qst);
     }
-    return questionsInVersionArr ;
+    return questionsInVersionArr;
+}
+
+const createPartsOfVersion = async (fullQ, versionId) => {
+
+    for (let i in fullQ.parts_in_questionnaire) {
+        if (fullQ.parts_in_questionnaire[i].mix) {
+            // const questionsInPart = 
+            await createMixedPartInVersion(fullQ.parts_in_questionnaire[i], versionId);
+            // fullQ.parts_in_questionnaire[i].questions_in_part = questionsInPart;
+        }
+        else {
+            // const questionsInPart = 
+            await createPartInVersionNotMixed(fullQ.parts_in_questionnaire[i], versionId);
+            // fullQ.parts_in_questionnaire[i].questions_in_part = questionsInPart;
+        }
+
+    }
 }
 
 class VersionCreator {
 
     createVersions = async (questionnaireId, amount) => {
         const fullQ = await getFullQuestionnaire(questionnaireId);
-        //only if managed to get we will precede to create version...
-        //need to produce the right errors over her if qstnr doesn't 
-        // console.log(fullQ.parts_in_questionnaire[0].questions_in_part[0])
+        if (!fullQ) //|| !is_exist.active //if field activ is exist
+            return res.status(401).json({ message: 'No questionnaire found' });
         const v = await createOneVersion(questionnaireId, 'hihihi');
-        const qInVersion = await createMixedPartInVersion(fullQ.parts_in_questionnaire[0], v.id)
-        console.log(qInVersion);
+        await createPartsOfVersion(fullQ, v.id);
 
-        return fullQ;
+        return v;
     }
 
 
 
-<<<<<<< HEAD
-                
-                }]
-            }
-        )
-
-        
-
-
-    } 
-=======
->>>>>>> d05edf291d1cf90558afb370374a4182b9d2c605
 }
 
 

@@ -50,8 +50,8 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
         }
     )
     const a = fullQuestionnaire.get({plain:true});
-    console.log(a.parts_in_questionnaire[0].questions_in_part)
-    console.log("here \n\n\n\n\n\n\n\n")
+    // console.log(a.parts_in_questionnaire[0].questions_in_part)
+    // console.log("here \n\n\n\n\n\n\n\n")
     return fullQuestionnaire.get({ plain: true });
 }
 const orderPartsByDesc = (questionnaire) => {
@@ -149,9 +149,8 @@ const printHeaders = async (detailsDic, doc)=>{
 const printParts = async (partsArr, doc) => {
 
     for (let i in partsArr) {
-        // console.log(partsArr[i]);
-        doc.text(`Part ${partsArr[i].serial_number}`);
-        doc.text(partsArr[i].headline + "\n");
+        doc.text(`\nPart ${partsArr[i].serial_number}, ${partsArr[i].headline}\n`, {underline:true});
+        doc.text();
         const qs = partsArr[i].questions_in_part;
         for (let q in qs) {
             doc.text(`\nQuestion ${qs[q].serial_number}`);
@@ -159,9 +158,11 @@ const printParts = async (partsArr, doc) => {
             // console.log('ANSWERS');
             // console.log(qs[q].answers);
             let as = qs[q].answers;
+            console.log(`the question: ${qs[q]}`)
+            console.log(`the answers: ${as}`)
+            
             for (let a in as) {
-                console.log(a);
-                // doc.text(`\n ${a.serial_number}: ${a.content}`)
+                doc.text(`\n ${a.serial_number}: ${a.content}`)
             }
         }
     }
