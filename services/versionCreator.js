@@ -110,18 +110,6 @@ class VersionCreator {
 
 
 
-<<<<<<< HEAD
-                
-                }]
-            }
-        )
-
-        
-
-
-    } 
-=======
->>>>>>> d05edf291d1cf90558afb370374a4182b9d2c605
 }
 
 

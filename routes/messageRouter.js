@@ -5,7 +5,7 @@ const verifyJWT = require('../middleware/verifyJWT');
 //.post(verifyJWT, messageController.createNewMessage);
 //or
 //router.use(verifyJWT)
-
+    
 
 messageRouter.route('/')
 .get(messageController.getAllMessages)

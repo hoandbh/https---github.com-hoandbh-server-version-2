@@ -19,12 +19,12 @@ const getQuestionnaireCourse = async (ownerId) => {
             where: { id: ownerId },
             include: [{
                 model: Courses,
-                as: 'teachers_in_course'
+                as: 'teachers_in_course'///////////////!!!!
             }]
         }
     )
     const o = owner.get({ plain: true });
-    return o.teachers_in_course.name;
+    return o.teachers_in_course.name;///////////////!!!!
 
 }
 const getFullQuestionnaireOfVersion = async (versionId) => {

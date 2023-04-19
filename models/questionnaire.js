@@ -15,6 +15,9 @@ const Questionnaire = sequelize.define(
             type: DataTypes.DATE
         },
 
+        course_id:{    
+            type:DataTypes.INTEGER                
+        }   
         //isComplete: {
         //
         //       

@@ -23,9 +23,9 @@ const { sequelize, DataTypes } = require("./sequelize");
             permission:{
                 type:DataTypes.INTEGER                
             },
-            course_id:{    
-                type:DataTypes.INTEGER                
-            }   
+            // course_id:{    
+            //     type:DataTypes.INTEGER                
+            // }   
         },
         {
             timestamps: false,
