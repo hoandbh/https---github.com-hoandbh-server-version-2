@@ -79,8 +79,9 @@ class QuestionnaireController {
 
         const id = req.params.id;
         const amount = req.body.amount;
-        const a = await versionCreator.createVersions(id,amount);
-        return res.status(200).json({version: "hi, success!!!"});
+        const version = await versionCreator.createVersions(id,amount);
+        if(version)
+        return res.status(201).json(version)
 
 
     }

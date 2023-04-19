@@ -3,23 +3,35 @@ const AnswerDal = require('../dal/answerDal');
 
 class QuestionController {
 
-    getAllQstOfPart = async (req, res) => {
-        const {partId} = req.params;
-        const questinos = await QuestionDal.getAllQstOfPart(partId);
-        if (!questinos?.length){
+    getQstById= async (req, res) => {
+        const { id } = req.params;
+        const question = await QuestionDal.getQstById(id);
+        if (!question){
             return res.status(204).send();
         }
+        res.json(question);
+    }
 
-        res.json(questinos);
+
+    getAllQstOfPart = async (req, res) => {
+        const { partId } = req.params;
+        const questions = await QuestionDal.getAllQstOfPart(partId);
+        if (!questions?.length){
+            return res.status(204).send();
+        }
+        res.json(questions);
     }
 
 
     updateQst = async (req, res) => {
         const { id } = req.params;
-        await AnswerDal.deleteAnswersOfQuestion(id);
-        console.log(`I deleted all the answers of this question ${id}`)
         const { content , correctAnswerContent, incorrectAnswers} = req.body;
-        if(correctAnswerContent){
+        const question = await QuestionDal.updateQst(id,content);
+        if (!question) {
+            return res.status(404).send('Question not found');
+        }
+        await AnswerDal.deleteAnswersOfQuestion(id);
+        if(correctAnswerContent){ 
             const correctAnswer = {
                 content: correctAnswerContent,
                 question_id: id,
@@ -36,11 +48,6 @@ class QuestionController {
                 })
             });
         }
-        //await???
-        const question = await QuestionDal.updateQst(id,content);
-        if (!question) {
-            return res.status(404).send('Question not found');
-        }
         return res.send(question);
     }   
 
@@ -52,7 +59,7 @@ class QuestionController {
     }
 
     deleteQst = async (req, res) => {
-        const {id} = req.params;
+        const { id } = req.params;
         if (!id) {
             return res.status(400).json({ message: 'question ID required' });
         }
