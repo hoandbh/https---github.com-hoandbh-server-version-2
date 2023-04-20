@@ -20,12 +20,10 @@ const { sequelize, DataTypes } = require("./sequelize");
                 type: DataTypes.STRING(200)
             },
             //the permission should be enum of 1,2 and 3
+            //** the prmission is 1: teacher or 2: admin
             permission:{
                 type:DataTypes.INTEGER                
-            },
-            // course_id:{    
-            //     type:DataTypes.INTEGER                
-            // }   
+            }, 
         },
         {
             timestamps: false,

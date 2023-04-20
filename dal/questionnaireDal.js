@@ -1,5 +1,5 @@
 const { model } = require('sequelize');
-const { possible_answer } = require('../models/index');
+const { possible_answer, course } = require('../models/index');
 const db = require('../models/index');
 
 
@@ -7,7 +7,7 @@ const Questionnaire = db.questionnaire
 const PartInQuestionnaire = db.part_in_questionnaire
 const QuestionsInQuestionnaire = db.qst_in_questionnaire
 const Answer = db.possible_answer;
-
+const Course = db.course;
 
 class QuestionnaireDal {
 
@@ -55,7 +55,13 @@ class QuestionnaireDal {
                             as: 'answers'
                         }]
                     }]
-                  }]
+                  },
+                  {
+                    model:Course,
+                    as: 'course',
+                    attributes:['name']
+                  }
+                  ]
    
             }   
         )

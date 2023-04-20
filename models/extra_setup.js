@@ -14,7 +14,7 @@ const applyExtraSetup = () => {
         // users.belongsTo(courses,{foreignKey:"course_id", as: "teachers_in_course", onDelete:'cascade'});
 
         courses.hasMany(questionnaire,{foreignKey:"course_id", as: "course_id", onDelete:'cascade'});
-        questionnaire.belongsTo(courses,{foreignKey:"course_id", as: "course_of_questionnaire", onDelete:'cascade'});
+        questionnaire.belongsTo(courses,{foreignKey:"course_id", onDelete:'cascade'});
 
    
         qst_in_questionnaires.belongsTo(part_in_questionnaire, {foreignKey: "part_id", as: "questionnaire_part_id", onDelete:'cascade'});

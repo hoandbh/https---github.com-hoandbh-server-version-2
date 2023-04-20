@@ -9,15 +9,16 @@ const Questionnaire = sequelize.define(
         },
         owner: {
             type: DataTypes.INTEGER
-            //forign key to user!!
         },
         date: {
             type: DataTypes.DATE
         },
-
         course_id:{    
             type:DataTypes.INTEGER                
-        }   
+        },
+        name: {
+            type: DataTypes.STRING
+        },  
         //isComplete: {
         //
         //       
