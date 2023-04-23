@@ -12,21 +12,24 @@ const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
 const Courses = db.course;
 const Owners = db.user;
-const getQuestionnaireCourse = async (ownerId) => {
+const getQuestionnaireCourse = async (courseId) => {
 
-    const owner = await Owners.findOne(
-        {
-            where: { id: ownerId },
-            include: [{
-                model: Courses,
-                as: 'teachers_in_course'///////////////!!!!
-            }]
-        }
-    )
-    const o = owner.get({ plain: true });
-    return o.teachers_in_course.name;///////////////!!!!
+    // const owner = await Owners.findOne(
+    //     {
+    //         where: { id: ownerId },
+    //         include: [{
+    //             model: Courses,
+    //             as: 'teachers_in_course'///////////////!!!!
+    //         }]
+    //     }
+    // )
+    // const o = owner.get({ plain: true });
+    // return o.teachers_in_course.name;///////////////!!!!
+    const c = await Courses.findByPk(courseId);
+    const course = c.get({ plain: true });
+    return course.name;
 
-}
+} 
 const getFullQuestionnaireOfVersion = async (versionId) => {
     const versionDetails = await Version.findByPk(versionId);
     const questionnaireId = versionDetails.questionnaire_id;
@@ -49,7 +52,7 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
 
         }
     )
-    const a = fullQuestionnaire.get({plain:true});
+    const a = fullQuestionnaire.get({ plain: true });
     // console.log(a.parts_in_questionnaire[0].questions_in_part)
     // console.log("here \n\n\n\n\n\n\n\n")
     return fullQuestionnaire.get({ plain: true });
@@ -137,11 +140,11 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
     }
     return questionnaire;
 }
-const printHeaders = async (detailsDic, doc)=>{
+const printHeaders = async (detailsDic, doc) => {
     // doc.image('./files/Header.PNG');
     doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
 
-    
+
     doc.text(`\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`);
     doc.text(`version: ${detailsDic.versionNum}`);
     doc.text(`date: ${detailsDic.date}`);
@@ -149,7 +152,7 @@ const printHeaders = async (detailsDic, doc)=>{
 const printParts = async (partsArr, doc) => {
 
     for (let i in partsArr) {
-        doc.text(`\nPart ${partsArr[i].serial_number}, ${partsArr[i].headline}\n`, {underline:true});
+        doc.text(`\nPart ${partsArr[i].serial_number}, ${partsArr[i].headline}\n`, { underline: true });
         doc.text();
         const qs = partsArr[i].questions_in_part;
         for (let q in qs) {
@@ -158,9 +161,9 @@ const printParts = async (partsArr, doc) => {
             // console.log('ANSWERS');
             // console.log(qs[q].answers);
             let as = qs[q].answers;
-            console.log(`the question: ${qs[q]}`)
-            console.log(`the answers: ${as}`)
-            
+            // console.log(`the question: ${qs[q]}`)
+            // console.log(`the answers: ${as}`)
+
             for (let a in as) {
                 doc.text(`\n ${a.serial_number}: ${a.content}`)
             }
@@ -176,19 +179,19 @@ class TestPrinter {
         doc.pipe(fs.createWriteStream(`./files/${versionId}.pdf`, 'utf8'));
 
         const fullQuestoinnaire = await getFullQuestionnaireOfVersion(versionId);
-        const ownerId = fullQuestoinnaire.owner;
-        const courseName = await getQuestionnaireCourse(ownerId);
+        const courseId = fullQuestoinnaire.course_id;
+        const courseName = await getQuestionnaireCourse(courseId);
         orderPartsByDesc(fullQuestoinnaire);
         await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
         //כותרות למבחן פה
 
         let headers = {
-            courseN:courseName,
-            versionNum:versionId,
-            date:fullQuestoinnaire.date.toLocaleDateString()
+            courseN: courseName,
+            versionNum: versionId,
+            date: fullQuestoinnaire.date.toLocaleDateString()
         }
-        await printHeaders(headers,doc);
-        
+        await printHeaders(headers, doc);
+
         await printParts(fullQuestoinnaire.parts_in_questionnaire, doc);
 
         doc.end();
