@@ -6,7 +6,7 @@ class CourseController {
     getAllCourses = async (req, res) => {
         const courses = await courseDal.getAllCourses();
         if (!courses?.length)
-            return res.status(400).json({ message: 'No messages found' })
+            return res.status(400).json({ message: 'No courses found' })
         res.json(courses);
     }
     

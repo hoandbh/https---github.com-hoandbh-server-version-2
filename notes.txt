@@ -1,0 +1,22 @@
+client tasks:
+
+בלחיצה על המרחב מסביב לטופס השאלה: הערכים נמחקים
+ערכי ברירת מחדל ביצירת שאלה כמו sarvio
+
+
+
+server tasks:
+
+
+בקשריםAS למחוק
+
+כאשר מחזירים את החלקים, השאלות, והתשובות: להחזיר ממוין
+
+grader:
+https://pyimagesearch.com/2016/10/03/bubble-sheet-multiple-choice-scanner-and-test-grader-using-omr-python-and-opencv/
+
+https://github.com/Practical-CV/OMR-Scanner-and-Test-Grader-using-OpenCV
+
+https://github.com/Thraetaona/AIMER
+
+https://github.com/hmontero1205/pygrader

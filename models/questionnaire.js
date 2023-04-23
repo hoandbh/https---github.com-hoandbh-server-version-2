@@ -32,6 +32,6 @@ const Questionnaire = sequelize.define(
     },
     {
         timestamps: false,
-    });
+    });    
 module.exports = Questionnaire;
 
