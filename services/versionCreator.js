@@ -1,5 +1,7 @@
 const db = require('../models/index');
 const { sequelize } = require('../models/sequelize');
+const versionPrinter = require('../services/testPrinter')
+
 
 const Questionnaire = db.questionnaire;
 const Part_In_Questionnaire = db.part_in_questionnaire;
@@ -57,7 +59,7 @@ const getFullQuestionnaire = async (questionnaireId) => {
     )
     return fullQuestionnaire.get({ plain: true });
 }
-const createOneVersion = async (questionnaireId, pdfPath) => {
+const createVersionDetails = async (questionnaireId, pdfPath) => {
     const version = await Version.create({ 'questionnaire_id': questionnaireId, 'pdf_path': pdfPath });
     return version.get({ plain: true });
 }
@@ -111,16 +113,30 @@ const createPartsOfVersion = async (fullQ, versionId) => {
     }
 }
 
+const createOneVersion = async(questionnaireId, fullQ, pdfPath)=>{
+    const v = await createVersionDetails(questionnaireId, 'hihihi');
+    await createPartsOfVersion(fullQ, v.id);
+
+    return v;
+}
+
 class VersionCreator {
 
     createVersions = async (questionnaireId, amount) => {
         const fullQ = await getFullQuestionnaire(questionnaireId);
         if (!fullQ) //|| !is_exist.active //if field activ is exist
             return res.status(401).json({ message: 'No questionnaire found' });
-        const v = await createOneVersion(questionnaireId, 'hihihi');
-        await createPartsOfVersion(fullQ, v.id);
+        
+        let versions = [];
+        for(let i =0;i<amount;i++){
+            const v = await createOneVersion(questionnaireId,fullQ, 'etner path');
+            console.log(v);
+            await versionPrinter.convertVersionToPdf(v.id, 'bbb')
+            versions.push(v);
+        }
+        console.log(versions)
+        return versions;
 
-        return v;
     }
 
 
