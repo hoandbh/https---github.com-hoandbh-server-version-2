@@ -14,4 +14,7 @@ versionRouter.route('/:id')
 .get(versionController.getVersionById)
 .delete(versionController.deleteVersion);
 
+versionRouter.route('/versionspdf/:questionnaireId')
+.get(versionController.getVersionsPDFByQuestionnaire)
+
 module.exports = versionRouter;

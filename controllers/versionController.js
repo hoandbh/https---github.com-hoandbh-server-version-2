@@ -11,12 +11,12 @@ class VersionController {
     }
 
     createVersions = async (req, res) => {
-        const {questionnaire_id,count} = req.body;
-        if(!questionnaire_id || !count)
+        const { questionnaire_id, count } = req.body;
+        if (!questionnaire_id || !count)
             return res.status(400).json({ version: '{questionnaire_id,count} are required both' });
         var arr = [];
-        for(var i=0; i<count; i++){
-            arr.push({questionnaire_id:questionnaire_id});
+        for (var i = 0; i < count; i++) {
+            arr.push({ questionnaire_id: questionnaire_id });
         }
         const versions = await versionDal.createVersions(arr);
         if (versions)
@@ -24,9 +24,9 @@ class VersionController {
         return res.status(500).json({ version: 'Failed to create new version' });
     }
 
-    createOneVersion = async(req,res)=>{
+    createOneVersion = async (req, res) => {
         const v = await versionDal.createVersion();
-        if(v)
+        if (v)
             return res.status(201).json(v);
     }
 
@@ -59,7 +59,22 @@ class VersionController {
         }
         res.json(versions);
     }
-    
+
+    getVersionsPDFByQuestionnaire = async (req, res) => {
+        const questionnaire_id = req.params.questionnaireId;
+        const versions = await versionDal.getVersionsByQuestionnaire(questionnaire_id);
+        if (!versions?.length) {
+            return res.status(204).send();
+        }
+        console.log(versions)
+        const versionIds = [];
+        for (let v in versions) {
+            versionIds.push(versions[v].dataValues.pdf_path)
+        }
+        res.json(versionIds) ;
+
+
+    }
 }
 
 const versionController = new VersionController();

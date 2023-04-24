@@ -8,8 +8,7 @@ class ServicesController {
 
     versionToPDF = async(req,res)=>{
         const versionId = req.params.id;
-        const path = '';
-        const fullversion = await versionPrinter.convertVersionToPdf(versionId,path);
+        const fullversion = await versionPrinter.convertVersionToPdf(versionId);
         if(fullversion)
             return res.status(201).json(fullversion)
 

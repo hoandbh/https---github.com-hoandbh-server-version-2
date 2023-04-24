@@ -12,24 +12,13 @@ const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
 const Courses = db.course;
 const Owners = db.user;
-const getQuestionnaireCourse = async (courseId) => {
+const getCourseName = async (courseId) => {
 
-    // const owner = await Owners.findOne(
-    //     {
-    //         where: { id: ownerId },
-    //         include: [{
-    //             model: Courses,
-    //             as: 'teachers_in_course'///////////////!!!!
-    //         }]
-    //     }
-    // )
-    // const o = owner.get({ plain: true });
-    // return o.teachers_in_course.name;///////////////!!!!
     const c = await Courses.findByPk(courseId);
-    const course = c.get({ plain: true });
-    return course.name;
+    return c.get({ plain: true }).name;
+    // return course.name;
 
-} 
+}
 const getFullQuestionnaireOfVersion = async (versionId) => {
     const versionDetails = await Version.findByPk(versionId);
     const questionnaireId = versionDetails.questionnaire_id;
@@ -174,13 +163,15 @@ const printParts = async (partsArr, doc) => {
 
 class TestPrinter {
 
-    convertVersionToPdf = async (versionId, filePath) => {
-        const doc = new PDFDocument();
-        doc.pipe(fs.createWriteStream(`./files/${versionId}.pdf`, 'utf8'));
+    convertVersionToPdf = async (versionId) => {
 
         const fullQuestoinnaire = await getFullQuestionnaireOfVersion(versionId);
         const courseId = fullQuestoinnaire.course_id;
-        const courseName = await getQuestionnaireCourse(courseId);
+        const courseName = await getCourseName(courseId);
+        const date = fullQuestoinnaire.date.getFullYear();//.toLocaleString({ day: "2-digit" })//.getFullYear();
+        const doc = new PDFDocument();
+        const path = `./files/readyVersions/${courseName}_${date}_t_${1}_v${versionId}.pdf`;
+        doc.pipe(fs.createWriteStream(path, 'utf8'));
         orderPartsByDesc(fullQuestoinnaire);
         await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
         //כותרות למבחן פה
@@ -195,7 +186,7 @@ class TestPrinter {
         await printParts(fullQuestoinnaire.parts_in_questionnaire, doc);
 
         doc.end();
-        return fullQuestoinnaire;
+        return path;
     }
 
 
