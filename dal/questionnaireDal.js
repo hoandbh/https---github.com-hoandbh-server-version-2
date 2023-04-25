@@ -77,7 +77,7 @@ class QuestionnaireDal {
         await Questionnaire.destroy({
             where: {
                 id: id
-            }
+            }  
         })
     }
 

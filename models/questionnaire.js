@@ -24,10 +24,10 @@ const Questionnaire = sequelize.define(
         //       
         //}
 
-        // term: { 
-        //     type: DataTypes.ENUM('A','B','C','D','E')
-        //     ,defaultValue:'A'
-        // }
+        term: { 
+            type: DataTypes.ENUM('A','B','C','D','E'),
+            defaultValue:'A'
+        }
 
     },
     {

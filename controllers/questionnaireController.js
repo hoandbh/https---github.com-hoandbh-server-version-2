@@ -10,7 +10,7 @@ class QuestionnaireController {
     //localhost:3600/api/messages
 
     getAllQuestionnaires = async (req, res) => {
-        const {owner} = req.query;
+        const { owner } = req.query;
         if (owner) {
             const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
             if (qstnr)
@@ -19,7 +19,7 @@ class QuestionnaireController {
                 res.status(204).send();
         } else {
             const questionnaires = await questionnaireDal.getAllQuestionnaires(owner);
-            if (!questionnaires?.length)   
+            if (!questionnaires?.length)
                 return res.status(400).json({ message: 'No questionnaires found' })
             res.json(questionnaires)
         }
@@ -67,7 +67,7 @@ class QuestionnaireController {
         // await questionnaireDal.deleteQuestionnaire(id);    
     }
 
-    getQuestionnairesByOwner = async (req,res)=>{
+    getQuestionnairesByOwner = async (req, res) => {
         const owner = req.params.ownerId;
         const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
         if (qstnr)
@@ -75,13 +75,13 @@ class QuestionnaireController {
         else
             res.status(204).send();
     }
-    createVersionForQuestionnaire = async(req,res)=>{
+    createVersionForQuestionnaire = async (req, res) => {
 
         const id = req.params.id;
         const amount = req.body.amount;
-        const versions = await versionCreator.createVersions(id,amount);
-        if(versions)
-        return res.status(201).json(versions)
+        const versions = await versionCreator.createVersions(id, amount);
+        if (versions)
+            return res.status(201).json(versions)
 
 
     }
