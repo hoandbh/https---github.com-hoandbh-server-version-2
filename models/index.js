@@ -30,8 +30,8 @@ db.part_in_questionnaire = require('./part_in_questionnaire')
 applyExtraSetup();
 db.sequelize.sync({ alter:true })//change to alter:true
   .then(() => {
-    console.log('yes re-sync done!')
+  console.log('yes re-sync done!')
   })
 
 module.exports = db
-       
+     

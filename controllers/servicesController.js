@@ -6,18 +6,18 @@ const versionPrinter = require('../services/testPrinter');
 
 class ServicesController {
 
-    versionToPDF = async(req,res)=>{
-        const versionId = req.params.id;
-        const fullversion = await versionPrinter.convertVersionToPdf(versionId);
-        if(fullversion)
-            return res.status(201).json(fullversion)
+  versionToPDF = async(req,res)=>{
+    const versionId = req.params.id;
+    const fullversion = await versionPrinter.convertVersionToPdf(versionId);
+    if(fullversion)
+      return res.status(201).json(fullversion)
 
-        // const d = await versionPrinter.convertVersionToPdf(versionId,path );
-        // if(d)
-        //     console.log("pdf created successfuly :)");
-        // else
-        //     res.status(204).send();
-    }
+    // const d = await versionPrinter.convertVersionToPdf(versionId,path );
+    // if(d)
+    //   console.log("pdf created successfuly :)");
+    // else
+    //   res.status(204).send();
+  }
 
 }
 
