@@ -27,6 +27,8 @@ app.use('/api/questionnaire',require('./routes/questionnaireRouter'))
 app.use('/api/question',require('./routes/questionRouter'))
 app.use('/api/part', require('./routes/partRouter'));
 app.use('/api/answer',require('./routes/answerRouter'));
+app.use('/api/downloads',require('./routes/filesRouter'));
+// app.use('/api/downloads', require('./routes/filesRouter'));
 
 
 

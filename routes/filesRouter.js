@@ -1,6 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const filesRouter = express.Router();
 
-router.get('/downloadPdf', (req,res)=>{
+filesRouter.get('/versions', (req,res)=>{
     res.download('files/Header.PNG');
-})
+});
+
+
+module.exports = filesRouter;
