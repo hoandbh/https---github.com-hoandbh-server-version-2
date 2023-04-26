@@ -7,6 +7,7 @@ courseRouter.route('/')
     .post(courseController.createNewCourse);
 
 courseRouter.route('/:id')
-    .get(courseController.getCourseById);
+    .get(courseController.getCourseById)
+    .delete(courseController.deleteCourse);
 
 module.exports = courseRouter;

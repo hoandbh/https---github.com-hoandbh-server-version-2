@@ -6,7 +6,7 @@ class CourseController {
     getAllCourses = async (req, res) => {
         const courses = await courseDal.getAllCourses();
         if (!courses?.length)
-            return res.status(400).json({ message: 'No courses found' })
+            return res.status(204).json({ message: 'No courses found' })
         res.json(courses);
     }
     
@@ -31,13 +31,8 @@ class CourseController {
 
     deleteCourse = async (req, res) => {
         const id = req.params.id;
-        if (!id) {
-            return res.status(400).json({ message: 'Course ID required' });
-        }
-        const result = await courseDal.deleteCourse(id);
-        if (result === 0) {
-            return res.status(404).json({ message: 'Course not found' });
-        }
+        //to check if corse exist
+        await courseDal.deleteCourse(id);
         res.json(`Course ID ${id} deleted`);
     }
 
