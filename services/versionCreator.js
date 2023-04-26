@@ -114,7 +114,7 @@ const createPartsOfVersion = async (fullQ, versionId) => {
 }
 
 const createOneVersion = async (questionnaireId, fullQ) => {
-    const v = await createVersionDetails(questionnaireId, 'hihihi');
+    const v = await createVersionDetails(questionnaireId);//HADAS i delete: , 'hihihi'
     await createPartsOfVersion(fullQ, v.id);
 
     return v;
@@ -126,7 +126,7 @@ const updateFilePathToDb = async (vId, filePath) => {
         }
     )
 }
-  
+     
 class VersionCreator {
 
     createVersions = async (questionnaireId, amount) => {

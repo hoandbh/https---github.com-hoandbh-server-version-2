@@ -170,8 +170,13 @@ class TestPrinter {
         const courseName = await getCourseName(courseId);
         const date = fullQuestoinnaire.date.getFullYear();//.toLocaleString({ day: "2-digit" })//.getFullYear();
         const doc = new PDFDocument();
+        doc.font('fonts/Alef-Regular.ttf')
+        .fontSize(16);
+        //.text('טקסט בעברית', { align: 'right' });
+
+
         const path = `./files/readyVersions/${courseName}_${date}_t_${1}_v${versionId}.pdf`;
-        doc.pipe(fs.createWriteStream(path, 'utf8'));
+        doc.pipe(fs.createWriteStream(path));
         orderPartsByDesc(fullQuestoinnaire);
         await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
         //כותרות למבחן פה
