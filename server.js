@@ -13,6 +13,8 @@ app.use(cookieParser())
 
 //Router
 app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/files', express.static(path.join(__dirname, 'files')));
+
 app.use('/', require('./routes/root'))
 
 //api
@@ -25,6 +27,8 @@ app.use('/api/questionnaire',require('./routes/questionnaireRouter'))
 app.use('/api/question',require('./routes/questionRouter'))
 app.use('/api/part', require('./routes/partRouter'));
 app.use('/api/answer',require('./routes/answerRouter'));
+
+
 
 //services
 app.use('/api/check-test',require('./routes/testRouter'));

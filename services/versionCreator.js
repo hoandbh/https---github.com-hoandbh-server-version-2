@@ -52,7 +52,7 @@ const getFullQuestionnaire = async (questionnaireId) => {
                     include: [{
                         model: Possible_Answer,
                         as: 'answers'
-                    }]
+                    }]  
                 }]
             }]
         }
@@ -141,7 +141,8 @@ class VersionCreator {
             await updateFilePathToDb(v.id, path);
             paths.push(path);
         }
-       
+        return paths;
+ 
 
     }
 
