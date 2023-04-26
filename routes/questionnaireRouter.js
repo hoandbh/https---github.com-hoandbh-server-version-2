@@ -1,26 +1,45 @@
 const express = require('express');
 const questionnaireRouter = express.Router();
-const qstnrController = require('../controllers/questionnaireController');
+const questionnaireController = require('../controllers/questionnaireController');
 
 questionnaireRouter.route('/')
-.get(qstnrController.getAllQuestionnaires)
-.post(qstnrController.createQuestionnaire);
+.get(questionnaireController.getAllQuestionnaires)
+.post(questionnaireController.createQuestionnaire);
 
 questionnaireRouter.route('/:id')
-.get(qstnrController.getQuestionnaireById)
-.delete(qstnrController.deleteQuestionnaire)
+.get(questionnaireController.getQuestionnaireById)
+.delete(questionnaireController.deleteQuestionnaire)
 
-// questionnaireRouter.route('/owner/:ownerId')
-// .get(qstnrController.getQuestionnairesByOwner)
+questionnaireRouter.route('/:id/full')
+.get(questionnaireController.getFullQuestionnaire)
 
-questionnaireRouter.route('/full/:id')
-.get(qstnrController.getFullQuestionnaire)
+questionnaireRouter.route('/:id/generate-versions')
+.post(questionnaireController.createVersionForQuestionnaire)
 
 const partRouter = require('./partRouter');
 questionnaireRouter.use('/:questionnaireId/part', partRouter);
 
 
-questionnaireRouter.route('/mixQuestionnaire/:id')
-.post(qstnrController.createVersionForQuestionnaire)
-
 module.exports = questionnaireRouter;
+
+///////////
+// const express = require('express');
+// const questionnaireRouter = express.Router();
+// const questionnaireController = require('../controllers/questionnaireController');
+
+// questionnaireRouter.route('/')
+// .get(questionnaireController.getAllQuestionnaires)
+// .post(questionnaireController.createQuestionnaire);
+
+// questionnaireRouter.route('/:id')
+// .get(questionnaireController.getQuestionnaireById)
+// .delete(questionnaireController.deleteQuestionnaire)
+
+// questionnaireRouter.route('/:id/full')
+// .get(questionnaireController.getFullQuestionnaire)
+
+// questionnaireRouter.route('/:id/generate-versions')
+// .post(questionnaireController.createVersionForQuestionnaire)
+
+// module.exports = questionnaireRouter;
+

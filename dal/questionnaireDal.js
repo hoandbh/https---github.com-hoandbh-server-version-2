@@ -11,77 +11,77 @@ const Course = db.course;
 
 class QuestionnaireDal {
 
-    
+  
 
-    getAllQuestionnaires = async () => {
-        //to add the name of course??
-        const quests = await Questionnaire.findAll({});
-        return quests;
-    }
+  getAllQuestionnaires = async () => {
+    //to add the name of course??
+    const quests = await Questionnaire.findAll({});
+    return quests;
+  }
 
-    getQuestionnaireById = async (id) => {
-        var quest = await Questionnaire.findByPk(id);
-        return quest;
-    }
-    
-    getQuestionnairesByOwner = async(ow)=>{
-        var quest = await Questionnaire.findAll({
-            where: {owner:ow}
-        });
-        return quest;
-    
-    }    
+  getQuestionnaireById = async (id) => {
+    var quest = await Questionnaire.findByPk(id);
+    return quest;
+  }
+  
+  getQuestionnairesByOwner = async(ow)=>{
+    var quest = await Questionnaire.findAll({
+      where: {owner:ow}
+    });
+    return quest;
+  
+  }  
 
 
-    //add more functions for getting according to certain paramters
+  //add more functions for getting according to certain paramters
 
-    getFullQuestionnaireById = async(id)=>{
-        //const quest = this.getQuestionnaireById(id);
-        //const questionsInQuestionnaire = 
+  getFullQuestionnaireById = async(id)=>{
+    //const quest = this.getQuestionnaireById(id);
+    //const questionsInQuestionnaire = 
 
-        const fullQuestoinnare = await Questionnaire.findOne(
-            {
-                where:{id:id},
-                // attributes:['owner','date'],
-                  include:[{
-                    model:PartInQuestionnaire,
-                    as: 'parts_in_questionnaire',
-                    // attributes:['id','questionnaire','number_in_questionnaire','headline'],
-                    include:[{
-                        model:QuestionsInQuestionnaire, 
-                        as: 'questions_in_part',
-                        include: [{
-                            model: Answer,
-                            as: 'answers'
-                        }]
-                    }]
-                  },
-                  {
-                    model:Course,
-                    as: 'course',
-                    attributes:['name']
-                  }
-                  ]
+    const fullQuestoinnare = await Questionnaire.findOne(
+      {
+        where:{id:id},
+        // attributes:['owner','date'],
+          include:[{
+          model:PartInQuestionnaire,
+          as: 'parts',
+          // attributes:['id','questionnaire','number_in_questionnaire','headline'],
+          include:[{
+            model:QuestionsInQuestionnaire, 
+            as: 'questions',
+            include: [{
+              model: Answer,
+              as: 'answers'
+            }]
+          }]
+          },
+          {
+          model:Course,
+          as: 'course',
+          attributes:['name']
+          }
+          ]
    
-            }   
-        )
-        return fullQuestoinnare;
+      }   
+    )
+    return fullQuestoinnare;
 
-    }
-    createNewQuestionnaire = async (content) => {
-        const quest = await Questionnaire.create(content);
-        return quest;
-    }
-    
-    deleteQuestionnaire = async (id) => {
-        await Questionnaire.destroy({
-            where: {
-                id: id
-            }  
-        })
-    }
+  }
+  createNewQuestionnaire = async (content) => {
+    const quest = await Questionnaire.create(content);
+    return quest;
+  }
+  
+  deleteQuestionnaire = async (id) => {
+    await Questionnaire.destroy({
+      where: {
+        id: id
+      }  
+    })
+  }
 
-    //TODO updateQuestionnaire = async()=>
+  //TODO updateQuestionnaire = async()=>
 }
 
 
