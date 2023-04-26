@@ -3,31 +3,31 @@ const Part = db.part_in_questionnaire;
 
 class PartDal {
 
-    createNewPart = async (content) => {
-        const part = await Part.create(content)
-        return part;
-    }
+  createNewPart = async (content) => {
+    const part = await Part.create(content)
+    return part;
+  }
 
-    getAllPartsForQuestionnaire = async (questionnaireId) => {
+  getAllPartsForQuestionnaire = async (questionnaireId) => {
 
-        const parts = await Part.findAll({
-            where:{
-                questionnaire_id:questionnaireId
-            }
-        })
-        return parts;
-    }
+    const parts = await Part.findAll({
+      where:{
+        questionnaire_id:questionnaireId
+      }
+    })
+    return parts;
+  }
 
-    //not necessary???
-    getAllParts = async () => {
-        const parts = await Part.findAll({});
-        return parts;
-    }
+  //not necessary???
+  getAllParts = async () => {
+    const parts = await Part.findAll({});
+    return parts;
+  }
 
-    getPartById = async (id) => {
-        const part = await Part.findByPk(id)
-        return part;
-    }
+  getPartById = async (id) => {
+    const part = await Part.findByPk(id)
+    return part;
+  }
 }
 
 const partDal = new PartDal();

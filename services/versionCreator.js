@@ -13,143 +13,103 @@ const Ans_in_version = db.ans_in_version;
 const Courses = db.course;
 const Owners = db.user;
 
-
-// createVersionsForQuestionnaire = async (questionnaireId, amount) =>{
-//     const questionnaireToMix = await Questionnaire.findByPk(questionnaireId){
-//     };
-
-// createVersion = async(q_id, pdfPath)=>{
-//     const version = await Version.create({'questionnaire':q_id, 'pdf_path':pdfPath});
-//     return version;
-// }
-//     const versionsArr = []
-//     for(let i = 0; i<questionnaireId;i++){
-//         const version = await Version.create({'questionnaire':q_id, 'pdf_path':'enter pdf path versionCreator'});
-//         versionsArr.append(version);
-//     }
-//     const questionsInQuestionnaire = Questionnaire.findOne(
-//         {
-//             where:{id_questionnaire: questionnaireId},
-//             include:[{
-//                 model: QuestionsInQuestionnaire,
-
-
-//             }]
-//         }
-//     )
-// } 
-const getFullQuestionnaire = async (questionnaireId) => {
-    const fullQuestionnaire = await Questionnaire.findOne(
-        {
-            where: { id: questionnaireId },
-            include: [{
-                model: Part_In_Questionnaire,
-                as: 'parts_in_questionnaire',
-
-                include: [{
-                    model: Qst_from_questionnaire,
-                    as: 'questions_in_part',
-                    include: [{
-                        model: Possible_Answer,
-                        as: 'answers'
-                    }]  
-                }]
-            }]
-        }
-    )
-    return fullQuestionnaire.get({ plain: true });
-}
-const createVersionDetails = async (questionnaireId) => {
-    const version = await Version.create({ 'questionnaire_id': questionnaireId });
-    return version.get({ plain: true });
-}
-
-const createPartInVersionNotMixed = async (part, versionId) => {
-    const questionsInVersionArr = []
-    for (let i in part.questions_in_part) {
-        const q = part.questions_in_part[i];
-        const question = await Qst_in_version.create({ 'question_id': q.id, 'version_id': versionId, 'serial_number_in_part': q.serial_number_in_part })
-        const qst = question.get({ plain: true });
-        questionsInVersionArr.push(qst);
+const getQuestionnaire = async (id) => {
+  const fullQuestionnaire = await Questionnaire.findOne(
+    {
+      where: { id },
+      include: [{
+        model: Part_In_Questionnaire,
+        as: 'parts',
+        include: [{
+          model: Qst_from_questionnaire,
+          as: 'questions',
+          include: [{
+            model: Possible_Answer,
+            as: 'answers'
+          }]
+        }]
+      }]
     }
-    return questionsInVersionArr;
+  )
+  return fullQuestionnaire.get({ plain: true });
 }
-const getShuffledArr = arr => {
-    const newArr = arr.slice()
-    for (let i = newArr.length - 1; i > 0; i--) {
-        const rand = Math.floor(Math.random() * (i + 1));
-        [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
-    }
-    return newArr
+
+const createAnswersInVersion = (question, versionId) => {
+  question.answers.forEach((answer, i) =>
+    Ans_in_version.create({ serial_number: i, answer_id: answer.id, version_id: versionId, qst_in_questionnaire: question.id })
+  );
+}
+
+const createMixedAnswersInVersion = (question, versionId) => {
+  const n = createShuffledArr(question.answers.length);
+  question.answers.forEach((answer, i) =>
+    Ans_in_version.create({ serial_number: n[i], answer_id: answer.id, version_id: versionId, qst_in_questionnaire: question.id })
+  );
+}
+
+const createShuffledArr = (length) => {
+  const arr = Array(length).fill().map((_, i) => i).slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const rand = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[rand]] = [arr[rand], arr[i]];
+  }
+  return arr;
 };
-const createMixedPartInVersion = async (part, versionId) => {
-    const questionsInVersionArr = []
-    const l = part.questions_in_part.length;
-    const numbers = Array(l).fill().map((_, i) => i + 1);
-    const n = getShuffledArr(numbers);
-    for (let i in part.questions_in_part) {
-        const q = part.questions_in_part[i];
-        const question = await Qst_in_version.create({ 'question_id': q.id, 'version_id': versionId, 'serial_number_in_part': n[i] })
-        const qst = question.get({ plain: true });
-        questionsInVersionArr.push(qst);
-    }
-    return questionsInVersionArr;
+
+
+const createMixedPartInVersion = (part, versionId) => {
+  const n = createShuffledArr(part.questions.length);
+  part.questions.forEach((question, i) => {
+    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i] });
+    createMixedAnswersInVersion(question, versionId, false);
+  });
 }
 
-const createPartsOfVersion = async (fullQ, versionId) => {
-
-    for (let i in fullQ.parts_in_questionnaire) {
-        if (fullQ.parts_in_questionnaire[i].mix) {
-            // const questionsInPart = 
-            await createMixedPartInVersion(fullQ.parts_in_questionnaire[i], versionId);
-            // fullQ.parts_in_questionnaire[i].questions_in_part = questionsInPart;
-        }
-        else {
-            // const questionsInPart = 
-            await createPartInVersionNotMixed(fullQ.parts_in_questionnaire[i], versionId);
-            // fullQ.parts_in_questionnaire[i].questions_in_part = questionsInPart;
-        }
-
-    }
+const createPartInVersion = (part, versionId) => {
+  part.questions.forEach((question, i) => {
+    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': i });
+    createAnswersInVersion(question, versionId);
+  });
 }
 
-const createOneVersion = async (questionnaireId, fullQ) => {
-    const v = await createVersionDetails(questionnaireId);//HADAS i delete: , 'hihihi'
-    await createPartsOfVersion(fullQ, v.id);
-
-    return v;
+const createPartsOfVersion = (questionnaire, versionId) => {
+  questionnaire.parts.forEach(part => {
+    part.mix ? createMixedPartInVersion(part, versionId) : createPartInVersion(part, versionId);
+  })
 }
+
+const createVersion = async (questionnaireId, questionnaire) => {
+  const version = await Version.create({ 'questionnaire_id': questionnaireId });
+  createPartsOfVersion(questionnaire, version.id);
+  return version;
+}
+
 const updateFilePathToDb = async (vId, filePath) => {
-    await Version.update({ 'pdf_path': filePath },
-        {
-            where: { id: vId },
-        }
-    )
+  await Version.update({ 'pdf_path': filePath },
+    {
+      where: { id: vId },
+    }
+  )
 }
-     
+
+const isExists = async (model, id) => {
+  return await model.findOne({ where: { id } });
+}
+
 class VersionCreator {
 
-    createVersions = async (questionnaireId, amount) => {
-        const fullQ = await getFullQuestionnaire(questionnaireId);
-        if (!fullQ) //|| !is_exist.active //if field activ is exist
-            return res.status(401).json({ message: 'No questionnaire found' });
-
-        let paths = [];
-        for (let i = 0; i < amount; i++) {
-            const v = await createOneVersion(questionnaireId, fullQ);
-            const path = await versionPrinter.convertVersionToPdf(v.id);
-            await updateFilePathToDb(v.id, path);
-            paths.push(path);
-        }
-        return paths;
- 
-
+  createVersions = async (id, amount) => {
+    const questionnaire = await getQuestionnaire(id);
+    let paths = [];
+    for (let i = 1; i <= amount; i++) {
+      const version = await createVersion(id, questionnaire);
+      const path = await versionPrinter.convertVersionToPdf(version.id);
+      await updateFilePathToDb(version.id, path);
+      paths.push(path);
     }
-
-
-
+    return paths;
+  }
 }
-
 
 const versionCreator = new VersionCreator();
 module.exports = versionCreator;
