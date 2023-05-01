@@ -21,7 +21,7 @@ const login = async (req, res) => {
   const allFieldsPresent = checkRequiredFields(requiredFields, req.body);
   if (!allFieldsPresent) {
     return res.status(400).json({
-      message: 'All fields are required'
+      message: 'All fields are required'   
     });
   }       
   const { email, password } = req.body;
@@ -32,7 +32,7 @@ const login = async (req, res) => {
   if (!passwordMatch)
     return res.status(401).json({ message: 'Incorrect password' });
   const userInfo = {
-    id: foundUser.id,
+    id: foundUser.id,       
     username: foundUser.username,//??
     permission: foundUser.permission   
   };

@@ -13,46 +13,13 @@ const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
 const Course = db.course;
 const Owners = db.user;
+const QuestionnaireDal = require('../dal/questionnaireDal');
 
 const getFullQuestionnaireOfVersion = async (versionId) => {
   const versionDetails = await Version.findByPk(versionId);
   const questionnaireId = versionDetails.questionnaire_id;
-  const fullQuestionnaire = await Questionnaire.findOne(
-    {
-      where: { id: questionnaireId },
-      include: [{
-        model: Part_In_Questionnaire,
-        as: 'parts',
-        order: [
-          ['serial_number', 'ASC'],
-        ],
-        include: [{
-          model: Qst_from_questionnaire,
-          as: 'questions',
-          order: [
-            ['serial_number', 'ASC'],
-          ],
-          include: [{
-            model: Possible_Answer,
-            as: 'answers',
-            order: [
-              ['serial_number', 'ASC'],
-            ],
-          }]
-        }]
-      },
-      {
-        model: Course,
-        as: 'course',
-        attributes: ['name']
-      }]
-    }
-  )
+  const fullQuestionnaire = await QuestionnaireDal.getFullQuestionnaireById(questionnaireId);
   return fullQuestionnaire.get({ plain: true });
-}
-
-const orderPartsByDesc = (questionnaire) => {
-  questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
 
 const getSerialNumberOfAnswer = async (answer, versionId) => {
@@ -134,7 +101,6 @@ const printHeaders = async (detailsDic) => {
 
   //doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
   return [
-
     new Paragraph({
       children: [new ImageRun({
         data: fs.readFileSync('./files/Header.PNG'),
@@ -183,16 +149,14 @@ class TestPrinter {
     const courseName = fullQuestoinnaire.course.name;
     const date = fullQuestoinnaire.date.getFullYear();
     const path = `./files/readyVersions/${courseName}_${date}_v${versionId}.docx`;
-    //orderPartsByDesc(fullQuestoinnaire);
     await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
     let headers = {
-      courseN: courseName,
+      courseName,
       versionNum: versionId,
       date: fullQuestoinnaire.date.toLocaleDateString()
     }
     const header = await printHeaders(headers);
     //await printParts(fullQuestoinnaire.parts, doc);
-    //doc.end();
     const doc = new Document({
       sections: [
         {
@@ -206,6 +170,6 @@ class TestPrinter {
     });
     return path;
   }
-}
+}   
 
 module.exports = new TestPrinter();
