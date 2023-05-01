@@ -3,7 +3,8 @@ const versionPrinter = require('../services/testPrinter');
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
-const QuestionnaireDal = require('../dal/questionnaireDal')
+const QuestionnaireDal = require('../dal/questionnaireDal');
+const Part_in_Version = require('../models/part_in_version');
 
 const createMixedAnswersInVersion = (question, versionId) => {
   const n = createShuffledArr(question.answers.length);
@@ -25,20 +26,23 @@ const createShuffledArr = (length) => {
 const createMixedPartInVersion = (part, versionId) => {
   const n = createShuffledArr(part.questions.length);
   part.questions.forEach((question, i) => {
-    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i] });
-    createMixedAnswersInVersion(question, versionId, false);
+    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i]});//hadas , part_id:
+    createMixedAnswersInVersion(question, versionId );
   });
 }
 
 const createPartInVersion = (part, versionId) => {
   part.questions.forEach((question, i) => {
     Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': i });
-    createMixedAnswersInVersion(question, versionId, false);
+    createMixedAnswersInVersion(question, versionId );
   });
 }
 
 const createPartsOfVersion = (questionnaire, versionId) => {
-  questionnaire.parts.forEach(part => {
+  const n = createShuffledArr(questionnaire.parts.length);
+
+  questionnaire.parts.forEach((part, i) => {
+    Part_in_Version.create({version_id:versionId, part_id:part.id, serial_number:n[i] });
     part.mix ? createMixedPartInVersion(part, versionId) : createPartInVersion(part, versionId);
   })
 }
@@ -64,7 +68,7 @@ class VersionCreator {
     let paths = [];
     for (let i = 1; i <= amount; i++) {
       const version = await createVersion(id, questionnaire);
-      const path = await versionPrinter.convertVersionToPdf(version.id);
+      const path = await versionPrinter.convertVersionToPdf(version.id,id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }

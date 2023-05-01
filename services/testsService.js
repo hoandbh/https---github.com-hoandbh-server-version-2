@@ -8,8 +8,6 @@ const Score = require('../models/score');
 
 const { sequelize } = require('../models/sequelize');
 
-// const Student = require('../models/student');
-
 class TestsService {
 
 

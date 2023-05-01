@@ -8,6 +8,7 @@ class VersionController {
     if (!versions?.length)
       return res.status(400).json({ version: 'No versions found' });
     res.json(versions);
+
   }
 
   createVersions = async (req, res) => {
@@ -31,12 +32,15 @@ class VersionController {
   }
 
   getVersionById = async (req, res) => {
-    const id = req.params.id;
-    var version = await versionDal.getVersionById(id);
-    if (version)
-      res.json(version);
-    else
-      res.status(204).send();
+    const {id} = req.params;
+    const version = await versionDal.getFullVersion(id);
+    res.json(version);
+
+    // var version = await versionDal.getVersionById(id);
+    // if (version)
+    //   res.json(version);
+    // else
+    //   res.status(204).send();
   }
 
   deleteVersion = async (req, res) => {

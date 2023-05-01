@@ -7,7 +7,10 @@ const Qst_in_version = sequelize.define(
       primaryKey: true,
       autoIncrement: true
     },
-    version_id: {
+    // version_id: {
+    //   type: DataTypes.INTEGER
+    // },
+    part_id: {
       type: DataTypes.INTEGER
     },
     question_id: {
@@ -15,7 +18,7 @@ const Qst_in_version = sequelize.define(
     },
     serial_number_in_part: {
       type: DataTypes.INTEGER
-    }
+    }   
   },
   {
     timestamps: false,

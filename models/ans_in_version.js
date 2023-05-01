@@ -12,7 +12,7 @@ const Ans_in_version = sequelize.define("ans_in_versions",
     question_id: {
       type: DataTypes.INTEGER
     },
-    version_id:{
+    answer_id:{
       type: DataTypes.INTEGER
     }
   },

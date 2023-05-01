@@ -14,13 +14,9 @@ const Ans_in_version = db.ans_in_version;
 const Course = db.course;
 const Owners = db.user;
 const QuestionnaireDal = require('../dal/questionnaireDal');
+const VersionDal = require('../dal/versionDal');
 
-const getFullQuestionnaireOfVersion = async (versionId) => {
-  const versionDetails = await Version.findByPk(versionId);
-  const questionnaireId = versionDetails.questionnaire_id;
-  const fullQuestionnaire = await QuestionnaireDal.getFullQuestionnaireById(questionnaireId);
-  return fullQuestionnaire.get({ plain: true });
-}
+
 
 const getSerialNumberOfAnswer = async (answer, versionId) => {
   try {
@@ -145,22 +141,21 @@ const getParts = async (parts) => {
     children: 
       arr.map((t) => {return new TextRun({text: t})})
   });
-
   return p;
-
 }
 
 
 class TestPrinter {
 
-  convertVersionToPdf = async (versionId) => {
-    const fullQuestoinnaire = await getFullQuestionnaireOfVersion(versionId);
-    const courseName = fullQuestoinnaire.course.name;
-    const date = fullQuestoinnaire.date.getFullYear();
-    const path = `./files/readyVersions/${courseName}_${date}_v${versionId}.docx`;
-    await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
-    const headers = await createHeaders(courseName,versionId,fullQuestoinnaire.date.toLocaleDateString());
-    const content = await getParts(fullQuestoinnaire.parts);
+  convertVersionToPdf = async (versionId, questionnaireId) => {
+
+    const questoinnaire = await QuestionnaireDal.getFullQuestionnaireById(questionnaireId);
+    const courseName = questoinnaire.course.name;
+    const year = questoinnaire.date.getFullYear();
+    const version = VersionDal.getFullVersion(versionId);
+    await getAllPartsWithQuestionsInOrder(questoinnaire, versionId);
+    const headers = await createHeaders(courseName,versionId,questoinnaire.date.toLocaleDateString());
+    const content = await getParts(questoinnaire.parts);
     const doc = new Document({   
       sections: [
         {
@@ -169,6 +164,8 @@ class TestPrinter {
         },
       ],
     });
+
+    const path = `./files/readyVersions/${courseName}_${year}_v${versionId}.docx`;
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(path, buffer);
     });

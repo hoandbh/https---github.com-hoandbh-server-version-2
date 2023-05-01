@@ -3,10 +3,12 @@ const { sequelize } = require("./sequelize");
 const applyExtraSetup = () => {
 
   const {versions, courses, messages, qst_in_questionnaires, ans_in_versions, possible_answers,
-       qst_in_versions,questionnaire,scores, users, ans_selected_in_test,part_in_questionnaire} = sequelize.models;
+       qst_in_versions,questionnaire,scores, users, ans_selected_in_test,part_in_questionnaire,part_in_version} = sequelize.models;
           
     users.hasMany(questionnaire,{foreignKey:"owner", onDelete:'cascade'})
     questionnaire.belongsTo(users,{foreignKey:"owner", onDelete:'cascade'});
+
+
 
     courses.hasMany(questionnaire,{foreignKey:"course_id", onDelete:'cascade'});
     questionnaire.belongsTo(courses,{foreignKey:"course_id", onDelete:'cascade'});
@@ -14,14 +16,17 @@ const applyExtraSetup = () => {
     qst_in_questionnaires.belongsTo(part_in_questionnaire, {foreignKey: "part_id", onDelete:'cascade'});
     part_in_questionnaire.hasMany(qst_in_questionnaires,{foreignKey:"part_id", as:'questions', onDelete:'cascade'});
  
+    qst_in_versions.belongsTo(part_in_version, {foreignKey: "part_id", onDelete:'cascade'});
+    part_in_version.hasMany(qst_in_versions,{foreignKey:"part_id", as:'questions', onDelete:'cascade'});
+ 
     possible_answers.belongsTo(qst_in_questionnaires,{foreignKey:"question_id", onDelete:'cascade'});
     qst_in_questionnaires.hasMany(possible_answers,{foreignKey:"question_id" , as:'answers', onDelete:'cascade'});
   
     qst_in_versions.belongsTo(qst_in_questionnaires,{foreignKey:"question_id", onDelete:'cascade'});
     qst_in_questionnaires.hasMany(qst_in_versions,{foreignKey:"question_id", onDelete:'cascade'});
 
-    qst_in_versions.belongsTo(versions,{foreignKey:"version_id", onDelete:'cascade'});
-    versions.hasMany(qst_in_versions,{foreignKey:"version_id", onDelete:'cascade'});
+    // qst_in_versions.belongsTo(versions,{foreignKey:"version_id", onDelete:'cascade'});
+    // versions.hasMany(qst_in_versions,{foreignKey:"version_id", onDelete:'cascade'});
    
     versions.belongsTo(questionnaire, {foreignKey:"questionnaire_id", onDelete:'cascade'});
     questionnaire.hasMany(versions, {foreignKey:"questionnaire_id", onDelete:'cascade'});
@@ -43,11 +48,20 @@ const applyExtraSetup = () => {
   
     part_in_questionnaire.belongsTo(questionnaire, {foreignKey:"questionnaire_id", onDelete:'cascade'});
     questionnaire.hasMany(part_in_questionnaire,{foreignKey:"questionnaire_id", as:'parts', onDelete:'cascade'} );
+
+    part_in_version.belongsTo(versions, {foreignKey:"version_id", onDelete:'cascade'});
+    versions.hasMany(part_in_version,{foreignKey:"version_id", as:'parts', onDelete:'cascade'} );
+
+    part_in_version.belongsTo(part_in_questionnaire, {foreignKey:"part_id", onDelete:'cascade'});
+    part_in_questionnaire.hasMany(part_in_version,{foreignKey:"part_id", onDelete:'cascade'} );
     
     ans_in_versions.belongsTo(qst_in_versions, {foreignKey:"question_id", onDelete:'cascade'});
-    qst_in_versions.hasMany(ans_in_versions,{foreignKey:"question_id", onDelete:'cascade'});
+    qst_in_versions.hasMany(ans_in_versions,{foreignKey:"question_id", as:'answers', onDelete:'cascade'});
 
-}   
+    ans_in_versions.belongsTo(possible_answers, {foreignKey:"answer_id", onDelete:'cascade'});
+    possible_answers.hasMany(ans_in_versions,{foreignKey:"answer_id", onDelete:'cascade'});
+
+}       
    
 module.exports = { applyExtraSetup };
 

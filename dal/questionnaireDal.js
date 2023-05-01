@@ -11,7 +11,7 @@ const Course = db.course;
 
 class QuestionnaireDal {
 
-  
+
 
   getAllQuestionnaires = async () => {
     //to add the name of course??
@@ -23,46 +23,46 @@ class QuestionnaireDal {
     var quest = await Questionnaire.findByPk(id);
     return quest;
   }
-  
-  getQuestionnairesByOwner = async(ow)=>{
+
+  getQuestionnairesByOwner = async (ow) => {
     var quest = await Questionnaire.findAll({
-      where: {owner:ow}
+      where: { owner: ow }
     });
     return quest;
-  
-  }  
+
+  }
 
 
   //add more functions for getting according to certain paramters
 
-  getFullQuestionnaireById = async(id)=>{
-    //const quest = this.getQuestionnaireById(id);
-    //const questionsInQuestionnaire = 
+  getFullQuestionnaireById = async (id) => {
 
     const fullQuestoinnare = await Questionnaire.findOne(
       {
-        where:{id:id},
-        include:[{
-          model:PartInQuestionnaire,
-          as: 'parts',
-          include:[{
-            model:QuestionsInQuestionnaire, 
-            as: 'questions',
+        where: { id: id },
+        include: [
+          {
+            model: PartInQuestionnaire,
+            as: 'parts',
             include: [{
-              model: Answer,
-              as: 'answers',
+              model: QuestionsInQuestionnaire,
+              as: 'questions',
+              include: [{
+                model: Answer,
+                as: 'answers',
+              }
+              ]
             }]
-          }]
           },
           {
-          model:Course,
-          as: 'course',
-          attributes:['name']
-        }],
+            model: Course,
+            as: 'course',
+            attributes: ['name']
+          }],
         order: [
-          ['parts', 'serial_number', 'ASC']  
+          ['parts', 'serial_number', 'ASC']
         ]
-      }   
+      }
     )
     return fullQuestoinnare;
 
@@ -71,12 +71,12 @@ class QuestionnaireDal {
     const quest = await Questionnaire.create(content);
     return quest;
   }
-  
+
   deleteQuestionnaire = async (id) => {
     await Questionnaire.destroy({
       where: {
         id: id
-      }  
+      }
     })
   }
 
