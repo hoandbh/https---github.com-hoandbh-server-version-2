@@ -13,6 +13,10 @@ const Course = sequelize.define(
     type: DataTypes.STRING,
     allowNull: false
     },
+    code: {
+      type: DataTypes.INTEGER,
+
+    }
   },
   {
     timestamps: false
