@@ -100,8 +100,7 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 const createHeaders = async (courseName, versionNumbern, date) => {
 
   //doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
-  return [
-    new Paragraph({
+  return new Paragraph({
       children: [new ImageRun({
         data: fs.readFileSync('./files/Header.PNG'),
         transformation: {
@@ -121,14 +120,13 @@ const createHeaders = async (courseName, versionNumbern, date) => {
         text: `date: ${date}`,
       })]
     })
-  ]
+  
 }
 
 const getParts = async (parts) => {
-
   const arr = []
   parts.forEach(part => {
-    arr.push(`\nPart ${part.serial_number}, ${part.headline}\n`, { underline: true });
+    arr.push(`\nPart ${part.serial_number}, ${part.headline}\n`);
     arr.push('');
 
     part.questions.forEach(question => {
@@ -143,11 +141,12 @@ const getParts = async (parts) => {
 
   })
 
-
-  return new Paragraph({
+  const p = new Paragraph({
     children: 
       arr.map((t) => {return new TextRun({text: t})})
-  })
+  });
+
+  return p;
 
 }
 
