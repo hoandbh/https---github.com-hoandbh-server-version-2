@@ -9,7 +9,7 @@ const Ans_in_version = sequelize.define("ans_in_versions",
     serial_number: {
       type: DataTypes.INTEGER
     },
-    answer_id: {
+    question_id: {
       type: DataTypes.INTEGER
     },
     version_id:{

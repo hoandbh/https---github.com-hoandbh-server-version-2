@@ -57,10 +57,6 @@ const updateFilePathToDb = async (vId, filePath) => {
   )
 }
 
-const isExists = async (model, id) => {
-  return await model.findOne({ where: { id } });
-}
-
 class VersionCreator {
 
   createVersions = async (id, amount) => {
@@ -74,6 +70,7 @@ class VersionCreator {
     }
     return paths;    
   }   
+  
 }
 
 const versionCreator = new VersionCreator();

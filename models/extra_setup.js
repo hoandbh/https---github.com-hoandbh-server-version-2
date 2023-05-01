@@ -44,10 +44,10 @@ const applyExtraSetup = () => {
     part_in_questionnaire.belongsTo(questionnaire, {foreignKey:"questionnaire_id", onDelete:'cascade'});
     questionnaire.hasMany(part_in_questionnaire,{foreignKey:"questionnaire_id", as:'parts', onDelete:'cascade'} );
     
-    ans_in_versions.belongsTo(qst_in_versions, {foreignKey:"qst_in_questionnaire", onDelete:'cascade'});
-    qst_in_versions.hasMany(ans_in_versions,{foreignKey:"qst_in_questionnaire", onDelete:'cascade'});
+    ans_in_versions.belongsTo(qst_in_versions, {foreignKey:"question_id", onDelete:'cascade'});
+    qst_in_versions.hasMany(ans_in_versions,{foreignKey:"question_id", onDelete:'cascade'});
 
-}
+}   
    
 module.exports = { applyExtraSetup };
 

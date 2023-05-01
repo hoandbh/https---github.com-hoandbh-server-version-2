@@ -97,7 +97,7 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 }
 
 
-const printHeaders = async (detailsDic) => {
+const createHeaders = async (courseName, versionNumbern, date) => {
 
   //doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
   return [
@@ -112,33 +112,43 @@ const printHeaders = async (detailsDic) => {
     }),
     new Paragraph({
       children: [new TextRun({
-        text: `\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`,
+        text: `\n\n\n\n\n\n questionnaire in ${courseName}. \n Good Luck!!!`,
       }),
       new TextRun({
-        text: `version: ${detailsDic.versionNum}`,
+        text: `version: ${versionNumbern}`,
       }),
       new TextRun({
-        text: `date: ${detailsDic.date}`,
+        text: `date: ${date}`,
       })]
     })
   ]
 }
 
-const printParts = async (parts, doc) => {
+const getParts = async (parts) => {
+
+  const arr = []
   parts.forEach(part => {
-    doc.text(`\nPart ${part.serial_number}, ${part.headline}\n`, { underline: true });
-    doc.text();
+    arr.push(`\nPart ${part.serial_number}, ${part.headline}\n`, { underline: true });
+    arr.push('');
 
     part.questions.forEach(question => {
-      doc.text(`\nQuestion ${question.serial_number}`);
-      doc.text(question.content);
+      arr.push(`\nQuestion ${question.serial_number}`);
+      arr.push(question.content);
 
       question.answers.forEach(answer => {
-        doc.text(`\n ${answer.serial_number}: ${answer.content}`)
+        arr.push(`\n ${answer.serial_number}: ${answer.content}`)
       })
+
     })
 
   })
+
+
+  return new Paragraph({
+    children: 
+      arr.map((t) => {return new TextRun({text: t})})
+  })
+
 }
 
 
@@ -150,18 +160,13 @@ class TestPrinter {
     const date = fullQuestoinnaire.date.getFullYear();
     const path = `./files/readyVersions/${courseName}_${date}_v${versionId}.docx`;
     await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
-    let headers = {
-      courseName,
-      versionNum: versionId,
-      date: fullQuestoinnaire.date.toLocaleDateString()
-    }
-    const header = await printHeaders(headers);
-    //await printParts(fullQuestoinnaire.parts, doc);
-    const doc = new Document({
+    const headers = await createHeaders(courseName,versionId,fullQuestoinnaire.date.toLocaleDateString());
+    const content = await getParts(fullQuestoinnaire.parts);
+    const doc = new Document({   
       sections: [
         {
           properties: {},
-          children: header,
+          children: [headers,content],
         },
       ],
     });
@@ -170,6 +175,8 @@ class TestPrinter {
     });
     return path;
   }
+
 }   
 
-module.exports = new TestPrinter();
+const testPrinter = new TestPrinter();
+module.exports = testPrinter;
