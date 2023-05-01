@@ -1,5 +1,7 @@
+//fonts/Alef-Regular.ttf
+const { Document, Packer, Paragraph, TextRun, ImageRun } = require('docx');
 const db = require('../models/index')
-const PDFDocument = require('pdfkit');
+//const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
 const Questionnaire = db.questionnaire;
@@ -9,13 +11,9 @@ const Possible_Answer = db.possible_answer;
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
-const Courses = db.course;
+const Course = db.course;
 const Owners = db.user;
-const getCourseName = async (courseId) => {
 
-  const c = await Courses.findByPk(courseId);
-  return c.get({ plain: true }).name;
-}
 const getFullQuestionnaireOfVersion = async (versionId) => {
   const versionDetails = await Version.findByPk(versionId);
   const questionnaireId = versionDetails.questionnaire_id;
@@ -25,27 +23,38 @@ const getFullQuestionnaireOfVersion = async (versionId) => {
       include: [{
         model: Part_In_Questionnaire,
         as: 'parts',
+        order: [
+          ['serial_number', 'ASC'],
+        ],
         include: [{
           model: Qst_from_questionnaire,
           as: 'questions',
+          order: [
+            ['serial_number', 'ASC'],
+          ],
           include: [{
             model: Possible_Answer,
-            as: 'answers'
+            as: 'answers',
+            order: [
+              ['serial_number', 'ASC'],
+            ],
           }]
         }]
-
+      },
+      {
+        model: Course,
+        as: 'course',
+        attributes: ['name']
       }]
-
     }
   )
-  const a = fullQuestionnaire.get({ plain: true });
   return fullQuestionnaire.get({ plain: true });
 }
-const orderPartsByDesc = (questionnaire) => {
-  const questionnaireParts = questionnaire.parts
-  return questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 
+const orderPartsByDesc = (questionnaire) => {
+  questionnaireParts.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
+
 const getSerialNumberOfAnswer = async (answer, versionId) => {
   try {
     const aInVersion = await Ans_in_version.findOne({
@@ -67,17 +76,17 @@ const getSerialNumberOfAnswer = async (answer, versionId) => {
       console.log(message);
 
     }
-
   }
 }
+
 const orderAnswersForVersion = async (question, versionId) => {
   for (let i in question.answers) {
     const serialNumberOfAns = await getSerialNumberOfAnswer(question.answers[i], versionId);
     question.answers[i].serial_number = serialNumberOfAns;
   }
-
   return question.answers.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
+
 const getSerialNumberOfQuestion = async (question, versionId) => {
   try {
     const qInVersion = await Qst_in_version.findOne({
@@ -87,8 +96,6 @@ const getSerialNumberOfQuestion = async (question, versionId) => {
       }
     });
     return qInVersion.get({ plain: true }).serial_number_in_part;
-
-
   } catch (error) {
     console.log(`Caught Error - no matching question in versoin: \n ${error}`);
     const message = `missing question in version: \n question: ${question}, version: ${versionId}`;
@@ -98,11 +105,11 @@ const getSerialNumberOfQuestion = async (question, versionId) => {
     } catch (error) {
       console.log("didn't write to file");
       console.log(message);
-
     }
-
   }
 }
+
+
 const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
   const questionsArr = part.questions;
   for (let i in questionsArr) {
@@ -111,23 +118,44 @@ const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
     questionsArr[i].answers = await orderAnswersForVersion(questionsArr[i], versionId);
   }
   return questionsArr.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
-
 }
-const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 
+
+const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
   for (let i in questionnaire.parts) {
     const m = await getAllQuestionsOfPartInVersionOrder(questionnaire.parts[i], versionId);
     questionnaire.parts[i].questions = m;
   }
   return questionnaire;
 }
-const printHeaders = async (detailsDic, doc) => {
-  doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
 
 
-  doc.text(`\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`);
-  doc.text(`version: ${detailsDic.versionNum}`);
-  doc.text(`date: ${detailsDic.date}`);
+const printHeaders = async (detailsDic) => {
+
+  //doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
+  return [
+
+    new Paragraph({
+      children: [new ImageRun({
+        data: fs.readFileSync('./files/Header.PNG'),
+        transformation: {
+          width: 600,
+          height: 100,
+        }
+      })]
+    }),
+    new Paragraph({
+      children: [new TextRun({
+        text: `\n\n\n\n\n\n questionnaire in ${detailsDic.courseN}. \n Good Luck!!!`,
+      }),
+      new TextRun({
+        text: `version: ${detailsDic.versionNum}`,
+      }),
+      new TextRun({
+        text: `date: ${detailsDic.date}`,
+      })]
+    })
+  ]
 }
 
 const printParts = async (parts, doc) => {
@@ -152,27 +180,32 @@ class TestPrinter {
 
   convertVersionToPdf = async (versionId) => {
     const fullQuestoinnaire = await getFullQuestionnaireOfVersion(versionId);
-    const courseId = fullQuestoinnaire.course_id;
-    const courseName = await getCourseName(courseId);
+    const courseName = fullQuestoinnaire.course.name;
     const date = fullQuestoinnaire.date.getFullYear();
-    const doc = new PDFDocument();
-    doc.font('fonts/Alef-Regular.ttf').fontSize(16);
-    const path = `./files/readyVersions/${courseName}_${date}_t_${1}_v${versionId}.pdf`;
-    doc.pipe(fs.createWriteStream(path));
-    orderPartsByDesc(fullQuestoinnaire);
+    const path = `./files/readyVersions/${courseName}_${date}_v${versionId}.docx`;
+    //orderPartsByDesc(fullQuestoinnaire);
     await getAllPartsWithQuestionsInOrder(fullQuestoinnaire, versionId);
     let headers = {
       courseN: courseName,
       versionNum: versionId,
       date: fullQuestoinnaire.date.toLocaleDateString()
     }
-    await printHeaders(headers, doc);
-    await printParts(fullQuestoinnaire.parts, doc);
-    doc.end();
+    const header = await printHeaders(headers);
+    //await printParts(fullQuestoinnaire.parts, doc);
+    //doc.end();
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: header,
+        },
+      ],
+    });
+    Packer.toBuffer(doc).then((buffer) => {
+      fs.writeFileSync(path, buffer);
+    });
     return path;
   }
-
-
 }
 
 module.exports = new TestPrinter();

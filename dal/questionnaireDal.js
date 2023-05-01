@@ -42,17 +42,24 @@ class QuestionnaireDal {
     const fullQuestoinnare = await Questionnaire.findOne(
       {
         where:{id:id},
-        // attributes:['owner','date'],
           include:[{
           model:PartInQuestionnaire,
           as: 'parts',
-          // attributes:['id','questionnaire','number_in_questionnaire','headline'],
+          order: [
+            ['serial_number', 'DESC'],
+          ],
           include:[{
             model:QuestionsInQuestionnaire, 
             as: 'questions',
+            order: [
+              ['serial_number', 'ASC'],
+            ],
             include: [{
               model: Answer,
-              as: 'answers'
+              as: 'answers',
+              // order: [
+              //   ['serial_number', 'ASC'],
+              // ]
             }]
           }]
           },
