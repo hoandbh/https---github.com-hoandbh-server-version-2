@@ -6,11 +6,12 @@ const Ans_in_version = db.ans_in_version;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const Part_in_Version = require('../models/part_in_version');
 
-const createMixedAnswersInVersion = (question, versionId) => {
-  const n = createShuffledArr(question.answers.length);
-  question.answers.forEach((answer, i) =>
-    Ans_in_version.create({ serial_number: n[i], answer_id: answer.id, version_id: versionId, qst_in_questionnaire: question.id })
-  );
+const createMixedAnswersInVersion = (answers, versionId, questionId) => {
+  const n = createShuffledArr(answers.length);
+  console.log('question.id')
+  answers.forEach((answer, i) =>
+    Ans_in_version.create({ serial_number: n[i], answer_id: answer.id, version_id: versionId, question_id: questionId })//hadas
+  );    
 }
 
 const createShuffledArr = (length) => {
@@ -21,36 +22,36 @@ const createShuffledArr = (length) => {
   }
   return arr;
 };
-
-
-const createMixedPartInVersion = (part, versionId) => {
-  const n = createShuffledArr(part.questions.length);
-  part.questions.forEach((question, i) => {
-    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i]});//hadas , part_id:
-    createMixedAnswersInVersion(question, versionId );
+       
+const createMixedQuestionsInVersion = (questions, versionId, partId) => {
+  const n = createShuffledArr(questions.length);
+  var q;
+  questions.forEach(async (question, i) => {
+    q = await Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i], part_id:partId});//hadas , 
+    createMixedAnswersInVersion(question.answers, versionId, q.id );
   });
 }
 
-const createPartInVersion = (part, versionId) => {
+const createQuestionsInVersion = (part, versionId) => {
   part.questions.forEach((question, i) => {
     Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': i });
     createMixedAnswersInVersion(question, versionId );
   });
 }
 
-const createPartsOfVersion = (questionnaire, versionId) => {
-  const n = createShuffledArr(questionnaire.parts.length);
-
-  questionnaire.parts.forEach((part, i) => {
-    Part_in_Version.create({version_id:versionId, part_id:part.id, serial_number:n[i] });
-    part.mix ? createMixedPartInVersion(part, versionId) : createPartInVersion(part, versionId);
+const createPartsOfVersion = (parts, versionId) => {
+  const n = createShuffledArr(parts.length);
+  var p;
+  parts.forEach(async (part, i) => {
+    p = await Part_in_Version.create({version_id:versionId, part_id:part.id, serial_number:n[i] });
+    part.mix ? createMixedQuestionsInVersion(part.questions, versionId, p.id) : createQuestionsInVersion(part, versionId);
   })
 }
 
 const createVersion = async (questionnaireId, questionnaire) => {
   const version = await Version.create({ 'questionnaire_id': questionnaireId });
-  createPartsOfVersion(questionnaire, version.id);
-  return version;
+  createPartsOfVersion(questionnaire.parts, version.id);
+  return version;   
 }
 
 const updateFilePathToDb = async (vId, filePath) => {

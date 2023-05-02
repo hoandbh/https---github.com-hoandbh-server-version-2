@@ -15,8 +15,58 @@ const where = (id) => ({
     id: id
   }
 });
-   
+
 class VersionDal {
+
+  // getFullVersion = async (id) => {
+  //   const versions = await Version.findOne(
+  //     {
+  //       where: { id },
+  //       include: [{
+  //         model: PartInVersion,
+  //         as: 'parts',
+  //         include: [{
+  //           model: QuestionsInVersion,
+  //           as: 'questions',
+  //           include: [
+  //             {
+  //               model: PartInQuestionnaire,
+  //               attributes: ['headline']
+  //             },
+  //             {
+  //               model: QuestionsInVersion,
+  //               as: 'questions',
+  //               attributes: ['serial_number_in_part'],
+  //               include: [
+  //                 {
+  //                   model: QuestionsInQuestionnaire,
+  //                   attributes: ['content']
+  //                 },
+  //                 {
+  //                   model: AnsInVersion,
+  //                   as: 'answers',
+  //                   include: [
+  //                     {
+  //                       model: Answer,
+  //                       attributes: ['content']
+  //                     }
+  //                   ]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         }]
+
+  //       }],
+  //       // order: [
+  //       //   ['parts', 'serial_number', 'ASC'],
+  //       //   ['questions', '']
+  //       // ]
+  //     }
+  //   )
+  //   return versions;
+  // }
+
 
   getFullVersion = async (id) => {
     const versions = await Version.findOne(
@@ -27,7 +77,11 @@ class VersionDal {
           as: 'parts',
           include: [{
             model: QuestionsInVersion,
-            as:'questions',
+            as: 'questions',
+            include: [{
+              model: AnsInVersion,
+              as: 'answers'
+            }]
           }]
           // include: [
           //   {    
@@ -64,6 +118,7 @@ class VersionDal {
     )
     return versions;
   }
+
 
   getAllVersions = async () => {
     const versions = await Version.findAll({});
