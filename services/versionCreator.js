@@ -6,13 +6,12 @@ const Ans_in_version = db.ans_in_version;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const Part_in_Version = require('../models/part_in_version');
 
-const createMixedAnswersInVersion = (answers, versionId, questionId) => {
+const createMixedAnswersInVersion = async (answers, versionId, questionId) => {
   const n = createShuffledArr(answers.length);
-  console.log('question.id')
-  answers.forEach((answer, i) =>
-    Ans_in_version.create({ serial_number: n[i], answer_id: answer.id, version_id: versionId, question_id: questionId })//hadas
-  );    
-}
+  for (const [i, answer] of answers.entries()) {
+    await Ans_in_version.create({ serial_number: n[i], answer_id: answer.id, version_id: versionId, question_id: questionId });
+  }
+}   
 
 const createShuffledArr = (length) => {
   const arr = Array(length).fill().map((_, i) => i).slice();
@@ -22,36 +21,36 @@ const createShuffledArr = (length) => {
   }
   return arr;
 };
-       
-const createMixedQuestionsInVersion = (questions, versionId, partId) => {
+
+const createMixedQuestionsInVersion = async (questions, versionId, partId) => {
   const n = createShuffledArr(questions.length);
   var q;
-  questions.forEach(async (question, i) => {
-    q = await Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i], part_id:partId});//hadas , 
-    createMixedAnswersInVersion(question.answers, versionId, q.id );
+  for (const [i, question] of questions.entries()) {
+    q = await Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': n[i], part_id: partId });//hadas , 
+    await createMixedAnswersInVersion(question.answers, versionId, q.id);
+  };
+}
+
+const createQuestionsInVersion = async (part, versionId) => {
+  part.questions.forEach(async (question, i) => {
+    await Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': i });
+    await createMixedAnswersInVersion(question, versionId);
   });
 }
 
-const createQuestionsInVersion = (part, versionId) => {
-  part.questions.forEach((question, i) => {
-    Qst_in_version.create({ 'question_id': question.id, 'version_id': versionId, 'serial_number_in_part': i });
-    createMixedAnswersInVersion(question, versionId );
-  });
-}
-
-const createPartsOfVersion = (parts, versionId) => {
+const createPartsOfVersion = async (parts, versionId) => {
   const n = createShuffledArr(parts.length);
   var p;
-  parts.forEach(async (part, i) => {
-    p = await Part_in_Version.create({version_id:versionId, part_id:part.id, serial_number:n[i] });
-    part.mix ? createMixedQuestionsInVersion(part.questions, versionId, p.id) : createQuestionsInVersion(part, versionId);
-  })
+  for (const [i, part] of parts.entries()) {
+    p = await Part_in_Version.create({ version_id: versionId, part_id: part.id, serial_number: n[i] });
+    part.mix ? await createMixedQuestionsInVersion(part.questions, versionId, p.id) : await createQuestionsInVersion(part, versionId);
+  }
 }
 
 const createVersion = async (questionnaireId, questionnaire) => {
   const version = await Version.create({ 'questionnaire_id': questionnaireId });
-  createPartsOfVersion(questionnaire.parts, version.id);
-  return version;   
+  await createPartsOfVersion(questionnaire.parts, version.id);
+  return version;
 }
 
 const updateFilePathToDb = async (vId, filePath) => {
@@ -65,17 +64,18 @@ const updateFilePathToDb = async (vId, filePath) => {
 class VersionCreator {
 
   createVersions = async (id, amount) => {
-    const questionnaire = await QuestionnaireDal.getFullQuestionnaireById(id)
+    const questionnaire = await QuestionnaireDal.getFullQuestionnaire(id)
     let paths = [];
     for (let i = 1; i <= amount; i++) {
       const version = await createVersion(id, questionnaire);
-      const path = await versionPrinter.convertVersionToPdf(version.id,id);
+      //await new Promise(resolve => setTimeout(resolve, 1000));
+      const path = await versionPrinter.convertVersionToPdf(version.id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }
-    return paths;    
-  }   
-  
+    return paths;
+  }
+
 }
 
 const versionCreator = new VersionCreator();

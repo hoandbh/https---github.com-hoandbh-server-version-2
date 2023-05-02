@@ -37,7 +37,7 @@ class QuestionnaireController {
 
   getFullQuestionnaire = async (req, res) => {
     const id = req.params.id;
-    const fullQuestionnaire = await questionnaireDal.getFullQuestionnaireById(id);
+    const fullQuestionnaire = await questionnaireDal.getFullQuestionnaire(id);
     if (fullQuestionnaire)
       return res.json(fullQuestionnaire)
     else

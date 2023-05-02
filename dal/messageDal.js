@@ -26,9 +26,10 @@ class MessageDal {
     return message;
   }
 
-  deleteMassage = async (id) => { 
+  deleteMessage = async (id) => { 
     await Message.destroy(where(id));
   }
+  
 
   search = async (where) => { 
     const messages = await Message.findAll({

@@ -31,16 +31,23 @@ class VersionController {
       return res.status(201).json(v);
   }
 
-  getVersionById = async (req, res) => {
+  
+  getFullVersion = async (req, res) => {
     const {id} = req.params;
     const version = await versionDal.getFullVersion(id);
-    res.json(version);
+    if (version)
+      res.json(version);
+    else
+      res.status(204).send();
+  }
 
-    // var version = await versionDal.getVersionById(id);
-    // if (version)
-    //   res.json(version);
-    // else
-    //   res.status(204).send();
+  getVersionById = async (req, res) => {
+    const {id} = req.params;
+    var version = await versionDal.getVersionById(id);
+    if (version)
+      res.json(version);
+    else
+      res.status(204).send();
   }
 
   deleteVersion = async (req, res) => {

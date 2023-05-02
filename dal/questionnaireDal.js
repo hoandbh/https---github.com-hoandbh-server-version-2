@@ -35,7 +35,7 @@ class QuestionnaireDal {
 
   //add more functions for getting according to certain paramters
 
-  getFullQuestionnaireById = async (id) => {
+  getFullQuestionnaire = async (id) => {
 
     const fullQuestoinnare = await Questionnaire.findOne(
       {

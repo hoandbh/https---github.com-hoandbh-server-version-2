@@ -11,12 +11,6 @@ class ServicesController {
     const fullversion = await versionPrinter.convertVersionToPdf(versionId);
     if(fullversion)
       return res.status(201).json(fullversion)
-
-    // const d = await versionPrinter.convertVersionToPdf(versionId,path );
-    // if(d)
-    //   console.log("pdf created successfuly :)");
-    // else
-    //   res.status(204).send();
   }
 
 }
