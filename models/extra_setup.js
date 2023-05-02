@@ -8,8 +8,6 @@ const applyExtraSetup = () => {
     users.hasMany(questionnaire,{foreignKey:"owner", onDelete:'cascade'})
     questionnaire.belongsTo(users,{foreignKey:"owner", onDelete:'cascade'});
 
-
-
     courses.hasMany(questionnaire,{foreignKey:"course_id", onDelete:'cascade'});
     questionnaire.belongsTo(courses,{foreignKey:"course_id", onDelete:'cascade'});
    
