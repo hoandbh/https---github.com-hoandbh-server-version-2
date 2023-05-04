@@ -14,8 +14,23 @@ app.use(cookieParser())
 //Router
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/files', express.static(path.join(__dirname, 'files')));
-
 app.use('/', require('./routes/root'))
+
+
+// //test
+// const versionDal = require('./dal/versionDal');
+// const f = async(id) => {
+//   const version = await versionDal.getFullVersion(id);
+//   // const v = await version.toJSON();
+//   const v = await version.get();
+//   console.log('**************************')
+//   console.log(v);
+//   console.log('**************************')
+// }
+// app.use('/try',(req,res)=>{
+//   f(14);
+//   return res.send();
+// })
 
 //api
 app.use("/api/auth", require("./routes/authRouter"))

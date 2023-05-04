@@ -1,122 +1,79 @@
 //V
-const { Op } = require('sequelize');
-// const { version: Version } = require('../models');
 const db = require('../models/index');
+const Questionnaire = db.questionnaire;
 const Version = db.version;
-const PartInVersion = db.part_in_version;
+const PartsInVersion = db.part_in_version;
 const QuestionsInVersion = db.qst_in_version;
-const AnsInVersion = db.ans_in_version;
-const PartInQuestionnaire = db.part_in_questionnaire
-const QuestionsInQuestionnaire = db.qst_in_questionnaire
-const Answer = db.possible_answer;
+const AnswersInVersion = db.ans_in_version;
+const OriginalParts = db.part_in_questionnaire
+const OriginalQuestions = db.qst_in_questionnaire
+const OriginalAnswers = db.possible_answer;
+const Course = db.course;
 
-const where = (id) => ({
-  where: {
-    id: id
-  }
-});
+
 
 class VersionDal {
 
-  // getFullVersion = async (id) => {
-  //   const versions = await Version.findOne(
-  //     {
-  //       where: { id },
-  //       include: [{
-  //         model: PartInVersion,
-  //         as: 'parts',
-  //         include: [{
-  //           model: QuestionsInVersion,
-  //           as: 'questions',
-  //           include: [
-  //             {
-  //               model: PartInQuestionnaire,
-  //               attributes: ['headline']
-  //             },
-  //             {
-  //               model: QuestionsInVersion,
-  //               as: 'questions',
-  //               attributes: ['serial_number_in_part'],
-  //               include: [
-  //                 {
-  //                   model: QuestionsInQuestionnaire,
-  //                   attributes: ['content']
-  //                 },
-  //                 {
-  //                   model: AnsInVersion,
-  //                   as: 'answers',
-  //                   include: [
-  //                     {
-  //                       model: Answer,
-  //                       attributes: ['content']
-  //                     }
-  //                   ]
-  //                 }
-  //               ]
-  //             }
-  //           ]
-  //         }]
-
-  //       }],
-  //       // order: [
-  //       //   ['parts', 'serial_number', 'ASC'],
-  //       //   ['questions', '']
-  //       // ]
-  //     }
-  //   )
-  //   return versions;
-  // }
-
-
   getFullVersion = async (id) => {
-    const versions = await Version.findOne(
+    const version = await Version.findOne(
       {
         where: { id },
-        include: [{
-          model: PartInVersion,
-          as: 'parts',
-          include: [{
-            model: QuestionsInVersion,
-            as: 'questions',
-            include: [{
-              model: AnsInVersion,
-              as: 'answers'
-            }]
-          }]
-          // include: [
-          //   {    
-          //     model: PartInQuestionnaire,
-          //     attributes: ['headline']
-          //   },
-          //   {
-          //     model: QuestionsInVersion,
-          //     as: 'questions',
-          //     attributes: ['serial_number_in_part'],
-          //     include: [   
-          //       {
-          //         model: QuestionsInQuestionnaire,
-          //         attributes: ['content']
-          //       },
-          //       {
-          //         model: AnsInVersion,
-          //         as: 'answers',
-          //         include: [
-          //           {
-          //             model: Answer,
-          //             attributes: ['content']
-          //           }
-          //         ]
-          //       }    
-          //     ]
-          //   }
-          // ]
-        }],
+        include: [
+          {
+            model: PartsInVersion,
+            as: 'parts',
+            include: [
+              {
+                model: QuestionsInVersion,
+                as: 'questions',
+                include: [
+                  {
+                    model: AnswersInVersion,
+                    as: 'answers',
+                    include: [
+                      {
+                        model: OriginalAnswers,
+                        as: 'original_answer'
+                      }
+                    ]
+                  },
+                  {
+                    model: OriginalQuestions,
+                    as: 'original_question'
+                  }
+                ],
+                order: [
+                  [{ model: AnswersInVersion, as: 'answers' }, 'serial_number', 'ASC']
+                ]
+              },
+              {
+                model: OriginalParts,
+                as: 'original_part'
+              }
+            ],
+            order: [
+              [{ model: QuestionsInVersion, as: 'questions' }, 'serial_number_in_part', 'ASC'],
+            ]
+          },
+          {
+            model: Questionnaire,
+            as: 'original_questionnaire',
+            attributes: ['date'],
+            include: [
+              {
+                model: Course,
+                as: 'course',
+                attributes: ['name']
+              }
+            ]  
+          }
+        ],
         order: [
-          ['parts', 'serial_number', 'ASC']
+          [{ model: PartsInVersion, as: 'parts' }, 'serial_number', 'ASC']
         ]
       }
     )
-    return versions;
+    return version;
   }
 
 
@@ -126,7 +83,6 @@ class VersionDal {
   }
 
   getVersionById = async (id) => {
-    // var version = await Version.findOne(where(id));
     var version = await Version.findByPk(id);
     return version;
   }
@@ -142,7 +98,7 @@ class VersionDal {
   }
 
   deleteVersion = async (id) => {
-    await Version.destroy(where(id));
+    await Version.destroy({ where: { id } });
   }
 
   getVersionsByQuestionnaire = async (id) => {

@@ -1,7 +1,6 @@
 //fonts/Alef-Regular.ttf
-const { Document, Packer, Paragraph, TextRun, ImageRun } = require('docx');
+const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber } = require('docx');
 const db = require('../models/index')
-//const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
 const Questionnaire = db.questionnaire;
@@ -15,6 +14,7 @@ const Course = db.course;
 const Owners = db.user;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const VersionDal = require('../dal/versionDal');
+const { versions } = require('process');
 
 
 
@@ -72,7 +72,6 @@ const getSerialNumberOfQuestion = async (question, versionId) => {
   }
 }
 
-
 const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
   const questionsArr = part.questions;
   for (let i in questionsArr) {
@@ -83,7 +82,6 @@ const getAllQuestionsOfPartInVersionOrder = async (part, versionId) => {
   return questionsArr.sort((a, b) => (a.serial_number > b.serial_number) ? 1 : -1);
 }
 
-
 const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
   for (let i in questionnaire.parts) {
     const m = await getAllQuestionsOfPartInVersionOrder(questionnaire.parts[i], versionId);
@@ -93,86 +91,147 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 }
 
 
-const createHeaders = async (courseName, versionNumbern, date) => {
+const createHeaders = async (version) => {
 
-  //doc.image('./files/Header.PNG', 100, 30, { fit: [420, 350], align: 'center' }).stroke();
-  return new Paragraph({
-      children: [new ImageRun({
-        data: fs.readFileSync('./files/Header.PNG'),
-        transformation: {
-          width: 600,
-          height: 100,
-        }
-      })]
+  const courseName = version.original_questionnaire.course.name;
+  const date = version.original_questionnaire.date.toLocaleDateString();
+
+  const headers = [
+    new Paragraph({
+      children:
+        [
+          new ImageRun({
+            data: fs.readFileSync('./files/Header.PNG'),
+            transformation: {
+              width: 600,
+              height: 100,
+            }
+          })
+        ]
     }),
     new Paragraph({
-      children: [new TextRun({
-        text: `\n\n\n\n\n\n questionnaire in ${courseName}. \n Good Luck!!!`,
-      }),
-      new TextRun({
-        text: `version: ${versionNumbern}`,
-      }),
-      new TextRun({
-        text: `date: ${date}`,
-      })]
+      children:
+        [
+          new TextRun({
+            text: `questionnaire in ${courseName}.  Good Luck!!!`
+          }),
+          new TextRun({
+            text: `version: ${version.id}`,
+          }),
+          new TextRun({
+            text: `date: ${date}`,
+          })
+        ]
     })
-  
+  ]
+
+  return headers;
 }
 
-const getParts = async (parts) => {
+
+
+// new docx.Paragraph("Parts:"),
+// new docx.Paragraph({
+//   children: version.parts.map(part => {
+//     const questionList = new docx.Paragraph({
+//       children: part.questions.map(question => {
+//         const answerList = new docx.Paragraph({
+//           children: question.answers.map(answer => new docx.Paragraph(answer.original_answer.content))
+//         });
+//         return new docx.Paragraph({
+//           text: question.original_question.content,
+//           children: [answerList]
+//         });
+//       })
+//     });
+//     return new docx.Paragraph({
+//       text: `Part ID: ${part.id} | Headline: ${part.original_part.headline}`,
+//       children: [questionList]
+//     });
+//   })
+// })
+
+
+const createParts = (parts) => {
   const arr = []
   parts.forEach(part => {
-    arr.push(`\nPart ${part.serial_number}, ${part.headline}\n`);
-    arr.push('');
-
+    arr.push(part.original_part.headline);
     part.questions.forEach(question => {
-      arr.push(`\nQuestion ${question.serial_number}`);
-      arr.push(question.content);
-
+      arr.push(question.original_question.content);
       question.answers.forEach(answer => {
-        arr.push(`\n ${answer.serial_number}: ${answer.content}`)
+        arr.push(answer.original_answer.content);
       })
-
     })
-
   })
 
-  const p = new Paragraph({
-    children: 
-      arr.map((t) => {return new TextRun({text: t})})
-  });
-  return p;
+  return arr;
+
 }
 
+const formatParts = (parts) => {
+
+  const arr = parts.map((p) => {
+    return new Paragraph({
+      children: [
+        new TextRun(p)
+      ]
+    })
+  })
+
+  return arr;
+}
+
+const createContent = async (version) => {
+  const parts = createParts(version.parts);
+  const formatedParts = formatParts(parts);
+  return formatedParts;
+}
 
 class TestPrinter {
 
-  convertVersionToPdf = async (versionId, questionnaireId) => {
+  convertVersionToPdf = async (versionId) => {
+    const version = await VersionDal.getFullVersion(versionId);
+    const headers = await createHeaders(version);
+    const content = await createContent(version);
+    const paragraphs = headers.concat(content);
 
-    const questoinnaire = await QuestionnaireDal.getFullQuestionnaireById(questionnaireId);
-    const courseName = questoinnaire.course.name;
-    const year = questoinnaire.date.getFullYear();
-    const version = VersionDal.getFullVersion(versionId);
-    await getAllPartsWithQuestionsInOrder(questoinnaire, versionId);
-    const headers = await createHeaders(courseName,versionId,questoinnaire.date.toLocaleDateString());
-    const content = await getParts(questoinnaire.parts);
-    const doc = new Document({   
+    const doc = new Document({
       sections: [
         {
-          properties: {},
-          children: [headers,content],
-        },
+          properties: {  
+            page: {
+              pageNumbers: {
+                start: 1,
+                formatType: NumberFormat.DECIMAL,
+              },
+            },
+          },
+          headers: {
+            default: new Header({
+              children: [new Paragraph("First Default Header on another page")],
+            }),
+          },
+          footers: {
+            default: new Footer({
+              children: [new Paragraph("Footer on another page")],
+            }),
+          },
+
+          children: paragraphs,
+        }
       ],
     });
 
+    const courseName = version.original_questionnaire.course.name;
+    const year = version.original_questionnaire.date.getYear();
     const path = `./files/readyVersions/${courseName}_${year}_v${versionId}.docx`;
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(path, buffer);
     });
     return path;
+
   }
 
-}   
+}
 
-const testPrinter = new TestPrinter();
-module.exports = testPrinter;
+module.exports = new TestPrinter();
