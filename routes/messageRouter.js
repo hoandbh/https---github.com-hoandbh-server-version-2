@@ -13,9 +13,9 @@ messageRouter.route('/')
 
 messageRouter.route('/search')
 .get(messageController.search)
-
-
-messageRouter.route('/:id')
+            
+           
+messageRouter.route('/:id')   
 .get(messageController.getMessageById)
 .delete(messageController.deleteMessage)
 

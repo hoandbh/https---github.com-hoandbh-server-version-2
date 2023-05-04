@@ -1,31 +1,37 @@
-const fs = require('fs');
-const { Document, Packer, Paragraph, TextRun } = require('docx');
+// const express = require("express")
+// const router = express.Router()
+// const uploadController = require("../controllers/uploadController")
+// const multer = require('multer');
+// const storage = multer.memoryStorage()
+// const upload = multer({ storage: storage })
 
-const text = [new TextRun("aaaa"),
-new TextRun({
-    text: "bbbbb",
-    bold: true,
-}),
-new TextRun({
-    text: "\tcccc",
-    bold: true,
-})]
+// router.route("/").post( upload.single("file"), uploadController.upload)
 
-const doc = new Document({
-    sections: [
-        {
-            properties: {},
-            children: [
-                new Paragraph({
-                    children: text,
-                }),
-            ],
-        },
-    ],
-});
+// module.exports =router
+// //////////////////////
+const fsPromises =require("fs").promises
+const path = require("path")
+const {v4:uuid} = require("uuid")
+const upload = async (req, res) =>{
+    if(!req.file){
+        res.status(500).send("No file")
+    }
+    const file = req.file
+    const folder = path.join(__dirname, "..", "public", "images")
+    const filename = `${uuid()}_${req.file.originalname}`
+    const fileUrl  =`${folder}/${filename}`
 
-const path = `./files/readyVersions/hadas.docx`;
 
-Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync(path, buffer);
-});
+    try{
+        await fsPromises.writeFile(fileUrl, req.file.buffer)
+        return res.json({location: fileUrl, name:filename })
+    }catch(err){
+        res.status(500).send(err)
+
+    }
+
+    res.send("test")
+
+}
+
+module.exports = {upload}

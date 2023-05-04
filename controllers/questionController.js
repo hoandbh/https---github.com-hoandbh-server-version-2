@@ -1,22 +1,45 @@
 const QuestionDal = require('../dal/qst_in_questionnaireDal');
 const AnswerDal = require('../dal/answerDal');
+const fsPromises = require('fs').promises;
+const path = require('path');
+const { v4: uuid } = require('uuid');
 
 class QuestionController {
 
-  getQstById= async (req, res) => {
+  getQstById = async (req, res) => {
     const { id } = req.params;
     const question = await QuestionDal.getQstById(id);
-    if (!question){
+    if (!question) {
       return res.status(204).send();
     }
     res.json(question);
+  }
+
+  uploadImage = async (req, res) => {
+    const image = req.image;
+    console.log('image');
+    console.log(image);
+    if (!image) {
+      return res.status(500).send("No image")
+    }
+    // '../public/images'
+    const folder = path.join(__dirname, "..", "public", "images")
+    const Imagename = `${uuid()}_${image.originalname}`
+    const fileUrl = `${folder}/${Imagename}`
+
+    try {
+      await fsPromises.writeFile(fileUrl, image.buffer)
+      return res.json({ location: fileUrl, name: filename })
+    } catch (err) {
+      return res.status(500).send(err)
+    }
   }
 
 
   getAllQstOfPart = async (req, res) => {
     const { partId } = req.params;
     const questions = await QuestionDal.getAllQstOfPart(partId);
-    if (!questions?.length){
+    if (!questions?.length) {
       return res.status(204).send();
     }
     res.json(questions);
@@ -25,13 +48,13 @@ class QuestionController {
 
   updateQst = async (req, res) => {
     const { id } = req.params;
-    const { content , correctAnswerContent, incorrectAnswers} = req.body;
-    const question = await QuestionDal.updateQst(id,content);
+    const { content, correctAnswerContent, incorrectAnswers } = req.body;
+    const question = await QuestionDal.updateQst(id, content);
     if (!question) {
       return res.status(404).send('Question not found');
     }
     await AnswerDal.deleteAnswersOfQuestion(id);
-    if(correctAnswerContent){ 
+    if (correctAnswerContent) {
       const correctAnswer = {
         content: correctAnswerContent,
         question_id: id,
@@ -39,7 +62,7 @@ class QuestionController {
       }
       const answer = await AnswerDal.createNewAns(correctAnswer);
     }
-    if(incorrectAnswers){
+    if (incorrectAnswers) {
       incorrectAnswers.map(inCorrectAnswerContent => {
         AnswerDal.createNewAns({
           content: inCorrectAnswerContent,
@@ -49,7 +72,7 @@ class QuestionController {
       });
     }
     return res.send(question);
-  }   
+  }
 
   createNewQst = async (req, res) => {
     const { content, part_id } = req.body;
