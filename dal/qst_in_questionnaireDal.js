@@ -66,6 +66,15 @@ class QstInQuestionnaireDal {
     });
   }
 
+  addImagePath = async (id, path) => {
+    console.log('path');
+    console.log(path);
+    await Qst.update(
+      {image_path: path},
+      {where: {id}}
+    );
+  } ;
+
 }
 
 const qstInQuestionnaireDal = new QstInQuestionnaireDal();

@@ -16,22 +16,22 @@ class QuestionController {
   }
 
   uploadImage = async (req, res) => {
-    const image = req.image;
-    console.log('image');
-    console.log(image);
+    const image = req.file;
+    const { id } = req.params;
     if (!image) {
-      return res.status(500).send("No image")
+      return res.status(400).send("No image provided")
     }
-    // '../public/images'
-    const folder = path.join(__dirname, "..", "public", "images")
+
+    const folder = path.resolve(__dirname, "../public/images");
     const Imagename = `${uuid()}_${image.originalname}`
-    const fileUrl = `${folder}/${Imagename}`
+    const imageUrl = path.resolve(folder, `${uuid()}_${image.originalname}`);
 
     try {
-      await fsPromises.writeFile(fileUrl, image.buffer)
-      return res.json({ location: fileUrl, name: filename })
+      await fsPromises.writeFile(imageUrl, image.buffer);
+      await QuestionDal.addImagePath(id, imageUrl);
+      return res.json({ location: imageUrl, name: Imagename })
     } catch (err) {
-      return res.status(500).send(err)
+      return res.status(500).send("Invalid image data provided")
     }
   }
 

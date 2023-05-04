@@ -12,10 +12,6 @@ const { sequelize, DataTypes } = require("./sequelize");
       },
       content: {
         type: DataTypes.STRING(1000)
-      },    
-      pic_path: {   
-        type: DataTypes.STRING,
-        allowNull:true
       },
       is_correct:{
         type:DataTypes.BOOLEAN

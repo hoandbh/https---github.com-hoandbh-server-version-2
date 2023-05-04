@@ -13,7 +13,7 @@ const Qst_in_questionnaire = sequelize.define(
     content: {
       type: DataTypes.STRING(1000)
     },
-    pic_path: {
+    image_path: {
       type: DataTypes.STRING,
       allowNull: true
     },
