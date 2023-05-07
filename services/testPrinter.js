@@ -2,6 +2,7 @@
 const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber, AlignmentType } = require('docx');
 const db = require('../models/index')
 const fs = require('fs');
+const printer = require('./createPageComponents')
 
 const Questionnaire = db.questionnaire;
 const Part_In_Questionnaire = db.part_in_questionnaire;
@@ -15,6 +16,7 @@ const Owners = db.user;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const VersionDal = require('../dal/versionDal');
 const { versions } = require('process');
+const { log } = require('console');
 
 
 
@@ -91,42 +93,7 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 }
 
 
-const createHeaders = async (version) => {
 
-  const courseName = version.original_questionnaire.course.name;
-  const date = version.original_questionnaire.date.toLocaleDateString();
-
-  const headers = [
-    new Paragraph({
-      children:
-        [
-          new ImageRun({
-            data: fs.readFileSync('./files/Header.PNG'),
-            transformation: {
-              width: 600,
-              height: 100,
-            }
-          })
-        ]
-    }),
-    new Paragraph({
-      children:
-        [
-          new TextRun({
-            text: `questionnaire in ${courseName}.  Good Luck!!!`
-          }),
-          new TextRun({
-            text: `version: ${version.id}`,
-          }),
-          new TextRun({
-            text: `date: ${date}`,
-          })
-        ]
-    })
-  ]
-
-  return headers;
-}
 
 
 
@@ -178,7 +145,7 @@ const formatParts = (parts) => {
           italics: true
         })
       ],
-      alignment: AlignmentType.RIGHT 
+      alignment: AlignmentType.RIGHT
 
     })
   })
@@ -198,7 +165,10 @@ class TestPrinter {
 
   convertVersionToPdf = async (versionId) => {
     const version = await VersionDal.getFullVersion(versionId);
-    const headers = await createHeaders(version);
+    // const v = version.get({ plain: true })
+    // console.log(v);
+    const headers = await printer.createHeaders(version);
+    console.log(headers)
     const content = await createContent(version);
     const paragraphs = headers.concat(content);
 
@@ -262,7 +232,7 @@ class TestPrinter {
     //     }
     //   ],
     // });
-    
+
 
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();
