@@ -7,8 +7,14 @@ class ComponentsCreator {
     createHeaders = async (version) => {
 
         const courseName = version.original_questionnaire.course.name;
-        const date = version.original_questionnaire.date.toLocaleDateString();
-      
+        const date = version.original_questionnaire.date;
+        const yyyy = date.getFullYear();
+        let mm = date.getMonth() + 1;
+        let dd = date.getDate();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        const formattedDate = dd + '/' + mm + '/' + yyyy;
+
         const headers = [
           new Paragraph({
             children:
@@ -32,7 +38,7 @@ class ComponentsCreator {
                   text: `version: ${version.id}`,
                 }),
                 new TextRun({
-                  text: `date: ${date}`,
+                  text: `date: ${formattedDate}`,
                 })
               ]
           })
