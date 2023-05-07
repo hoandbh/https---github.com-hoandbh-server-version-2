@@ -1,5 +1,5 @@
 //fonts/Alef-Regular.ttf
-const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber } = require('docx');
+const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber, AlignmentType } = require('docx');
 const db = require('../models/index')
 const fs = require('fs');
 
@@ -152,7 +152,8 @@ const createHeaders = async (version) => {
 // })
 
 
-const createParts = (parts) => {
+
+const createText = (parts) => {
   const arr = []
   parts.forEach(part => {
     arr.push(part.original_part.headline);
@@ -163,9 +164,7 @@ const createParts = (parts) => {
       })
     })
   })
-
   return arr;
-
 }
 
 const formatParts = (parts) => {
@@ -173,8 +172,14 @@ const formatParts = (parts) => {
   const arr = parts.map((p) => {
     return new Paragraph({
       children: [
-        new TextRun(p)
-      ]
+        new TextRun({
+          text: `\u202B${p}`,
+          bold: true,
+          italics: true
+        })
+      ],
+      alignment: AlignmentType.RIGHT 
+
     })
   })
 
@@ -182,10 +187,12 @@ const formatParts = (parts) => {
 }
 
 const createContent = async (version) => {
-  const parts = createParts(version.parts);
+  const parts = createText(version.parts);
   const formatedParts = formatParts(parts);
   return formatedParts;
 }
+
+
 
 class TestPrinter {
 
@@ -198,7 +205,7 @@ class TestPrinter {
     const doc = new Document({
       sections: [
         {
-          properties: {  
+          properties: {
             page: {
               pageNumbers: {
                 start: 1,
@@ -220,7 +227,42 @@ class TestPrinter {
           children: paragraphs,
         }
       ],
+      properties: {
+        alignment: AlignmentType.RIGHT //  LEFT JUSTIFIED
+      }
     });
+
+    // const doc = new Document({
+    //   sections: [
+    //     {
+    //       properties: {
+    //         page: {
+    //           pageNumbers: {
+    //             start: 1,
+    //             formatType: NumberFormat.DECIMAL,
+    //           },
+    //         },
+    //       },
+    //       headers: {
+    //         default: new Header({
+    //           children: [new Paragraph("First Default Header on another page")],
+    //         }),
+    //       },
+    //       footers: {
+    //         default: new Footer({
+    //           children: [new Paragraph("Footer on another page")],
+    //         }),
+    //       },
+    //       children: paragraphs.map((p) => {
+    //         return new Paragraph({
+    //           children: p.children,
+    //           alignment: AlignmentType.RIGHT // Set the desired alignment for each paragraph
+    //         });
+    //       })
+    //     }
+    //   ],
+    // });
+    
 
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();

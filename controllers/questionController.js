@@ -24,11 +24,13 @@ class QuestionController {
 
     const folder = path.resolve(__dirname, "../public/images");
     const Imagename = `${uuid()}_${image.originalname}`
-    const imageUrl = path.resolve(folder, `${uuid()}_${image.originalname}`);
+    const x = `${uuid()}_${image.originalname}`;
+    const imageUrl = path.resolve(folder, x);
 
     try {
       await fsPromises.writeFile(imageUrl, image.buffer);
-      await QuestionDal.addImagePath(id, imageUrl);
+      await QuestionDal.addImagePath(id, x);
+      // await QuestionDal.addImagePath(id, imageUrl);
       return res.json({ location: imageUrl, name: Imagename })
     } catch (err) {
       return res.status(500).send("Invalid image data provided")

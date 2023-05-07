@@ -10,7 +10,15 @@ const OriginalQuestions = db.qst_in_questionnaire
 const OriginalAnswers = db.possible_answer;
 const Course = db.course;
 
-
+const sortVersion = (version) => {
+  version.parts.sort((p1, p2) => (p1.serial_number - p2.serial_number))
+  version.parts.forEach(p => {
+    p.questions.sort((q1, q2) => (q1.serial_number_in_part - q2.serial_number_in_part));
+    p.questions.forEach(q => {
+      q.answers.sort((a1, a2) => (a1.serial_number - a2.serial_number))
+    })
+  })
+}
 
 class VersionDal {
 
@@ -41,18 +49,12 @@ class VersionDal {
                     model: OriginalQuestions,
                     as: 'original_question'
                   }
-                ],
-                order: [
-                  [{ model: AnswersInVersion, as: 'answers' }, 'serial_number', 'ASC']
                 ]
               },
               {
                 model: OriginalParts,
                 as: 'original_part'
               }
-            ],
-            order: [
-              [{ model: QuestionsInVersion, as: 'questions' }, 'serial_number_in_part', 'ASC'],
             ]
           },
           {
@@ -65,17 +67,14 @@ class VersionDal {
                 as: 'course',
                 attributes: ['name']
               }
-            ]  
+            ]
           }
-        ],
-        order: [
-          [{ model: PartsInVersion, as: 'parts' }, 'serial_number', 'ASC']
         ]
       }
-    )
+    );
+    sortVersion(version);
     return version;
   }
-
 
   getAllVersions = async () => {
     const versions = await Version.findAll({});
