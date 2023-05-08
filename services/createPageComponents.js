@@ -77,7 +77,7 @@ class ComponentsCreator {
   
 
 
-const createText = (parts) => {
+ createText = (parts) => {
   const arr = []
   parts.forEach(part => {
     arr.push(part.original_part.headline);
@@ -91,7 +91,7 @@ const createText = (parts) => {
   return arr;
 }
 
-const formatParts = (parts) => {
+ formatParts = (parts) => {
 
   const arr = parts.map((p) => {
     return new Paragraph({
@@ -110,7 +110,7 @@ const formatParts = (parts) => {
   return arr;
 }
 
-const createContent = async (version) => {
+ createContent = async (version) => {
   const parts = createText(version.parts);
   const formatedParts = formatParts(parts);
   return formatedParts;
