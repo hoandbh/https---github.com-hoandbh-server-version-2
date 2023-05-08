@@ -145,7 +145,7 @@ const formatParts = (parts) => {
           italics: true
         })
       ],
-      alignment: AlignmentType.RIGHT
+      //alignment: AlignmentType.RIGHT
 
     })
   })
