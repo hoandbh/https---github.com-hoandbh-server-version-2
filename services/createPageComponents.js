@@ -74,6 +74,49 @@ class ComponentsCreator {
     return headers;
   }
 
+  
+
+
+const createText = (parts) => {
+  const arr = []
+  parts.forEach(part => {
+    arr.push(part.original_part.headline);
+    part.questions.forEach(question => {
+      arr.push(question.original_question.content);
+      question.answers.forEach(answer => {
+        arr.push(answer.original_answer.content);
+      })
+    })
+  })
+  return arr;
+}
+
+const formatParts = (parts) => {
+
+  const arr = parts.map((p) => {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: `\u202B${p}`,
+          bold: true,
+          italics: true
+        })
+      ],
+      //alignment: AlignmentType.RIGHT
+
+    })
+  })
+
+  return arr;
+}
+
+const createContent = async (version) => {
+  const parts = createText(version.parts);
+  const formatedParts = formatParts(parts);
+  return formatedParts;
+}
+
+
 }
 
 module.exports = new ComponentsCreator();
