@@ -20,3 +20,7 @@ https://github.com/Practical-CV/OMR-Scanner-and-Test-Grader-using-OpenCV
 https://github.com/Thraetaona/AIMER
 
 https://github.com/hmontero1205/pygrader
+
+EXTENSIONS :)
+spellcheck
+gitlens

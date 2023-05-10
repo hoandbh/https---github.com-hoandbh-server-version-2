@@ -4,90 +4,120 @@ const fs = require('fs');
 
 class ComponentsCreator {
 
-    createHeaders = async (version) => {
+  createHeadlines = async (version) => {
 
-        const courseName = version.original_questionnaire.course.name;
-        const date = version.original_questionnaire.date;
-        const yyyy = date.getFullYear();
-        let mm = date.getMonth() + 1;
-        let dd = date.getDate();
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-        const formattedDate = dd + '/' + mm + '/' + yyyy;
+    const courseName = version.original_questionnaire.course.name;
+    const date = version.original_questionnaire.date;
+    const yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    let dd = date.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    const formattedDate = dd + '/' + mm + '/' + yyyy;
 
-        const headers = [
-          new Paragraph({
-            children:
-              [
-                new ImageRun({
-                  data: fs.readFileSync('./files/Header.PNG'),
-                  transformation: {
-                    width: 600,
-                    height: 100,
-                  }
-                })
-              ]
-          }),
-          new Paragraph({
-            children:
-              [
-                new TextRun({
-                  text: `questionnaire in ${courseName}.  Good Luck!!!`
-                }),
-                new TextRun({
-                  text: `version: ${version.id}`,
-                }),
-                new TextRun({
-                  text: `date: ${formattedDate}`,
-                })
-              ]
-          })
-        ]
-      
-        return headers;
-      }
+    const headlines = [
+      new Paragraph({
+        children:
+          [
+            new ImageRun({
+              data: fs.readFileSync('./files/Header.PNG'),
+              transformation: {
+                width: 600,
+                height: 100,
+              }
+            })
+          ]
+      }),
+      new Paragraph({
+        children:
+          [
+            new TextRun({
+              text: `${courseName}שאלון ב`,
+            }),
+            new TextRun({
+              text: `${version.id}גרסה: `,
+              break: 1,
 
-  
+            }),
+            new TextRun({
+              text: `date: ${formattedDate}`,
+              break: 1,
 
-
- createText = (parts) => {
-  const arr = []
-  parts.forEach(part => {
-    arr.push(part.original_part.headline);
-    part.questions.forEach(question => {
-      arr.push(question.original_question.content);
-      question.answers.forEach(answer => {
-        arr.push(answer.original_answer.content);
+            })
+          ]
       })
-    })
-  })
-  return arr;
-}
+    ]
 
- formatParts = (parts) => {
+    return headlines;
+  }
 
-  const arr = parts.map((p) => {
+
+
+
+  formatQuestion = (q, questNumber)=>{
     return new Paragraph({
+      children:[
+        new TextRun({
+          text: `${questNumber}שאלה `,
+          break:1,
+          bold:true
+        }),
+        // new TextRun({
+        //   text:`${q}`
+        // })
+      ]
+    })
+  }
+  createQuestions = (questions) => {
+    let questionCounter = 0;
+    const arr = questions.map((q) => {
+      questionCounter += 1;
+      return this.formatQuestion(q, questionCounter);
+    })
+    return arr;
+    // return new Paragraph({
+    //   children:[
+    //     new TextRun({
+    //       text:'questions[0]'
+    //     })
+    //   ]
+
+    // })
+  }
+  formatPart = (part, partNum) => {
+    console.log(part);
+    const parts =   new Paragraph({
       children: [
         new TextRun({
-          text: `\u202B${p}`,
+          text: `${partNum} חלק`,
+          break: 1,
           bold: true,
-          italics: true
-        })
+        }),
+        this.createQuestions(part.questions),
       ],
-      //alignment: AlignmentType.RIGHT
-
     })
-  })
+    return parts;
 
-  return arr;
-}
+  }
 
- createContent = async (version) => {
-  const parts = createText(version.parts);
-  const formatedParts = formatParts(parts);
-  return formatedParts;
-}
+  formatParts = async (parts) => {
+    let partsCounter = 0;
+    const arr = parts.map((p) => {
+      partsCounter += 1;
+      return this.formatPart(p, partsCounter);
+    })
+
+    return arr;
+  }
+
+  createContent = async (version) => {
+
+    const parts = version.parts;
+
+    // const parts = await this.createText(version.parts);
+    const formatedParts = await this.formatParts(parts);
+    return formatedParts;
+  }
 
 
 }

@@ -95,82 +95,16 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 
 
 
-
-
-// new docx.Paragraph("Parts:"),
-// new docx.Paragraph({
-//   children: version.parts.map(part => {
-//     const questionList = new docx.Paragraph({
-//       children: part.questions.map(question => {
-//         const answerList = new docx.Paragraph({
-//           children: question.answers.map(answer => new docx.Paragraph(answer.original_answer.content))
-//         });
-//         return new docx.Paragraph({
-//           text: question.original_question.content,
-//           children: [answerList]
-//         });
-//       })
-//     });
-//     return new docx.Paragraph({
-//       text: `Part ID: ${part.id} | Headline: ${part.original_part.headline}`,
-//       children: [questionList]
-//     });
-//   })
-// })
-
-
-
-const createText = (parts) => {
-  const arr = []
-  parts.forEach(part => {
-    arr.push(part.original_part.headline);
-    part.questions.forEach(question => {
-      arr.push(question.original_question.content);
-      question.answers.forEach(answer => {
-        arr.push(answer.original_answer.content);
-      })
-    })
-  })
-  return arr;
-}
-
-const formatParts = (parts) => {
-
-  const arr = parts.map((p) => {
-    return new Paragraph({
-      children: [
-        new TextRun({
-          text: `\u202B${p}`,
-          bold: true,
-          italics: true
-        })
-      ],
-      //alignment: AlignmentType.RIGHT
-
-    })
-  })
-
-  return arr;
-}
-
-const createContent = async (version) => {
-  const parts = createText(version.parts);
-  const formatedParts = formatParts(parts);
-  return formatedParts;
-}
-
-
-
 class TestPrinter {
 
   convertVersionToPdf = async (versionId) => {
     const version = await VersionDal.getFullVersion(versionId);
-    // const v = version.get({ plain: true })
-    // console.log(v);
-    const headers = await printer.createHeaders(version);
-    console.log(headers)
-    const content = await createContent(version);
-    const paragraphs = headers.concat(content);
+    const v = version.get({ plain: true });
+
+    const headlines = await printer.createHeadlines(version);
+    // console.log(headlines)
+    const content = await printer.createContent(v);
+    const paragraphs = headlines.concat(content);
 
     const doc = new Document({
       sections: [
@@ -190,8 +124,25 @@ class TestPrinter {
           },
           footers: {
             default: new Footer({
-              children: [new Paragraph("Footer on another page")],
-            }),
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      text: "       איגוד הסמינרים",
+                    }
+                    ),
+
+                    new TextRun({
+                      children: ["page: ", PageNumber.CURRENT],
+                    }),
+                    new TextRun({
+                      children: [" of ", PageNumber.TOTAL_PAGES],
+                    }),
+                  ],
+                }),
+              ],
+            })
           },
 
           children: paragraphs,
@@ -202,36 +153,6 @@ class TestPrinter {
       }
     });
 
-    // const doc = new Document({
-    //   sections: [
-    //     {
-    //       properties: {
-    //         page: {
-    //           pageNumbers: {
-    //             start: 1,
-    //             formatType: NumberFormat.DECIMAL,
-    //           },
-    //         },
-    //       },
-    //       headers: {
-    //         default: new Header({
-    //           children: [new Paragraph("First Default Header on another page")],
-    //         }),
-    //       },
-    //       footers: {
-    //         default: new Footer({
-    //           children: [new Paragraph("Footer on another page")],
-    //         }),
-    //       },
-    //       children: paragraphs.map((p) => {
-    //         return new Paragraph({
-    //           children: p.children,
-    //           alignment: AlignmentType.RIGHT // Set the desired alignment for each paragraph
-    //         });
-    //       })
-    //     }
-    //   ],
-    // });
 
 
     const courseName = version.original_questionnaire.course.name;
