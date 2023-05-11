@@ -14,7 +14,7 @@ app.use(cookieParser())
 
 // Router
 app.use('/', express.static(path.join(__dirname, 'public')))
-app.use('/files', express.static(path.join(__dirname, 'files')));
+//app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use('/', require('./routes/root'))
 
 // Api
