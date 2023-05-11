@@ -72,6 +72,8 @@ class VersionDal {
         ]
       }
     );
+    if(!version)
+      return null;
     sortVersion(version);
     return version;
   }

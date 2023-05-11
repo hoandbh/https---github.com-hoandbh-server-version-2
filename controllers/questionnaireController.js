@@ -8,14 +8,14 @@ const questionnaireDal = require("../dal/questionnaireDal");
 class QuestionnaireController {
 
   //localhost:3600/api/messages
-   
+      
   getAllQuestionnaires = async (req, res) => {
     const { owner } = req.query;
     if (owner) {
       const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
       if (qstnr)
         res.json(qstnr);
-      else
+      else    
         res.status(204).send();
     } else {
       const questionnaires = await questionnaireDal.getAllQuestionnaires(owner);

@@ -10,13 +10,12 @@ const { sequelize } = require('../models/sequelize');
 
 class TestsService {
 
-
   convertAnsSelectedInTestToScore = async ({ studentId, questionnaireId }) => {
     const { ans_selected_in_test, qst_in_questionnaires, possible_answers, scores } = sequelize.models;
 
     const result = await sequelize.query(
       `
-      SELECT 
+      SELECT     
       COUNT(*) AS correct_answers_count
       FROM 
       ans_selected_in_tests ast

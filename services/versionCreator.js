@@ -1,3 +1,4 @@
+const VersionDal = require('../dal/versionDal')
 const db = require('../models/index');
 const versionPrinter = require('../services/testPrinter');
 const Version = db.version;
@@ -63,6 +64,26 @@ const updateFilePathToDb = async (vId, filePath) => {
   )
 }
 
+const findCorrectAnswer = (question) => {
+  const answer = question.answers.find(a => a.original_answer.is_correct);
+  return answer.serial_number;
+}
+
+const createAnswerKey = async (version) => {
+  //ANSWER_KEY = {0: 1, 1: 4, 2: 0, 3: 3, 4: 1}
+  const dic = {};
+  let qst = 0;
+  version.parts.forEach(p => {
+    p.questions.forEach(q => {
+      dic[qst++]=findCorrectAnswer(q);
+    })
+  })
+  console.log('dic')
+  console.log(dic)
+  return dic;
+}
+
+    
 class VersionCreator {
 
   createVersions = async (id, amount) => {
@@ -70,13 +91,16 @@ class VersionCreator {
     let paths = [];
     for (let i = 1; i <= amount; i++) {
       const version = await createVersion(id, questionnaire);
+      const fullVersion = await VersionDal.getFullVersion(version.id);
+      const answerKey = await createAnswerKey(fullVersion);
       const path = await versionPrinter.convertVersionToPdf(version.id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }
-    return paths;
+    return paths;    
   }
-
+  
+     
 }
 
 const versionCreator = new VersionCreator();

@@ -1,3 +1,4 @@
+const { INTEGER } = require("sequelize");
 const { sequelize, DataTypes } = require("./sequelize");
 const Questionnaire = sequelize.define(
   "questionnaire",
@@ -22,11 +23,14 @@ const Questionnaire = sequelize.define(
     term: { 
       type: DataTypes.ENUM('A','B','C','D','E'),
       defaultValue:'A'
-    }
-
+    },
+    // one_part: {
+    //   type: DataTypes.BOOLEAN,
+    //   defaultValue: false
+    // }
   },
   {
     timestamps: false,
   });  
-module.exports = Questionnaire;
+module.exports = Questionnaire;    
 

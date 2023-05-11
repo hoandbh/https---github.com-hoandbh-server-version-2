@@ -31,7 +31,7 @@ class MessageController {
   }
 
   deleteMessage = async (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
     if (!id) {
       return res.status(400).json({ message: 'Message ID required' });
     }

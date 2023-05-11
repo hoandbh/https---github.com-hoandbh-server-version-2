@@ -59,7 +59,7 @@ const getSerialNumberOfQuestion = async (question, versionId) => {
         version_id: versionId,
         question_id: question.id
       }
-    });
+    });   
     return qInVersion.get({ plain: true }).serial_number_in_part;
   } catch (error) {
     console.log(`Caught Error - no matching question in versoin: \n ${error}`);
