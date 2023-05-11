@@ -1,3 +1,4 @@
+const path = require('path');
 
 const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber, AlignmentType } = require('docx');
 const fs = require('fs');
@@ -14,13 +15,14 @@ class ComponentsCreator {
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
         const formattedDate = dd + '/' + mm + '/' + yyyy;
+        const filePath = path.join(__dirname, '../public/files/Header.PNG');
 
         const headers = [
           new Paragraph({
             children:
               [
-                new ImageRun({
-                  data: fs.readFileSync('./files/Header.PNG'),
+                new ImageRun({  
+                  data: fs.readFileSync(filePath),
                   transformation: {
                     width: 600,
                     height: 100,

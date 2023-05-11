@@ -1,3 +1,4 @@
+const path = require('path');
 //fonts/Alef-Regular.ttf
 const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber, AlignmentType } = require('docx');
 const db = require('../models/index')
@@ -231,16 +232,16 @@ class TestPrinter {
     //       })
     //     }
     //   ],
-    // });
+    // });   
 
 
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();
-    const path = `./files/readyVersions/${courseName}_${year}_v${versionId}.docx`;
+    const filePath = path.join(__dirname, `../public/files/readyVersions/${courseName}_${year}_v${versionId}.docx`);
     Packer.toBuffer(doc).then((buffer) => {
-      fs.writeFileSync(path, buffer);
+      fs.writeFileSync(filePath, buffer);
     });
-    return path;
+    return filePath;
 
   }
 
