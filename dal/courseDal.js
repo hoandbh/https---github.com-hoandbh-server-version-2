@@ -1,12 +1,6 @@
 //V
 const { course: Course } = require('../models');
 
-const where = (id) => ({
-  where: {
-    id: id
-  }
-  });
-
 class CourseDal {
 
   getAllCourses = async () => {
@@ -15,7 +9,6 @@ class CourseDal {
   }
 
   getCourseById = async (id) => {
-    // var course = await Course.findOne(where(id));
     var course = await Course.findByPk(id);
     return course;
   }
@@ -26,7 +19,7 @@ class CourseDal {
   }
   
   deleteCourse =  async (id) => { 
-    await Course.destroy(where(id));
+    await Course.destroy({where:{id}});
   }
 
 }

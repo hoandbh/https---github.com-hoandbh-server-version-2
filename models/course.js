@@ -15,7 +15,6 @@ const Course = sequelize.define(
     },
     code: {
       type: DataTypes.INTEGER,
-
     }
   },
   {

@@ -11,10 +11,10 @@ class CourseController {
   }
   
   createNewCourse = async (req, res) => {
-    const details = req.body;
-    if(!details.name)
-      return res.status(400).json({ message: 'Course Name is required' });
-    const course = await courseDal.createNewCourse(details);
+    const { name, code } = req.body;
+    if(!name || !code)
+      return res.status(400).json({ message: 'All field are require' });
+    const course = await courseDal.createNewCourse({ name, code });
     if (course)
       return res.status(201).json(course);
     return res.status(400);

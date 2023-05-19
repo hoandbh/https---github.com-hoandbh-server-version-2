@@ -11,7 +11,7 @@ class AnswerController {
   }
 
   createNewAns = async(req,res) => {
-    const {content,is_correct,question_id} = req.body;//to get all the feilds
+    const { content,is_correct,question_id } = req.body;//to get all the feilds
     const answer = await AnswerDal.createNewAns({content,is_correct,question_id});
     if(answer)
       return res.status(201).json(answer);
