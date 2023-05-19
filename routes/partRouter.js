@@ -7,8 +7,9 @@ partRouter.route('/')
 .post(partController.createPartForQuestionnaire);
 
 partRouter.route('/:id')
-.get(partController.getPartById);
-//need to implement delete and put
+.get(partController.getPartById)
+.delete(partController.deletePart)
+//need to implement and put
 
 const questionRouter = require('./questionRouter')
 partRouter.use('/:partId/question', questionRouter);

@@ -2,6 +2,10 @@ const db = require('../models/index');
 const Part = db.part_in_questionnaire;
 
 class PartDal {
+    
+  deletePart = async (id) => { 
+    await Part.destroy({where:{id}});
+  }
 
   createNewPart = async (content) => {
     const part = await Part.create(content)

@@ -1,7 +1,9 @@
+const path = require('path');
 //fonts/Alef-Regular.ttf
-const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber } = require('docx');
+const { Header, Document, Packer, Paragraph, TextRun, ImageRun, NumberFormat, Footer, PageNumber, AlignmentType } = require('docx');
 const db = require('../models/index')
 const fs = require('fs');
+const printer = require('./createPageComponents')
 
 const Questionnaire = db.questionnaire;
 const Part_In_Questionnaire = db.part_in_questionnaire;
@@ -15,6 +17,7 @@ const Owners = db.user;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const VersionDal = require('../dal/versionDal');
 const { versions } = require('process');
+const { log } = require('console');
 
 
 
@@ -57,7 +60,7 @@ const getSerialNumberOfQuestion = async (question, versionId) => {
         version_id: versionId,
         question_id: question.id
       }
-    });
+    });   
     return qInVersion.get({ plain: true }).serial_number_in_part;
   } catch (error) {
     console.log(`Caught Error - no matching question in versoin: \n ${error}`);
@@ -91,42 +94,7 @@ const getAllPartsWithQuestionsInOrder = async (questionnaire, versionId) => {
 }
 
 
-const createHeaders = async (version) => {
 
-  const courseName = version.original_questionnaire.course.name;
-  const date = version.original_questionnaire.date.toLocaleDateString();
-
-  const headers = [
-    new Paragraph({
-      children:
-        [
-          new ImageRun({
-            data: fs.readFileSync('./files/Header.PNG'),
-            transformation: {
-              width: 600,
-              height: 100,
-            }
-          })
-        ]
-    }),
-    new Paragraph({
-      children:
-        [
-          new TextRun({
-            text: `questionnaire in ${courseName}.  Good Luck!!!`
-          }),
-          new TextRun({
-            text: `version: ${version.id}`,
-          }),
-          new TextRun({
-            text: `date: ${date}`,
-          })
-        ]
-    })
-  ]
-
-  return headers;
-}
 
 
 
@@ -152,7 +120,8 @@ const createHeaders = async (version) => {
 // })
 
 
-const createParts = (parts) => {
+
+const createText = (parts) => {
   const arr = []
   parts.forEach(part => {
     arr.push(part.original_part.headline);
@@ -163,9 +132,7 @@ const createParts = (parts) => {
       })
     })
   })
-
   return arr;
-
 }
 
 const formatParts = (parts) => {
@@ -173,8 +140,14 @@ const formatParts = (parts) => {
   const arr = parts.map((p) => {
     return new Paragraph({
       children: [
-        new TextRun(p)
-      ]
+        new TextRun({
+          text: `\u202B${p}`,
+          bold: true,
+          italics: true
+        })
+      ],
+      //alignment: AlignmentType.RIGHT
+
     })
   })
 
@@ -182,23 +155,28 @@ const formatParts = (parts) => {
 }
 
 const createContent = async (version) => {
-  const parts = createParts(version.parts);
+  const parts = createText(version.parts);
   const formatedParts = formatParts(parts);
   return formatedParts;
 }
+
+
 
 class TestPrinter {
 
   convertVersionToPdf = async (versionId) => {
     const version = await VersionDal.getFullVersion(versionId);
-    const headers = await createHeaders(version);
+    // const v = version.get({ plain: true })
+    // console.log(v);
+    const headers = await printer.createHeaders(version);
+    // console.log(headers)
     const content = await createContent(version);
     const paragraphs = headers.concat(content);
 
     const doc = new Document({
       sections: [
         {
-          properties: {  
+          properties: {
             page: {
               pageNumbers: {
                 start: 1,
@@ -220,15 +198,50 @@ class TestPrinter {
           children: paragraphs,
         }
       ],
+      properties: {
+        alignment: AlignmentType.RIGHT //  LEFT JUSTIFIED
+      }
     });
+
+    // const doc = new Document({
+    //   sections: [
+    //     {
+    //       properties: {
+    //         page: {
+    //           pageNumbers: {
+    //             start: 1,
+    //             formatType: NumberFormat.DECIMAL,
+    //           },
+    //         },
+    //       },
+    //       headers: {
+    //         default: new Header({
+    //           children: [new Paragraph("First Default Header on another page")],
+    //         }),
+    //       },
+    //       footers: {
+    //         default: new Footer({
+    //           children: [new Paragraph("Footer on another page")],
+    //         }),
+    //       },
+    //       children: paragraphs.map((p) => {
+    //         return new Paragraph({
+    //           children: p.children,
+    //           alignment: AlignmentType.RIGHT // Set the desired alignment for each paragraph
+    //         });
+    //       })
+    //     }
+    //   ],
+    // });   
+
 
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();
-    const path = `./files/readyVersions/${courseName}_${year}_v${versionId}.docx`;
+    const filePath = path.join(__dirname, `../public/files/readyVersions/${courseName}_${year}_v${versionId}.docx`);
     Packer.toBuffer(doc).then((buffer) => {
-      fs.writeFileSync(path, buffer);
+      fs.writeFileSync(filePath, buffer);
     });
-    return path;
+    return filePath;
 
   }
 

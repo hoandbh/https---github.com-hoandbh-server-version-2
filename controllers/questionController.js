@@ -6,6 +6,7 @@ const { v4: uuid } = require('uuid');
 
 class QuestionController {
 
+
   getQstById = async (req, res) => {
     const { id } = req.params;
     const question = await QuestionDal.getQstById(id);
@@ -15,6 +16,29 @@ class QuestionController {
     res.json(question);
   }
 
+  // uploadImage = async (req, res) => {
+  //   const image = req.file;
+  //   const { id } = req.params;
+  //   if (!image) {
+  //     return res.status(400).send("No image provided")
+  //   }
+
+  //   const folder = path.resolve(__dirname, "../public/images");
+  //   const Imagename = `${uuid()}_${image.originalname}`
+  //   const x = `${uuid()}_${image.originalname}`;
+  //   const imageUrl = path.resolve(folder, x);
+
+  //   try {
+  //     await fsPromises.writeFile(imageUrl, image.buffer);
+  //     await QuestionDal.addImagePath(id, x);
+  //     // await QuestionDal.addImagePath(id, imageUrl);
+  //     return res.json({ location: imageUrl, name: Imagename, name2:x })
+  //   } catch (err) {
+  //     return res.status(500).send("Invalid image data provided")
+  //   }
+  // }
+
+  
   uploadImage = async (req, res) => {
     const image = req.file;
     const { id } = req.params;
@@ -22,14 +46,14 @@ class QuestionController {
       return res.status(400).send("No image provided")
     }
 
-    const folder = path.resolve(__dirname, "../public/images");
-    const Imagename = `${uuid()}_${image.originalname}`
-    const imageUrl = path.resolve(folder, `${uuid()}_${image.originalname}`);
+    const folder = path.join(__dirname, "..", "public", "images")  
+    const imageName = `${uuid()}_${image.originalname}`
+    const imageUrl  =`${folder}/${imageName}`
 
     try {
       await fsPromises.writeFile(imageUrl, image.buffer);
-      await QuestionDal.addImagePath(id, imageUrl);
-      return res.json({ location: imageUrl, name: Imagename })
+      await QuestionDal.addImagePath(id, imageName);
+      return res.json({location: imageUrl, name:imageName })
     } catch (err) {
       return res.status(500).send("Invalid image data provided")
     }

@@ -39,6 +39,17 @@ class PartController {
       return res.status(201).json(part);
     return res.status(500).json({ message: 'Failed to create new message' });
   }
+
+  deletePart = async (req, res) => {
+    const {id} = req.params;
+    if (!id) {
+      return res.status(400).json({ message: 'Message ID required' });
+    }
+    //to check if part exist
+    await PartDal.deletePart(id);
+    res.json(`Message ID ${id} deleted`);
+  }
+
   
 }
 const partController = new PartController();
