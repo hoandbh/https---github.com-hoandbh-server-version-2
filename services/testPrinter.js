@@ -169,7 +169,7 @@ class TestPrinter {
     // const v = version.get({ plain: true })
     // console.log(v);
     const headers = await printer.createHeaders(version);
-    console.log(headers)
+    // console.log(headers)
     const content = await createContent(version);
     const paragraphs = headers.concat(content);
 

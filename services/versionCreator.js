@@ -6,6 +6,7 @@ const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
 const QuestionnaireDal = require('../dal/questionnaireDal');
 const Part_in_Version = require('../models/part_in_version');
+const CreateAnswerKey = require('./createAnswerSheet');
 
 
 const createShuffledArr = (length) => {
@@ -78,8 +79,7 @@ const createAnswerKey = async (version) => {
       dic[qst++]=findCorrectAnswer(q);
     })
   })
-  console.log('dic')
-  console.log(dic)
+
   return dic;
 }
 
@@ -89,14 +89,25 @@ class VersionCreator {
   createVersions = async (id, amount) => {
     const questionnaire = await QuestionnaireDal.getFullQuestionnaire(id)
     let paths = [];
+    let ansDic = [];
+
     for (let i = 1; i <= amount; i++) {
       const version = await createVersion(id, questionnaire);
       const fullVersion = await VersionDal.getFullVersion(version.id);
       const answerKey = await createAnswerKey(fullVersion);
+      const versionKey = {
+        "vId":version.id,
+        "answers":answerKey
+      }
+      ansDic.push(versionKey);
+      CreateAnswerKey.createXL(ansDic);
+
       const path = await versionPrinter.convertVersionToPdf(version.id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }
+    
+
     return paths;    
   }
   
