@@ -12,12 +12,17 @@ class PartDal {
     return part;
   }
 
+  _sortParts = (parts) => {
+    parts.sort((p1, p2) => (p1.serial_number - p2.serial_number));
+  }
+
   getAllPartsForQuestionnaire = async (questionnaireId) => {
     const parts = await Part.findAll({
       where:{
         questionnaire_id:questionnaireId
       }
     })
+    this._sortParts(parts);
     return parts;
   }
 
@@ -31,13 +36,14 @@ class PartDal {
     const part = await Part.findByPk(id)
     return part;
   }
-
+     
   changePartName = async (id, headline) => {
+
     const part = await Part.findByPk(id);
     if (!part){
       return null;
     }
-    part.set({headline});
+    await part.set({headline});
     await part.save();
     return part;
   }

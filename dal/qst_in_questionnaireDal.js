@@ -20,7 +20,7 @@ class QstInQuestionnaireDal {
     if (!question) {
       return null;
     }
-    await question.update({content});
+    await question.update({content,image_path:''});
     return question;
   }
 
@@ -38,7 +38,7 @@ class QstInQuestionnaireDal {
   }
   
   getAllQstOfPart = async (partId) => {
-    const qsts = await Qst.findAll({
+    const questions = await Qst.findAll({
       where: {
         part_id: partId
       },
@@ -47,7 +47,8 @@ class QstInQuestionnaireDal {
         as: 'answers'
       }]
     })
-    return qsts;
+    this._sortQuestions(questions);
+    return questions;
   }
 
   // const fullQuestoinnare = await Questionnaire.findOne(
@@ -59,9 +60,9 @@ class QstInQuestionnaireDal {
   // )
 
   deleteQst = async (id) => {
-    await Qst.destroy({
+    return await Qst.destroy({
       where: {
-        id: id
+        id
       }
     });
   }
@@ -72,6 +73,13 @@ class QstInQuestionnaireDal {
       {where: {id}}
     );
   } ;
+
+  _sortQuestions = (questions) => {
+    questions.sort((q1, q2) => (q1.serial_number_in_part - q2.serial_number_in_part));
+    questions.forEach(q => {
+      q.answers.sort((a1, a2) => (a1.serial_number - a2.serial_number))
+    })
+  }
 
 }
 

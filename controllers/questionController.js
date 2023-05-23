@@ -16,27 +16,13 @@ class QuestionController {
     res.json(question);
   }
 
-  // uploadImage = async (req, res) => {
-  //   const image = req.file;
-  //   const { id } = req.params;
-  //   if (!image) {
-  //     return res.status(400).send("No image provided")
-  //   }
+  deleteImage = async (req, res) => {
+    // need to implement the delete
+    const { id } = req.params;
+    await QuestionDal.addImagePath(id, '');
+    res.status(200).send();
 
-  //   const folder = path.resolve(__dirname, "../public/images");
-  //   const Imagename = `${uuid()}_${image.originalname}`
-  //   const x = `${uuid()}_${image.originalname}`;
-  //   const imageUrl = path.resolve(folder, x);
-
-  //   try {
-  //     await fsPromises.writeFile(imageUrl, image.buffer);
-  //     await QuestionDal.addImagePath(id, x);
-  //     // await QuestionDal.addImagePath(id, imageUrl);
-  //     return res.json({ location: imageUrl, name: Imagename, name2:x })
-  //   } catch (err) {
-  //     return res.status(500).send("Invalid image data provided")
-  //   }
-  // }
+  }
 
   
   uploadImage = async (req, res) => {
@@ -58,7 +44,7 @@ class QuestionController {
       return res.status(500).send("Invalid image data provided")
     }
   }
-
+         
 
   getAllQstOfPart = async (req, res) => {
     const { partId } = req.params;
@@ -73,10 +59,8 @@ class QuestionController {
   updateQst = async (req, res) => {
     const { id } = req.params;
     const { content, correctAnswerContent, incorrectAnswers } = req.body;
+    // to delete the image related!!!!
     const question = await QuestionDal.updateQst(id, content);
-    if (!question) {
-      return res.status(404).send('Question not found');
-    }
     await AnswerDal.deleteAnswersOfQuestion(id);
     if (correctAnswerContent) {
       const correctAnswer = {
@@ -95,7 +79,7 @@ class QuestionController {
         })
       });
     }
-    return res.send(question);
+    return question==undefined? res.status(204).send : res.send(question);
   }
 
   createNewQst = async (req, res) => {
@@ -107,12 +91,8 @@ class QuestionController {
 
   deleteQst = async (req, res) => {
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: 'question ID required' });
-    }
-    await QuestionDal.deleteQst(id);
-    await AnswerDal.deleteAnswersOfQuestion(id)
-    res.json(`Message ID ${id} deleted`);
+    const deleted = await QuestionDal.deleteQst(id);
+    return deleted==0? res.status(204).send() : res.json(`Message ID ${id} deleted`);
   }
 
 }

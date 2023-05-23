@@ -51,7 +51,7 @@ class PartController {
     //to check if part exist
     await PartDal.deletePart(id);
     res.json(`Message ID ${id} deleted`);
-  }
+  }     
 
   changePartName =  async (req, res) => {
     const {id} = req.params;
@@ -59,7 +59,7 @@ class PartController {
     const part = await PartDal.changePartName(id, headline);
     return part == null? res.status(400).send() : res.json(part);
   }
-     
+         
 }   
 const partController = new PartController();
 module.exports = partController;

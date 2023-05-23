@@ -78,7 +78,7 @@ const createAnswerKey = async (version) => {
     p.questions.forEach(q => {
       dic[qst++]=findCorrectAnswer(q);
     })
-  })
+  })        
 
   return dic;
 }

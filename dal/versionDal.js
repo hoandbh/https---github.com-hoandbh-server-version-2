@@ -20,6 +20,30 @@ const sortVersion = (version) => {
   })
 }
 
+// const sortVersion = (version) => {
+//   version.parts.sort((p1, p2) => {
+//     const serialNumber1 = p1.serial_number || 0; // Use 0 as a fallback value for null
+//     const serialNumber2 = p2.serial_number || 0;
+//     return serialNumber1 - serialNumber2;
+//   });
+
+//   version.parts.forEach((p) => {
+//     p.questions.sort((q1, q2) => {
+//       const serialNumber1 = q1.serial_number_in_part || 0; // Use 0 as a fallback value for null
+//       const serialNumber2 = q2.serial_number_in_part || 0;
+//       return serialNumber1 - serialNumber2;
+//     });
+
+//     p.questions.forEach((q) => {
+//       q.answers.sort((a1, a2) => {
+//         const serialNumber1 = a1.serial_number || 0; // Use 0 as a fallback value for null
+//         const serialNumber2 = a2.serial_number || 0;
+//         return serialNumber1 - serialNumber2;
+//       });
+//     });
+//   });
+// };
+
 class VersionDal {
 
   getFullVersion = async (id) => {
@@ -74,8 +98,18 @@ class VersionDal {
     );
     if(!version)
       return null;
-    sortVersion(version);
+    this._sortVersion(version);
     return version;
+  }
+
+  _sortVersion = (version) => {
+    version.parts.sort((p1, p2) => (p1.serial_number - p2.serial_number))
+    version.parts.forEach(p => {
+      p.questions.sort((q1, q2) => (q1.serial_number_in_part - q2.serial_number_in_part));
+      p.questions.forEach(q => {
+        q.answers.sort((a1, a2) => (a1.serial_number - a2.serial_number))
+      })
+    })
   }
 
   getAllVersions = async () => {

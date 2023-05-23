@@ -16,7 +16,8 @@ questionRouter.route('/:id')
 .put(questionController.updateQst)
 
 questionRouter.route('/:id/image') 
-.post(upload.single("file"), questionController.uploadImage);
+.post(upload.single("file"), questionController.uploadImage)
+.delete(questionController.deleteImage)
 
 const answerRouter = require('./answerRouter')
 questionRouter.use('/:qstId/answer', answerRouter);
