@@ -1,6 +1,18 @@
 // Require library
-var xl = require('excel4node');
+const xl = require('excel4node');
+const fs = require('fs')
 
+const Headers = async(dic, ws) =>{
+    for(let l in dic){}
+}
+
+const questionNumber = async(numOfQsts, ws)=>{
+    
+    for(let i = 1;i<=numOfQsts;i++){
+        const row = i+1;
+        ws.cell(row,1).string(`question ${i}`);
+    }
+}
 class CreateAnswerKey {
 
     createXL = async (ansDic) => {
@@ -10,44 +22,43 @@ class CreateAnswerKey {
 
         // Add Worksheets to the workbook
         var ws = wb.addWorksheet('Sheet 1');
-        var ws2 = wb.addWorksheet('Sheet 2');
 
         // Create a reusable style
         var style = wb.createStyle({
             font: {
-                color: '#FF0800',
+                color: '#000000',
                 size: 12,
             },
             numberFormat: '$#,##0.00; ($#,##0.00); -',
         });
 
-        // Set value of cell A1 to 100 as a number type styled with paramaters of style
-        ws.cell(1, 1)
-            .number(100)
-            .style(style);
+        const boldStyle = wb.createStyle({
+            font:{
+                bold:true,
+                underline:true
+                
+            }
+        });
+        const underlinedStyle = wb.createStyle({
+            font:{underline:true}
+        });
 
-        // Set value of cell B1 to 200 as a number type styled with paramaters of style
-        ws.cell(1, 2)
-            .number(200)
-            .style(style);
+        ws.cell(1,1).string('Question Number').style(underlinedStyle);
+        for(let i = 0;i<ansDic.length;i++){
+            const col = i+2;
 
-        // Set value of cell C1 to a formula styled with paramaters of style
-        ws.cell(1, 3)
-            .formula('A1 + B1')
-            .style(style);
+            const answers = ansDic[i].answers;
 
-        // Set value of cell A2 to 'string' styled with paramaters of style
-        ws.cell(2, 1)
-            .string('string')
-            .style(style);
+            ws.cell(1,col).string(`version ${ansDic[i].vId}`).style(boldStyle);
 
-        // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
-        ws.cell(3, 1)
-            .bool(true)
-            .style(style)
-            .style({ font: { size: 14 } });
+        }
+        await(questionNumber(14,ws));
 
-        wb.write('Excel.xlsx');
+
+        wb.writeToBuffer().then((buffer)=>{
+            fs.writeFileSync(`./public/files/Excel.xlsx`,buffer);
+        });
+        wb.write()
     }
 }
 
