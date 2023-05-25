@@ -23,7 +23,7 @@ class CourseController {
   getCourseById =  async (req, res) => {
     const id = req.params.id;
     var course = await courseDal.getCourseById(id);
-    if(course)
+    if(course?.length)
       res.json(course);
     else
       res.status(204).send();

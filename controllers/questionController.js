@@ -10,7 +10,7 @@ class QuestionController {
   getQstById = async (req, res) => {
     const { id } = req.params;
     const question = await QuestionDal.getQstById(id);
-    if (!question) {
+    if (!question?.length) {
       return res.status(204).send();
     }
     res.json(question);

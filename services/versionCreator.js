@@ -119,7 +119,6 @@ class VersionCreator {
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }
-    
 
     return paths;    
   }

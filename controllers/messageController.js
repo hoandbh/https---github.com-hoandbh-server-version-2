@@ -24,7 +24,7 @@ class MessageController {
   getMessageById = async (req, res) => {
     const id = req.params.id;
     var message = await messageDal.getMessageById(id);
-    if (message)
+    if (message?.length)
       res.json(message);
     else
       res.status(204).send();

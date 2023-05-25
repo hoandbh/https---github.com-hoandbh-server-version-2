@@ -8,14 +8,14 @@ const questionnaireDal = require("../dal/questionnaireDal");
 class QuestionnaireController {
 
   //localhost:3600/api/messages
-      
+
   getAllQuestionnaires = async (req, res) => {
     const { owner } = req.query;
     if (owner) {
       const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
-      if (qstnr)
+      if (qstnr.length)
         res.json(qstnr);
-      else    
+      else
         res.status(204).send();
     } else {
       const questionnaires = await questionnaireDal.getAllQuestionnaires(owner);
@@ -52,19 +52,13 @@ class QuestionnaireController {
   }
 
   deleteQuestionnaire = async (req, res) => {
-    const id = req.params.id;
-    //the way I think: 
-    qstnr = this.getQuestionnaireById(id);
-    if (!qstnr)
+    const {id} = req.params;
+    const questionnaire = questionnaireDal.getQuestionnaireById(id);
+    if (!questionnaire){
       return res.status(400).json({ message: 'no questionnaire with this ID' });
-    else
-      await questionnaireDal.deleteQuestionnaire(id);
+    }
+    await questionnaireDal.deleteQuestionnaire(id);
     res.json(`Questionnaire with ID ${id} was deleted`);
-    //what we did in msg controller
-    // if (!id) {
-    //   return res.status(400).json({ message: 'questionnaire id required' });
-    // } 
-    // await questionnaireDal.deleteQuestionnaire(id);  
   }
 
   getQuestionnairesByOwner = async (req, res) => {
@@ -75,12 +69,20 @@ class QuestionnaireController {
     else
       res.status(204).send();
   }
-  
+
   createVersionForQuestionnaire = async (req, res) => {
-      const { id } = req.params;
-      const { amount } = req.body;
-      const versions = await versionCreator.createVersions(id, amount);
-      return res.status(201).json(versions);
+    const { id } = req.params;
+    const { amount } = req.body;
+    const mixed = questionnaireDal.isMixed(id);
+    if (mixed) {
+      return res.status(409).json({ message: 'You mixed this questionnaire already' });
+    }
+    const versions = await versionCreator.createVersions(id, amount);
+    if (!versions) {
+      return res.status(500).send();
+    }
+    await questionnaireDal.disableMixing(id);
+    return res.status(201).json(versions);
   }
 
 }

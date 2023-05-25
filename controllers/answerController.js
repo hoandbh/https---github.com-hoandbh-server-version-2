@@ -20,7 +20,7 @@ class AnswerController {
   getAnsById = async (req, res) => {
     const id = req.params.id;
     const pAns = await AnswerDal.getPossibleAnsById(id);
-    if (pAns)
+    if (qstnr.length)
       res.json(pAns)
     else
       res.status(204).send();

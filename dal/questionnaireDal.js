@@ -11,7 +11,20 @@ const Course = db.course;
 
 class QuestionnaireDal {
 
+  disableMixing = async (id) => {
+    const questionnaire = await Questionnaire.findByPk(id);
+    if(!questionnaire){
+      return null;
+    }
+    await questionnaire.set({mixed:true})
+    await questionnaire.save();
+    return questionnaire;
+  }
 
+  isMixed = async (id) => {
+    const questionnaire = await Questionnaire.findByPk(id);
+    return questionnaire.mixed;
+  }
 
   getAllQuestionnaires = async () => {
     //to add the name of course??
@@ -24,12 +37,11 @@ class QuestionnaireDal {
     return quest;
   }
 
-  getQuestionnairesByOwner = async (ow) => {
+  getQuestionnairesByOwner = async (owner) => {
     var quest = await Questionnaire.findAll({
-      where: { owner: ow }
+      where: { owner }
     });
     return quest;
-
   }
 
 

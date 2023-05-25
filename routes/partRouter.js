@@ -9,7 +9,7 @@ partRouter.route('/')
 partRouter.route('/:id')
 .get(partController.getPartById)   
 .delete(partController.deletePart)
-.patch(partController.changePartName);
+.patch(partController.renamePart);
 //need to implement and put
 
 const questionRouter = require('./questionRouter')

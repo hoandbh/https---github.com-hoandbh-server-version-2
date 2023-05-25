@@ -37,8 +37,7 @@ class PartDal {
     return part;
   }
      
-  changePartName = async (id, headline) => {
-
+  renamePart = async (id, headline) => {
     const part = await Part.findByPk(id);
     if (!part){
       return null;
