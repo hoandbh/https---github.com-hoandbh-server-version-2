@@ -73,7 +73,7 @@ class QuestionnaireController {
   createVersionForQuestionnaire = async (req, res) => {
     const { id } = req.params;
     const { amount } = req.body;
-    const mixed = questionnaireDal.isMixed(id);
+    const mixed = await questionnaireDal.isMixed(id);
     if (mixed) {
       return res.status(409).json({ message: 'You mixed this questionnaire already' });
     }
@@ -81,7 +81,7 @@ class QuestionnaireController {
     if (!versions) {
       return res.status(500).send();
     }
-    await questionnaireDal.disableMixing(id);
+    //await questionnaireDal.disableMixing(id); // hadas error
     return res.status(201).json(versions);
   }
 

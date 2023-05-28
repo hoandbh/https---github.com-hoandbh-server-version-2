@@ -1,10 +1,10 @@
 // Require library
 var xl = require('excel4node');
-const path = require('path')//hadas new
+const path = require('path') 
 
 class CreateAnswerKey {
 
-  createXL = async (ansDic, id) => { //hadas new
+  createXL = async (ansDic, id) => {  
     console.log(ansDic);
     // Create a new instance of a Workbook class
     var wb = new xl.Workbook();
@@ -49,8 +49,8 @@ class CreateAnswerKey {
       .style({ font: { size: 14 } });
 
 
-    const filePath = path.join(__dirname, `../public/files/versions/${id}/Excel.xlsx`);//hadas new
-    wb.write(filePath);//hadas new
+    const filePath = path.join(__dirname, `../public/files/versions/${id}/Excel.xlsx`); 
+    wb.write(filePath); 
     // wb.write('Excel.xlsx');
   }
 }

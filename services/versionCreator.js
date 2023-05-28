@@ -1,6 +1,6 @@
 const VersionDal = require('../dal/versionDal')
 const db = require('../models/index');
-const versionPrinter = require('../services/testPrinter');
+const VersionToPdfConverter = require('../services/versionToPdfConverter');
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
@@ -110,12 +110,12 @@ class VersionCreator {
         "answers":answerKey
       }
       ansDic.push(versionKey);
-      createVersionsFolder(id);//hadas new
+      createVersionsFolder(id); 
 
 
       CreateAnswerKey.createXL(ansDic,id);
 
-      const path = await versionPrinter.convertVersionToPdf(version.id);
+      const path = await VersionToPdfConverter.convertVersionToPdf(version.id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }

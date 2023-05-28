@@ -237,8 +237,8 @@ class TestPrinter {
 
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();
-    const questionnaireId = version.questionnaire_id;//hadas new
-    const filePath = path.join(__dirname, `../public/files/versions/${questionnaireId}/${courseName}_${year}_v${versionId}.docx`); //hadas new
+    const questionnaireId = version.questionnaire_id; 
+    const filePath = path.join(__dirname, `../public/files/versions/${questionnaireId}/${courseName}_${year}_v${versionId}.docx`);  
     Packer.toBuffer(doc).then((buffer) => {
       fs.writeFileSync(filePath, buffer);
     });
