@@ -83,5 +83,4 @@ class QstInQuestionnaireDal {
 
 }
 
-const qstInQuestionnaireDal = new QstInQuestionnaireDal();
-module.exports = qstInQuestionnaireDal;
+module.exports = new QstInQuestionnaireDal();

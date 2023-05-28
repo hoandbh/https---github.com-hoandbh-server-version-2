@@ -49,5 +49,4 @@ class PartDal {
 
 }
 
-const partDal = new PartDal();
-module.exports = partDal;
+module.exports = new PartDal();

@@ -27,6 +27,5 @@ class AnswerController {
   }
 
 }
-
-const answerController = new AnswerController();
-module.exports = answerController;
+ 
+module.exports = new AnswerController(); 

@@ -108,6 +108,4 @@ class QuestionnaireDal {
   //TODO updateQuestionnaire = async()=>
 }
 
-
-const questionnaireDal = new QuestionnaireDal();
-module.exports = questionnaireDal;
+module.exports = new QuestionnaireDal();

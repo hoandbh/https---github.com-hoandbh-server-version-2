@@ -23,8 +23,7 @@ class CourseDal {
   }
 
 }
-
-const courseDal = new CourseDal();
-module.exports  = courseDal;
+ 
+module.exports  = new CourseDal(); 
 
 

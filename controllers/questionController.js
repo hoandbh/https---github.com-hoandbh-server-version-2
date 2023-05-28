@@ -96,9 +96,8 @@ class QuestionController {
   }
 
 }
-
-const questionController = new QuestionController();
-module.exports = questionController;
+ 
+module.exports = new QuestionController();  
 
   // not in use
   // getAllQst = async (req, res) => {

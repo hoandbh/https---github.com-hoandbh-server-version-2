@@ -60,6 +60,6 @@ class PartController {
     return part == null? res.status(400).send() : res.json(part);
   }
          
-}   
-const partController = new PartController();
-module.exports = partController;
+}    
+
+module.exports = new PartController();  

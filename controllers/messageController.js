@@ -57,6 +57,5 @@ class MessageController {
   }
 
 }
-
-const messageController = new MessageController();
-module.exports = messageController;
+ 
+module.exports = new MessageController(); 

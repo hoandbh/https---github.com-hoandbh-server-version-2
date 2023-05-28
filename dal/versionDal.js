@@ -147,7 +147,6 @@ class VersionDal {
 
 }
 
-const versionDal = new VersionDal();
-module.exports = versionDal;
+module.exports = new VersionDal();
 
 

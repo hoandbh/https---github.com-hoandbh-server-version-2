@@ -27,5 +27,4 @@ class TestDal {
   }
 }
 
-const testDal = new TestDal();
-module.exports = testDal;
+module.exports = new TestDal();

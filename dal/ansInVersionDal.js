@@ -28,7 +28,5 @@ class AnsInVersionDal {
   // }
 
 }
-
-
-const ansInVersionDal = new AnsInVersionDal();
-module.exports = ansInVersionDal;
+ 
+module.exports = new AnsInVersionDal(); 

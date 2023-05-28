@@ -34,6 +34,5 @@ class DownloadController {
     }
 
 }
-
-const downloadController = new DownloadController();
-module.exports = downloadController;
+ 
+module.exports = new DownloadController(); 

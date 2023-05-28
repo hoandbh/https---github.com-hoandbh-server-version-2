@@ -36,8 +36,6 @@ class CourseController {
     res.json(`Course ID ${id} deleted`);
   }
 
-}
+} 
 
-const courseController = new CourseController();
-module.exports = courseController;
-
+module.exports = new CourseController(); 

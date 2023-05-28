@@ -41,7 +41,6 @@ class ScoreDal {
 
 }
 
-const scoreDal = new ScoreDal();
-module.exports  = scoreDal;
+module.exports = new ScoreDal();
 
 

@@ -56,6 +56,5 @@ class ScoreController {
   }
   
 }
-const scoreController = new ScoreController();
-
-module.exports = scoreController;
+  
+module.exports = new ScoreController(); 

@@ -126,5 +126,4 @@ class VersionCreator {
      
 }
 
-const versionCreator = new VersionCreator();
-module.exports = versionCreator;
+module.exports = new VersionCreator();

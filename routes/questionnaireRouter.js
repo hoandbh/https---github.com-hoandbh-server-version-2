@@ -8,13 +8,13 @@ questionnaireRouter.route('/')
 
 questionnaireRouter.route('/:id')
 .get(questionnaireController.getQuestionnaireById)
-.delete(questionnaireController.deleteQuestionnaire)
+.delete(questionnaireController.deleteQuestionnaire);
 
 questionnaireRouter.route('/:id/full')
-.get(questionnaireController.getFullQuestionnaire)
+.get(questionnaireController.getFullQuestionnaire);
 
 questionnaireRouter.route('/:id/generate-versions')
-.post(questionnaireController.createVersionForQuestionnaire)
+.post(questionnaireController.createVersionForQuestionnaire);
 
 const partRouter = require('./partRouter');
 questionnaireRouter.use('/:questionnaireId/part', partRouter);

@@ -55,5 +55,4 @@ class CreateAnswerKey {
   }
 }
 
-const createAnswerKey = new CreateAnswerKey();
-module.exports = createAnswerKey;
+module.exports = new CreateAnswerKey();
