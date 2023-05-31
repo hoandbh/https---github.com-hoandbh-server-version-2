@@ -87,6 +87,5 @@ class VersionController {
 
   }
 }
-
-const versionController = new VersionController();
-module.exports = versionController;
+ 
+module.exports = new VersionController();  

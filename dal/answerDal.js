@@ -55,9 +55,8 @@ class AnswerDal {
   }
   
 }
-
-const answerDal = new AnswerDal();
-module.exports  = answerDal;
+ 
+module.exports  = new AnswerDal(); 
 
 
 

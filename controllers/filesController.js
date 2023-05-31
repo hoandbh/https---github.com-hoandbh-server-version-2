@@ -17,7 +17,5 @@ class FilesController {
         res.json(paths);
     }
 }
-
-
-const filesController = new FilesController();
-module.exports = filesController;
+ 
+module.exports = new FilesController(); 

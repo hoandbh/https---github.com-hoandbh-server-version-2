@@ -11,6 +11,5 @@ class TestsController {
   }
 
 }
-
-const testsController = new TestsController();
-module.exports = testsController;
+ 
+module.exports = new TestsController(); 

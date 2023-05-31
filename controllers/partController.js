@@ -13,7 +13,7 @@ class PartController {
   getPartById = async(req,res) => {
     const id = req.params.id;
     const part = await PartDal.getPartById(id);
-    if(part)
+    if(part?.length)
       res.json(part)
     else
       res.status(204).send();
@@ -25,7 +25,7 @@ class PartController {
       return ;   
     }  
     const parts = await PartDal.getAllPartsForQuestionnaire(questionnaireId);
-    if(parts)
+    if(parts?.length)
       res.json(parts);
     else
       res.status(204).send();
@@ -51,15 +51,15 @@ class PartController {
     //to check if part exist
     await PartDal.deletePart(id);
     res.json(`Message ID ${id} deleted`);
-  }
+  }     
 
-  changePartName =  async (req, res) => {
+  renamePart =  async (req, res) => {
     const {id} = req.params;
     const {headline} = req.body;
-    const part = await PartDal.changePartName(id, headline);
+    const part = await PartDal.renamePart(id, headline);
     return part == null? res.status(400).send() : res.json(part);
   }
-     
-}   
-const partController = new PartController();
-module.exports = partController;
+         
+}    
+
+module.exports = new PartController();  

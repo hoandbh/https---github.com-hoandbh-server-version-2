@@ -53,4 +53,4 @@ class TestsService {
   }
 }
 
-module.exports = new TestsService();//to do like this for all expoting
+module.exports = new TestsService();

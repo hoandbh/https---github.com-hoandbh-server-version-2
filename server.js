@@ -33,21 +33,7 @@ app.use('/api/downloads',require('./routes/filesRouter'));
 // Services
 app.use('/api/check-test',require('./routes/testRouter'));
 app.use('/api/print_version', require('./routes/servicesRouter'))
-
-
-// // Define a route for file download
-// app.get('/files/:filename', (req, res) => {
-//   const { filename } = req.params;
-//   const filePath = path.join(__dirname, 'public', 'files', filename);
-//   console.log('File path:', filePath);
-  
-//   res.download(filePath, (err) => {
-//     if (err) {
-//       console.error('Error downloading file:', err);
-//       res.status(404).send('Failed - No file');
-//     }
-//   });
-// });
+app.use('/api/download-folder', require('./routes/downloadRouter'))
 
 // Error Handling
 app.all('*',(req, res) => {

@@ -2,13 +2,13 @@
 //we can take out components needed after development if necessary
 //signed: Bracha
 
-const versionPrinter = require('../services/testPrinter');
+const VersionToPdfConverter = require('../services/versionToPdfConverter');
 
 class ServicesController {
 
   versionToPDF = async(req,res)=>{
     const versionId = req.params.id;
-    const fullversion = await versionPrinter.convertVersionToPdf(versionId);
+    const fullversion = await VersionToPdfConverter.convertVersionToPdf(versionId);
     if(fullversion)
       return res.status(201).json(fullversion)
   }

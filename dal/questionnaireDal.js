@@ -11,7 +11,20 @@ const Course = db.course;
 
 class QuestionnaireDal {
 
+  disableMixing = async (id) => {
+    const questionnaire = await Questionnaire.findByPk(id);
+    if(!questionnaire){
+      return null;
+    }
+    await questionnaire.set({mixed:true})
+    await questionnaire.save();
+    return questionnaire;
+  }
 
+  isMixed = async (id) => {
+    const questionnaire = await Questionnaire.findByPk(id);
+    return questionnaire.mixed;
+  }
 
   getAllQuestionnaires = async () => {
     //to add the name of course??
@@ -24,12 +37,11 @@ class QuestionnaireDal {
     return quest;
   }
 
-  getQuestionnairesByOwner = async (ow) => {
+  getQuestionnairesByOwner = async (owner) => {
     var quest = await Questionnaire.findAll({
-      where: { owner: ow }
+      where: { owner }
     });
     return quest;
-
   }
 
 
@@ -37,7 +49,7 @@ class QuestionnaireDal {
 
   getFullQuestionnaire = async (id) => {
 
-    const fullQuestoinnare = await Questionnaire.findOne(
+    const fullQuestionnaire = await Questionnaire.findOne(
       {
         where: { id: id },
         include: [
@@ -64,9 +76,22 @@ class QuestionnaireDal {
         ]
       }
     )
-    return fullQuestoinnare;
-
+    if(!fullQuestionnaire)
+      return null;
+    this._sortQuestionnaire(fullQuestionnaire);
+    return fullQuestionnaire;
   }
+
+  _sortQuestionnaire = (questionnaire) => {
+    questionnaire.parts.sort((p1, p2) => (p1.serial_number - p2.serial_number));
+    questionnaire.parts.forEach(p => {
+      p.questions.sort((q1, q2) => (q1.serial_number_in_part - q2.serial_number_in_part));
+      p.questions.forEach(q => {
+        q.answers.sort((a1, a2) => (a1.serial_number - a2.serial_number));
+      })
+    })
+  }
+
   createNewQuestionnaire = async (content) => {
     const quest = await Questionnaire.create(content);
     return quest;
@@ -83,6 +108,4 @@ class QuestionnaireDal {
   //TODO updateQuestionnaire = async()=>
 }
 
-
-const questionnaireDal = new QuestionnaireDal();
-module.exports = questionnaireDal;
+module.exports = new QuestionnaireDal();

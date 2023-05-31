@@ -1,6 +1,6 @@
 const VersionDal = require('../dal/versionDal')
 const db = require('../models/index');
-const versionPrinter = require('../services/testPrinter');
+const VersionToPdfConverter = require('../services/versionToPdfConverter');
 const Version = db.version;
 const Qst_in_version = db.qst_in_version;
 const Ans_in_version = db.ans_in_version;
@@ -8,6 +8,7 @@ const QuestionnaireDal = require('../dal/questionnaireDal');
 const Part_in_Version = require('../models/part_in_version');
 const CreateAnswerKey = require('./createAnswerSheet');
 
+const fs = require('fs');
 
 const createShuffledArr = (length) => {
   const arr = Array(length).fill().map((_, i) => i).slice();
@@ -78,11 +79,20 @@ const createAnswerKey = async (version) => {
     p.questions.forEach(q => {
       dic[qst++]=findCorrectAnswer(q);
     })
-  })
+  })        
 
   return dic;
 }
 
+const createVersionsFolder = (id) => {
+  const folderName = `public/files/versions/${id}`;
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+  }
+  else{
+    console.log('folder exists')
+  }
+}
     
 class VersionCreator {
 
@@ -100,13 +110,15 @@ class VersionCreator {
         "answers":answerKey
       }
       ansDic.push(versionKey);
-      CreateAnswerKey.createXL(ansDic);
+      createVersionsFolder(id); 
 
-      const path = await versionPrinter.convertVersionToPdf(version.id);
+
+      CreateAnswerKey.createXL(ansDic,id);
+
+      const path = await VersionToPdfConverter.convertVersionToPdf(version.id);
       await updateFilePathToDb(version.id, path);
       paths.push(path);
     }
-    
 
     return paths;    
   }
@@ -114,5 +126,4 @@ class VersionCreator {
      
 }
 
-const versionCreator = new VersionCreator();
-module.exports = versionCreator;
+module.exports = new VersionCreator();

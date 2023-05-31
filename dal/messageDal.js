@@ -42,5 +42,4 @@ class MessageDal {
 
 }
 
-const messageDal = new MessageDal();
-module.exports  = messageDal;
+module.exports  = new MessageDal();

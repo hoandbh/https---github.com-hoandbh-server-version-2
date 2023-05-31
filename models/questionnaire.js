@@ -24,6 +24,10 @@ const Questionnaire = sequelize.define(
       type: DataTypes.ENUM('A','B','C','D','E'),
       defaultValue:'A'
     },
+    mixed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
     // one_part: {
     //   type: DataTypes.BOOLEAN,
     //   defaultValue: false
