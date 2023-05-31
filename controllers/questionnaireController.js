@@ -49,7 +49,6 @@ class QuestionnaireController {
   }
 
   createQuestionnaire = async (req, res) => {
-    throw new Error('Something went wrong');
     const {owner, date, course_id, name, term} = req.body;
     if (!owner || !date || !course_id || !name || !term) 
       return res.status(400).json({ message: 'All fields are required' });
