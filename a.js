@@ -3,7 +3,7 @@ const PDFDocument = require('pdfkit');
 
 const regularFont = 'fonts/DavidLibre-Regular.ttf';
 const boldFont = 'fonts/DavidLibre-Bold.ttf';
-
+      
 const margins = {
   top: 50,
   bottom: 50,

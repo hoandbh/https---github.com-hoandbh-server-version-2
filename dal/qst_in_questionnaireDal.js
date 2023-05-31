@@ -13,11 +13,11 @@ class QstInQuestionnaireDal {
   createNewQst = async (content) => {
     const question = await Qst.create(content);
     return question;
-  }
-
+  }        
+            
   updateQst = async (id, content) => {
     const question = await Qst.findByPk(id);
-    if (!question) {
+    if (!question) {    
       return null;
     }
     await question.update({content,image_path:''});

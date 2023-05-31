@@ -1,17 +1,19 @@
 const express = require('express');
 const questionnaireRouter = express.Router();
 const questionnaireController = require('../controllers/questionnaireController');
+const verifyJWT = require('../middleware/verifyJWT');
+const verifyOwnershipQuestionnaire = require('../middleware/verifyOwnershipQuestionnaire');
 
 questionnaireRouter.route('/')
 .get(questionnaireController.getAllQuestionnaires)
-.post(questionnaireController.createQuestionnaire);
+.post(verifyJWT, questionnaireController.createQuestionnaire);
 
 questionnaireRouter.route('/:id')
 .get(questionnaireController.getQuestionnaireById)
 .delete(questionnaireController.deleteQuestionnaire);
 
 questionnaireRouter.route('/:id/full')
-.get(questionnaireController.getFullQuestionnaire);
+.get(verifyJWT, verifyOwnershipQuestionnaire, questionnaireController.getFullQuestionnaire);
 
 questionnaireRouter.route('/:id/generate-versions')
 .post(questionnaireController.createVersionForQuestionnaire);
