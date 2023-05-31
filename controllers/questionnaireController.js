@@ -7,7 +7,11 @@ const questionnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
 
-  //localhost:3600/api/messages
+  getOwnerId = async (req, res) => {
+    const { id } = req.params;
+    const questionnaire = await questionnaireDal.getQuestionnaireById(id);
+    return questionnaire?.owner;
+  }
 
   getAllQuestionnaires = async (req, res) => {
     const { owner } = req.query;
@@ -45,10 +49,13 @@ class QuestionnaireController {
   }
 
   createQuestionnaire = async (req, res) => {
-    const content = req.body;
-    const questionnaire = await questionnaireDal.createNewQuestionnaire(content);
+    throw new Error('Something went wrong');
+    const {owner, date, course_id, name, term} = req.body;
+    if (!owner || !date || !course_id || !name || !term) 
+      return res.status(400).json({ message: 'All fields are required' });
+    const questionnaire = await questionnaireDal.createNewQuestionnaire({owner, date, course_id, name, term});
     if (questionnaire)
-      return res.status(201).json(questionnaire)
+      return res.status(201).json(questionnaire);
   }
 
   deleteQuestionnaire = async (req, res) => {

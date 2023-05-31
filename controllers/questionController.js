@@ -6,7 +6,6 @@ const { v4: uuid } = require('uuid');
 
 class QuestionController {
 
-
   getQstById = async (req, res) => {
     const { id } = req.params;
     const question = await QuestionDal.getQstById(id);
