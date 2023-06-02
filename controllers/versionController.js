@@ -3,7 +3,7 @@ const versionDal = require("../dal/versionDal");
 
 class VersionController {
 
-  getAllVersions = async (req, res) => {
+  getAllVersions = async (req, res, next) => {
     const versions = await versionDal.getAllVersions();
     if (!versions?.length)
       return res.status(400).json({ version: 'No versions found' });
@@ -11,7 +11,7 @@ class VersionController {
 
   }
 
-  createVersions = async (req, res) => {
+  createVersions = async (req, res, next) => {
     const { questionnaire_id, count } = req.body;
     if (!questionnaire_id || !count)
       return res.status(400).json({ version: '{questionnaire_id,count} are required both' });
@@ -25,14 +25,14 @@ class VersionController {
     return res.status(500).json({ version: 'Failed to create new version' });
   }
 
-  createOneVersion = async (req, res) => {
+  createOneVersion = async (req, res, next) => {
     const v = await versionDal.createVersion();
     if (v)
       return res.status(201).json(v);
   }
 
   
-  getFullVersion = async (req, res) => {
+  getFullVersion = async (req, res, next) => {
     const {id} = req.params;
     const version = await versionDal.getFullVersion(id);
     if (version)
@@ -41,7 +41,7 @@ class VersionController {
       res.status(204).send();
   }
 
-  getVersionById = async (req, res) => {
+  getVersionById = async (req, res, next) => {
     const {id} = req.params;
     var version = await versionDal.getVersionById(id);
     if (version)
@@ -50,7 +50,7 @@ class VersionController {
       res.status(204).send();
   }
 
-  deleteVersion = async (req, res) => {
+  deleteVersion = async (req, res, next) => {
     const id = req.params.id;
     if (!id) {
       return res.status(400).json({ version: 'Version ID required' });
@@ -62,7 +62,7 @@ class VersionController {
     res.json(`Version ID ${id} deleted`);
   }
 
-  getVersionsByQuestionnaire = async (req, res) => {
+  getVersionsByQuestionnaire = async (req, res, next) => {
     const questionnaire_id = req.params.id;
     const versions = await versionDal.getVersionsByQuestionnaire(questionnaire_id);
     if (!versions?.length) {
@@ -71,7 +71,7 @@ class VersionController {
     res.json(versions);
   }
 
-  getVersionsPDFByQuestionnaire = async (req, res) => {
+  getVersionsPDFByQuestionnaire = async (req, res, next) => {
     const questionnaire_id = req.params.questionnaireId;
     const versions = await versionDal.getVersionsByQuestionnaire(questionnaire_id);
     if (!versions?.length) {

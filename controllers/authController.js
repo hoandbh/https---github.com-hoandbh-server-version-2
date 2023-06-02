@@ -14,7 +14,7 @@ const checkRequiredFields = (requiredFields, requestBody) => {
   return missingFields.length == 0;
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   console.log(req.body)
 
   const requiredFields = ['email', 'password'];
@@ -44,7 +44,7 @@ const login = async (req, res) => {
 
 }
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
 
   const requiredFields = ['first_name', 'last_name', 'email', 'password','permission'];
   const allFieldsPresent = checkRequiredFields(requiredFields, req.body);

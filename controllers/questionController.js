@@ -6,7 +6,7 @@ const { v4: uuid } = require('uuid');
 
 class QuestionController {
 
-  getQstById = async (req, res) => {
+  getQstById = async (req, res, next) => {
     const { id } = req.params;
     const question = await QuestionDal.getQstById(id);
     if (!question) {
@@ -15,7 +15,7 @@ class QuestionController {
     res.json(question);
   }
 
-  deleteImage = async (req, res) => {
+  deleteImage = async (req, res, next) => {
     // need to implement the delete
     const { id } = req.params;
     await QuestionDal.addImagePath(id, '');
@@ -24,7 +24,7 @@ class QuestionController {
   }
 
   
-  uploadImage = async (req, res) => {
+  uploadImage = async (req, res, next) => {
     const image = req.file;
     const { id } = req.params;
     if (!image) {
@@ -45,7 +45,7 @@ class QuestionController {
   }
          
 
-  getAllQstOfPart = async (req, res) => {
+  getAllQstOfPart = async (req, res, next) => {
     const { partId } = req.params;
     const questions = await QuestionDal.getAllQstOfPart(partId);
     if (!questions?.length) {
@@ -55,7 +55,7 @@ class QuestionController {
   }
 
 
-  updateQst = async (req, res) => {
+  updateQst = async (req, res, next) => {
     const { id } = req.params;
     const { content, correctAnswerContent, incorrectAnswers } = req.body;
     // to delete the image related!!!!
@@ -81,14 +81,14 @@ class QuestionController {
     return question==undefined? res.status(204).send : res.send(question);
   }
 
-  createNewQst = async (req, res) => {
+  createNewQst = async (req, res, next) => {
     const { content, part_id } = req.body;
     const qst = await QuestionDal.createNewQst({ content, part_id });
     if (qst)
       return res.status(201).json(qst)
   }
 
-  deleteQst = async (req, res) => {
+  deleteQst = async (req, res, next) => {
     const { id } = req.params;
     const deleted = await QuestionDal.deleteQst(id);
     return deleted==0? res.status(204).send() : res.json(`Message ID ${id} deleted`);
@@ -99,7 +99,7 @@ class QuestionController {
 module.exports = new QuestionController();  
 
   // not in use
-  // getAllQst = async (req, res) => {
+  // getAllQst = async (req, res, next) => {
   //   var questinos = await QuestionDal.getAllQst();
   //   if (!questinos?.length)
   //     return res.status(204).send();
@@ -107,7 +107,7 @@ module.exports = new QuestionController();
   // }
 
   // not in use
-  // getMessageById = async (req, res) => {
+  // getMessageById = async (req, res, next) => {
   //   const id = req.params.id;
   //   const question = await QstDal.getMessageById(id);
   //   if (question)
@@ -117,7 +117,7 @@ module.exports = new QuestionController();
   // }
 
   // not in use
-  // getAllQstOfPartWithOutAnswers = async (req, res) => {
+  // getAllQstOfPartWithOutAnswers = async (req, res, next) => {
   //   const {partId} = req.params;
   //   const questinos = await QuestionDal.getAllQstOfPart(partId);
   //   if (!questinos?.length)

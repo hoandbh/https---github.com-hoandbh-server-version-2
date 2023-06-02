@@ -3,14 +3,14 @@ const scoreDal = require("../dal/scoreDal");
 
 class ScoreController {
 
-  getAllScores = async (req, res) => {
+  getAllScores = async (req, res, next) => {
     const scores = await scoreDal.getAllScores();
     if (!scores?.length)
       return res.status(400).json({ score: 'No scores found' });
     res.json(scores);
   }
 
-  createNewScore = async (req, res) => {
+  createNewScore = async (req, res, next) => {
     const {student_id, questionnaire_id, score_} = req.body;
     if(!student_id || !questionnaire_id)
       return res.status(400).json({ message: 'All fields are required' });
@@ -22,7 +22,7 @@ class ScoreController {
     return res.status(500).json({ score: 'Failed to create new score' });
   }
 
-  getScoreById = async (req, res) => {
+  getScoreById = async (req, res, next) => {
     const id = req.params.id;
     var score = await scoreDal.getScoreById(id);
     if (score)
@@ -31,7 +31,7 @@ class ScoreController {
       res.status(204).send();
   }
 
-  deleteScore = async (req, res) => {
+  deleteScore = async (req, res, next) => {
     const id = req.params.id;
     if (!id) {
       return res.status(400).json({ score: 'Score ID required' });
@@ -43,7 +43,7 @@ class ScoreController {
     res.json(`Score ID ${id} deleted`);
   }
 
-  search = async (req, res) => {
+  search = async (req, res, next) => {
     const {student_id, questionnaire_id} = req.query;
     const where = {};
     if (student_id) where.student_id = student_id;

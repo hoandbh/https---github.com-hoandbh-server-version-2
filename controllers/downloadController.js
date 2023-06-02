@@ -6,7 +6,7 @@ const fs = require('fs');
 
 class DownloadController {
 
-  downloadFolder = async (req, res) => {
+  downloadFolder = async (req, res, next) => {
 
       const { questionnaireId } = req.params;
 

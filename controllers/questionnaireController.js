@@ -7,13 +7,13 @@ const questionnaireDal = require("../dal/questionnaireDal");
 
 class QuestionnaireController {
 
-  getOwnerId = async (req, res) => {
+  getOwnerId = async (req, res, next) => {
     const { id } = req.params;
     const questionnaire = await questionnaireDal.getQuestionnaireById(id);
     return questionnaire?.owner;
   }
 
-  getAllQuestionnaires = async (req, res) => {
+  getAllQuestionnaires = async (req, res, next) => {
     const { owner } = req.query;
     if (owner) {
       const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
@@ -29,7 +29,7 @@ class QuestionnaireController {
     }
   }
 
-  getQuestionnaireById = async (req, res) => {
+  getQuestionnaireById = async (req, res, next) => {
     //this function really brings all the questions that belong to this questionnaire 
     const id = req.params.id;
     const questionnaire = await questionnaireDal.getQuestionnaireById(id);
@@ -39,16 +39,21 @@ class QuestionnaireController {
       res.status(204).send();
   }
 
-  getFullQuestionnaire = async (req, res) => {
-    const id = req.params.id;
-    const fullQuestionnaire = await questionnaireDal.getFullQuestionnaire(id);
-    if (fullQuestionnaire)
-      return res.json(fullQuestionnaire)
-    else
-      res.status(204).send()
-  }
+  getFullQuestionnaire = async (req, res, next) => {
+    try{
+      const {id} = req.params;
+      const fullQuestionnaire = await questionnaireDal.getFullQuestionnaire(id);
+      if (fullQuestionnaire)
+        return res.json(fullQuestionnaire);
+      else
+        res.status(204).send();
+    } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  }   
 
-  createQuestionnaire = async (req, res) => {
+  createQuestionnaire = async (req, res, next) => {
     const {owner, date, course_id, name, term} = req.body;
     if (!owner || !date || !course_id || !name || !term) 
       return res.status(400).json({ message: 'All fields are required' });
@@ -57,7 +62,7 @@ class QuestionnaireController {
       return res.status(201).json(questionnaire);
   }
 
-  deleteQuestionnaire = async (req, res) => {
+  deleteQuestionnaire = async (req, res, next) => {
     const {id} = req.params;
     const questionnaire = questionnaireDal.getQuestionnaireById(id);
     if (!questionnaire){
@@ -67,7 +72,7 @@ class QuestionnaireController {
     res.json(`Questionnaire with ID ${id} was deleted`);
   }
 
-  getQuestionnairesByOwner = async (req, res) => {
+  getQuestionnairesByOwner = async (req, res, next) => {
     const owner = req.params.ownerId;
     const qstnr = await questionnaireDal.getQuestionnairesByOwner(owner);
     if (qstnr)
@@ -76,7 +81,7 @@ class QuestionnaireController {
       res.status(204).send();
   }
 
-  createVersionForQuestionnaire = async (req, res) => {
+  createVersionForQuestionnaire = async (req, res, next) => {
     const { id } = req.params;
     const { amount } = req.body;
     const mixed = await questionnaireDal.isMixed(id);

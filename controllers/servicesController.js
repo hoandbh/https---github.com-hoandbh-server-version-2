@@ -6,7 +6,7 @@ const VersionToPdfConverter = require('../services/versionToPdfConverter');
 
 class ServicesController {
 
-  versionToPDF = async(req,res)=>{
+  versionToPDF = async(req, res, next)=>{
     const versionId = req.params.id;
     const fullversion = await VersionToPdfConverter.convertVersionToPdf(versionId);
     if(fullversion)

@@ -2,7 +2,7 @@ const versionDal = require('../dal/versionDal')
 
 class FilesController {
 
-    getVersionsOfQ = async (req, res) => {
+    getVersionsOfQ = async (req, res, next) => {
 
         const id = req.params.qId;
         const vDetails = await versionDal.getVersionsByQuestionnaire(id)

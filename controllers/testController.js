@@ -1,7 +1,7 @@
 const testsService = require('../services/testsService');
 
 class TestsController {
-  convertAnsSelectedInTestToScore = async (req, res) => {
+  convertAnsSelectedInTestToScore = async (req, res, next) => {
   const { studentId, questionnaireId } = req.body;
   // const { studentId, questionnaireId } = req.query;
   if (!studentId || !questionnaireId)

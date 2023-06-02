@@ -3,14 +3,14 @@ const PartDal = require('../dal/partDal')
 
 class PartController {
 
-  getAllParts = async (req, res) => {
+  getAllParts = async (req, res, next) => {
     const parts = await PartDal.getAllParts();
     if (!parts?.length)
       return res.status(400).json({ message: 'no parts found' })
     res.json(parts)
   }
 
-  getPartById = async(req,res) => {
+  getPartById = async(req, res, next) => {
     const id = req.params.id;
     const part = await PartDal.getPartById(id);
     if(part?.length)
@@ -19,7 +19,7 @@ class PartController {
       res.status(204).send();
   }
 
-  getAllPartsForQuestionnaire = async(req,res) => {
+  getAllPartsForQuestionnaire = async(req, res, next) => {
     const {questionnaireId} = req.params;
     if(!questionnaireId){ 
       return ;   
@@ -31,7 +31,7 @@ class PartController {
       res.status(204).send();
   }
 
-  createPartForQuestionnaire = async(req,res) => {
+  createPartForQuestionnaire = async(req, res, next) => {
     //to get the part number form the user????
     const questionnaireId = req.params.questionnaireId;
     const {serial_number, headline, mix} = req.body;
@@ -43,7 +43,7 @@ class PartController {
     return res.status(500).json({ message: 'Failed to create new message' });
   }
 
-  deletePart = async (req, res) => {
+  deletePart = async (req, res, next) => {
     const {id} = req.params;
     if (!id) {
       return res.status(400).json({ message: 'Message ID required' });
@@ -53,7 +53,7 @@ class PartController {
     res.json(`Message ID ${id} deleted`);
   }     
 
-  renamePart =  async (req, res) => {
+  renamePart =  async (req, res, next) => {
     const {id} = req.params;
     const {headline} = req.body;
     const part = await PartDal.renamePart(id, headline);

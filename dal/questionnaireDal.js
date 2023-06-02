@@ -13,10 +13,10 @@ class QuestionnaireDal {
 
   disableMixing = async (id) => {
     const questionnaire = await Questionnaire.findByPk(id);
-    if(!questionnaire){
+    if (!questionnaire) {
       return null;
     }
-    await questionnaire.set({mixed:true})
+    await questionnaire.set({ mixed: true })
     await questionnaire.save();
     return questionnaire;
   }
@@ -48,6 +48,7 @@ class QuestionnaireDal {
   //add more functions for getting according to certain paramters
 
   getFullQuestionnaire = async (id) => {
+    //throw new Error('An exception occurred');
 
     const fullQuestionnaire = await Questionnaire.findOne(
       {
@@ -76,7 +77,7 @@ class QuestionnaireDal {
         ]
       }
     )
-    if(!fullQuestionnaire)
+    if (!fullQuestionnaire)
       return null;
     this._sortQuestionnaire(fullQuestionnaire);
     return fullQuestionnaire;

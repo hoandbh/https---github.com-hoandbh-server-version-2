@@ -3,14 +3,14 @@ const courseDal = require("../dal/courseDal");
 
 class CourseController {
 
-  getAllCourses = async (req, res) => {
+  getAllCourses = async (req, res, next) => {
     const courses = await courseDal.getAllCourses();
     if (!courses?.length)
       return res.status(204).json({ message: 'No courses found' })
     res.json(courses);
   }
   
-  createNewCourse = async (req, res) => {
+  createNewCourse = async (req, res, next) => {
     const { name, code } = req.body;
     if(!name || !code)
       return res.status(400).json({ message: 'All field are require' });
@@ -20,7 +20,7 @@ class CourseController {
     return res.status(400);
   }
 
-  getCourseById =  async (req, res) => {
+  getCourseById =  async (req, res, next) => {
     const id = req.params.id;
     var course = await courseDal.getCourseById(id);
     if(course?.length)
@@ -29,7 +29,7 @@ class CourseController {
       res.status(204).send();
   }
 
-  deleteCourse = async (req, res) => {
+  deleteCourse = async (req, res, next) => {
     const id = req.params.id;
     //to check if corse exist
     await courseDal.deleteCourse(id);

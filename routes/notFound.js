@@ -1,6 +1,6 @@
 const path = require('path')
 
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   res.status(404)
   if (req.accepts('html')) {
     const filePath = path.join(__dirname, '..', 'views', '404.html');
