@@ -3,6 +3,7 @@ const versionDal = require('../dal/versionDal')
 class FilesController {
 
     getVersionsOfQ = async (req, res, next) => {
+    try{
 
         const id = req.params.qId;
         const vDetails = await versionDal.getVersionsByQuestionnaire(id)
@@ -15,7 +16,11 @@ class FilesController {
             paths.push(vDetails[v].dataValues.pdf_path)
         }
         res.json(paths);
+     } catch (error) {
+      throw new Error(error);
+      next(error);
     }
+  } 
 }
  
 module.exports = new FilesController(); 

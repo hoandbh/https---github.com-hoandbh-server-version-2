@@ -6,3 +6,4 @@ downloadRouter.route('/:questionnaireId')
 .get(downloadController.downloadFolder)
 
 module.exports = downloadRouter;
+
