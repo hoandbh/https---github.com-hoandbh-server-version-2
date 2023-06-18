@@ -26,6 +26,25 @@ const features = { features: ['rtla'], align: 'right' }
 
 class VersionToPdfConverter {
 
+  reverseEnglishText(str) {
+    // Split the string into an array of words
+    let words = str.split(' ');
+  
+    // Iterate through each word
+    for (let i = 0; i < words.length; i++) {
+      // Check if the word contains only English letters
+      if (/^[A-Za-z]+$/.test(words[i])) {
+        // Reverse the characters of the word
+        words[i] = words[i].split('').reverse().join('');
+      }
+    }
+  
+    // Join the words back into a string
+    let reversedStr = words.join(' ');
+  
+    return reversedStr;
+  }
+
   generateFilePath = (versionId, version) => {
     const courseName = version.original_questionnaire.course.name;
     const year = version.original_questionnaire.date.getYear();
@@ -73,7 +92,12 @@ class VersionToPdfConverter {
   }
 
   addFormattedAnswer = (answer, index, doc) => {
-    const formattedAnswer = `     ${hebrewAlphabets[index % hebrewAlphabets.length]}.${answer.original_answer.content}`;
+    const text = `     ${hebrewAlphabets[index % hebrewAlphabets.length]}.${answer.original_answer.content}`;
+    
+    const formattedAnswer = this.reverseEnglishText(text)
+    console.log('formattedAnswer')
+    console.log(formattedAnswer)
+    console.log('formattedAnswer')
     doc.font(regularFont).text(formattedAnswer, features);
     doc.moveDown(0.5);
   }
@@ -186,10 +210,10 @@ class VersionToPdfConverter {
     this.writeFirstPage(version, doc);
     this.writeHeader(vSimple, doc);
     this.writeConent(version, doc);
-    this.writeConent(version, doc);
-    this.writeConent(version, doc);
-    this.writeConent(version, doc);
-    this.writeConent(version, doc);
+    // this.writeConent(version, doc);
+    // this.writeConent(version, doc);
+    // this.writeConent(version, doc);
+    // this.writeConent(version, doc);
 
     this.writeFooter(doc);
 

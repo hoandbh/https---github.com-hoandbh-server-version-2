@@ -1,9 +1,11 @@
 const errorHandler = (err, req, res, next) => {
+  // console.error('err'); // Log the error
+  // console.error(err); // Log the error
+  // console.error('err'); // Log the error
 
-  console.error('error!');
-  console.error(err);
-  console.error('error!');
-  res.status(500).json({ error: 'Internal Server Error' });
+  // res.status(500).json({ error: 'Internal Server Error' }); // Send an error response
+  throw new Error(err);
+
 
 }
 

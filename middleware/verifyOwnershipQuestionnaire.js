@@ -2,23 +2,19 @@ const jwt = require('jsonwebtoken');
 const questionnaireController = require('../controllers/questionnaireController');
 
 const verifyOwnership = async (req, res, next) => {
-  // try {
-    const userId = req.user.id;
+  const userId = req.user.id;
 
-    const ownerId = await questionnaireController.getOwnerId(req, res);
+  const ownerId = await questionnaireController.getOwnerId(req, res, next);
 
-    if (!ownerId) {
-      return res.status(404).json({ message: 'Resource not found' });
-    }
+  if (!ownerId) {
+    return res.status(404).json({ message: 'Resource not found' });
+  }
 
-    if (ownerId !== userId) {
-      return res.status(403).json({ message: 'Forbidden - You can only access your own resources' });
-    }
+  if (ownerId !== userId) {
+    return res.status(403).json({ message: 'Forbidden - You can only access your own resources' });
+  }
 
-    next();
-  // } catch (error) {
-  //   return res.status(500).json({ message: 'Internal server error' });
-  // }
+  next();
 };
 
 module.exports = verifyOwnership;

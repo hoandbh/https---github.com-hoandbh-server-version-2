@@ -28,7 +28,7 @@ class AnswerDal {
   }
 
   //TODO
-  possibleAnsSearch = async (req, res) => {
+  possibleAnsSearch = async (req, res, next) => {
     const { id, question_id, content, is_correct } = req.query
     //maybe the content we need to search only according to beginning! or not at all
     const possible_anss = await PossibleAns.findAll({

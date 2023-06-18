@@ -3,14 +3,20 @@ const scoreDal = require("../dal/scoreDal");
 
 class ScoreController {
 
-  getAllScores = async (req, res) => {
+  getAllScores = async (req, res, next) => {
+    try{
     const scores = await scoreDal.getAllScores();
     if (!scores?.length)
       return res.status(400).json({ score: 'No scores found' });
     res.json(scores);
-  }
+   } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  } 
 
-  createNewScore = async (req, res) => {
+  createNewScore = async (req, res, next) => {
+    try{
     const {student_id, questionnaire_id, score_} = req.body;
     if(!student_id || !questionnaire_id)
       return res.status(400).json({ message: 'All fields are required' });
@@ -20,18 +26,28 @@ class ScoreController {
     if (score)
       return res.status(201).json(score);
     return res.status(500).json({ score: 'Failed to create new score' });
-  }
+   } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  } 
 
-  getScoreById = async (req, res) => {
+  getScoreById = async (req, res, next) => {
+    try{
     const id = req.params.id;
     var score = await scoreDal.getScoreById(id);
     if (score)
       res.json(score);
     else
       res.status(204).send();
-  }
+   } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  } 
 
-  deleteScore = async (req, res) => {
+  deleteScore = async (req, res, next) => {
+    try{
     const id = req.params.id;
     if (!id) {
       return res.status(400).json({ score: 'Score ID required' });
@@ -41,9 +57,14 @@ class ScoreController {
       return res.status(404).json({ score: 'Score not found' });
     }
     res.json(`Score ID ${id} deleted`);
-  }
+   } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  } 
 
-  search = async (req, res) => {
+  search = async (req, res, next) => {
+    try{
     const {student_id, questionnaire_id} = req.query;
     const where = {};
     if (student_id) where.student_id = student_id;
@@ -53,7 +74,11 @@ class ScoreController {
       return res.status(204).send();
     }
     res.json(scores);
-  }
+   } catch (error) {
+      throw new Error(error);
+      next(error);
+    }
+  } 
   
 }
   
