@@ -18,7 +18,7 @@ const fillOneversion = async (vAnswers, rowN, ws, style1, style2) => {
     for (let i = 0; i < keys.length; i++) {
         const value = ans[keys[i]];
         ws.cell(i + 2, rowN).number(value).style(style2);
-        console.log(`Iteration: ${i},  Value: ${value}`);
+        // console.log(`Iteration: ${i},  Value: ${value}`);
     }
 
 }
