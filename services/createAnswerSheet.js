@@ -25,8 +25,10 @@ const fillOneversion = async (vAnswers, rowN, ws, style1, style2) => {
 
 class CreateAnswerKey {
 
-    createXL = async (ansDic) => {
+    createXL = async (ansDic, questionnaireId) => {
 
+        console.log("hihihihihi\n\n\n\n");
+        console.log(ansDic)
         var wb = new xl.Workbook();
 
         var ws = wb.addWorksheet('Answers');
@@ -65,10 +67,9 @@ class CreateAnswerKey {
             fillOneversion(ansDic[i], i + 2, ws, boldUnderlinedStyle, boldStyle);
         }
 
-        const filePath = path.join(__dirname, `../public/files/answerDics`, 'output.xlsx');
         try {
-            fs.accessSync(filePath, fs.constants.W_OK);
-            wb.write(filePath);
+            // fs.accessSync(filePath, fs.constants.W_OK);
+            wb.write(`public/files/versions/${questionnaireId}/ans_key.xlsx`);
         } catch (error) {
             console.error(`Error occurred while writing to the file: ${error.message}`);
         }
