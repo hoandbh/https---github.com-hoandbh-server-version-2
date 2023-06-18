@@ -149,15 +149,20 @@ class VersionToPdfConverter {
 
   writeHeader = (version, doc) => {
 
+
+    console.log(version)
+    const courseName =  version.original_questionnaire.course.name;
+    const courseCode =  version.original_questionnaire.course.code;
     const date = version.original_questionnaire.date;
+    const term = version.original_questionnaire.term;
     const jewishDate = toJewishDate(date);
     const jewishDateInHebrew = toHebrewJewishDate(jewishDate);
     const hebrewYear = jewishDateInHebrew.year.slice(1);
 
     doc.on('pageAdded', () => {
-      const a = `שנה"ל ${hebrewYear}, סמסטר א, מועד א`;
-      const b = `שאלון בחינה בקורס: מבוא למיקרו כלכלה`;
-      const c = ` מספר קורס: 200311`;
+      const a = `שנה"ל ${hebrewYear}, סמסטר א, מועד ${term}`;
+      const b = `שאלון בחינה בקורס: ${courseName}`;
+      const c = ` מספר קורס: ${courseCode}`;
       const d = ' '
       const lines = [a, b, c, d];
       const headerText = lines.join('\n')
@@ -170,6 +175,8 @@ class VersionToPdfConverter {
   convertVersionToPdf = async (versionId) => {
 
     const version = await VersionDal.getFullVersion(versionId);
+    const vSimple = version.get({plain:true})
+
     const filePath = this.generateFilePath(versionId, version);
     const doc = new PDFDocument({
       bufferPages: true
@@ -177,7 +184,7 @@ class VersionToPdfConverter {
     doc.pipe(fs.createWriteStream(filePath));
 
     this.writeFirstPage(version, doc);
-    this.writeHeader(version, doc);
+    this.writeHeader(vSimple, doc);
     this.writeConent(version, doc);
     this.writeConent(version, doc);
     this.writeConent(version, doc);

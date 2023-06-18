@@ -84,12 +84,12 @@ class VersionDal {
           {
             model: Questionnaire,
             as: 'original_questionnaire',
-            attributes: ['date'],
+            attributes: ['date','term'],
             include: [
               {
                 model: Course,
                 as: 'course',
-                attributes: ['name']
+                attributes: ['name','code']
               }
             ]
           }
