@@ -1,6 +1,6 @@
 const db = require('../models/index');
-const bcrypt = require('bcrypt');
-const jwt= require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = db.user;
 
 const checkRequiredFields = (requiredFields, requestBody) => {
@@ -27,7 +27,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const foundUser = await User.findOne({ where: { email } });
   if (!foundUser) //|| !is_exist.active //if field activ is exist
-    return res.status(401).json({ message: 'No user found'});
+    return res.status(401).json({ message: 'No user found' });
   const passwordMatch = await bcrypt.compare(password, foundUser.password);
   if (!passwordMatch)
     return res.status(401).json({ message: 'Incorrect password' });
