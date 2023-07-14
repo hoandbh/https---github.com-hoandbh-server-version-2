@@ -5,18 +5,18 @@ const verifyJWT = require('../middleware/verifyJWT');
 const verifyOwnershipQuestionnaire = require('../middleware/verifyOwnershipQuestionnaire');
 
 questionnaireRouter.route('/')
-.get(questionnaireController.getAllQuestionnaires)
-.post(verifyJWT, questionnaireController.createQuestionnaire);
+    .get(verifyJWT, questionnaireController.getAllQuestionnaires)
+    .post(verifyJWT, questionnaireController.createQuestionnaire);
 
 questionnaireRouter.route('/:id')
-.get(questionnaireController.getQuestionnaireById)
-.delete(questionnaireController.deleteQuestionnaire);
+    .get(verifyJWT, questionnaireController.getQuestionnaireById)
+    .delete(verifyJWT, questionnaireController.deleteQuestionnaire);
 
 questionnaireRouter.route('/:id/full')
-.get(verifyJWT, verifyOwnershipQuestionnaire, questionnaireController.getFullQuestionnaire);
+    .get(verifyJWT, verifyOwnershipQuestionnaire, questionnaireController.getFullQuestionnaire);
 
 questionnaireRouter.route('/:id/generate-versions')
-.post(questionnaireController.createVersionForQuestionnaire);
+    .post(verifyJWT, questionnaireController.createVersionForQuestionnaire);
 
 const partRouter = require('./partRouter');
 questionnaireRouter.use('/:questionnaireId/part', partRouter);

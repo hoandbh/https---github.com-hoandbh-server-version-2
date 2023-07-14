@@ -1,58 +1,79 @@
 // Require library
-var xl = require('excel4node');
-const path = require('path') 
+const xl = require('excel4node');
+const fs = require('fs')
+const path = require('path');
+
+const fillQuestionNumber = async (numOfQsts, ws, style) => {
+
+    for (let i = 1; i <= numOfQsts; i++) {
+        const row = i + 1;
+        ws.cell(row, 1).number(i).style(style);
+    }
+}
+
+const fillOneversion = async (vAnswers, rowN, ws, style1, style2) => {
+    ws.cell(1, rowN).string(`version ${vAnswers.vId}`).style(style1);
+    const ans = vAnswers.answers;
+    const keys = Object.keys(ans);
+    for (let i = 0; i < keys.length; i++) {
+        const value = ans[keys[i]];
+        ws.cell(i + 2, rowN).number(value).style(style2);
+        // console.log(`Iteration: ${i},  Value: ${value}`);
+    }
+
+}
 
 class CreateAnswerKey {
 
-  createXL = async (ansDic, id) => {  
-    console.log(ansDic);
-    // Create a new instance of a Workbook class
-    var wb = new xl.Workbook();
+    createXL = async (ansDic, questionnaireId) => {
 
-    // Add Worksheets to the workbook
-    var ws = wb.addWorksheet('Sheet 1');
-    var ws2 = wb.addWorksheet('Sheet 2');
+        console.log("hihihihihi\n\n\n\n");
+        console.log(ansDic)
+        var wb = new xl.Workbook();
 
-    // Create a reusable style
-    var style = wb.createStyle({
-      font: {
-        color: '#FF0800',
-        size: 12,
-      },
-      numberFormat: '$#,##0.00; ($#,##0.00); -',
-    });
+        var ws = wb.addWorksheet('Answers');
 
-    // Set value of cell A1 to 100 as a number type styled with paramaters of style
-    ws.cell(1, 1)
-      .number(100)
-      .style(style);
+        const boldUnderlinedStyle = wb.createStyle({
+            font: {
+                bold: true,
+                underline: true
 
-    // Set value of cell B1 to 200 as a number type styled with paramaters of style
-    ws.cell(1, 2)
-      .number(200)
-      .style(style);
+            }
+        });
+        const underlinedStyle = wb.createStyle({
+            font: { underline: true }
+        });
+        const boldStyle = wb.createStyle({
+            font: {
+                bold: true,
+            },
+            alignment: {
+                horizontal: 'center'
+            }
+        });
+        const boldStyleSide = wb.createStyle({
+            font: {
+                bold: true,
+            }
+        })
 
-    // Set value of cell C1 to a formula styled with paramaters of style
-    ws.cell(1, 3)
-      .formula('A1 + B1')
-      .style(style);
+        ws.cell(1, 1).string('Question Number').style(underlinedStyle);
 
-    // Set value of cell A2 to 'string' styled with paramaters of style
-    ws.cell(2, 1)
-      .string('string')
-      .style(style);
+        const numOfQsts = Object.keys(ansDic[0].answers).length;
 
-    // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
-    ws.cell(3, 1)
-      .bool(true)
-      .style(style)
-      .style({ font: { size: 14 } });
+        await (fillQuestionNumber(numOfQsts, ws, boldStyleSide));
 
+        for (let i = 0; i < ansDic.length; i++) {
+            fillOneversion(ansDic[i], i + 2, ws, boldUnderlinedStyle, boldStyle);
+        }
 
-    const filePath = path.join(__dirname, `../public/files/versions/${id}/Excel.xlsx`); 
-    wb.write(filePath); 
-    // wb.write('Excel.xlsx');
-  }
+        try {
+            // fs.accessSync(filePath, fs.constants.W_OK);
+            wb.write(`public/files/versions/${questionnaireId}/ans_key.xlsx`);
+        } catch (error) {
+            console.error(`Error occurred while writing to the file: ${error.message}`);
+        }
+    }
 }
 
 module.exports = new CreateAnswerKey();
