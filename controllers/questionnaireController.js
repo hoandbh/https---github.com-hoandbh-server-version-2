@@ -110,9 +110,9 @@ class QuestionnaireController {
       next(error);
     }
   }
-
+  
   createVersionForQuestionnaire = async (req, res, next) => {
-    try {
+    // try {
       const { id } = req.params;
       const { amount } = req.body;
       const mixed = await questionnaireDal.isMixed(id);
@@ -125,10 +125,10 @@ class QuestionnaireController {
       }
       //await questionnaireDal.disableMixing(id); // hadas error
       return res.status(201).json(versions);
-    } catch (error) {
-      throw new Error(error);
-      next(error);
-    }
+    // } catch (error) {
+    //   throw new Error(error);
+    //   next(error);
+    // }
   }
 
 }

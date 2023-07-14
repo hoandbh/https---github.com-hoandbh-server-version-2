@@ -26,24 +26,24 @@ const features = { features: ['rtla'], align: 'right' }
 
 class VersionToPdfConverter {
 
-  reverseEnglishText(str) {
-    // Split the string into an array of words
-    let words = str.split(' ');
+  // reverseEnglishText(str) {
+  //   // Split the string into an array of words
+  //   let words = str.split(' ');
   
-    // Iterate through each word
-    for (let i = 0; i < words.length; i++) {
-      // Check if the word contains only English letters
-      if (/^[A-Za-z]+$/.test(words[i])) {
-        // Reverse the characters of the word
-        words[i] = words[i].split('').reverse().join('');
-      }
-    }
+  //   // Iterate through each word
+  //   for (let i = 0; i < words.length; i++) {
+  //     // Check if the word contains only English letters
+  //     if (/^[A-Za-z]+$/.test(words[i])) {
+  //       // Reverse the characters of the word
+  //       words[i] = words[i].split('').reverse().join('');
+  //     }
+  //   }
   
-    // Join the words back into a string
-    let reversedStr = words.join(' ');
+  //   // Join the words back into a string
+  //   let reversedStr = words.join(' ');
   
-    return reversedStr;
-  }
+  //   return reversedStr;
+  // }
 
   generateFilePath = (versionId, version) => {
     const courseName = version.original_questionnaire.course.name;
@@ -59,7 +59,13 @@ class VersionToPdfConverter {
   }
 
   addFormattedQuestion = (question, questionNumber, doc) => {
+    console.log('question.original_question.content')
+    console.log(question.original_question.content)
+    console.log('question.original_question.content')
     const formattedQuestion = `${questionNumber}.     ${question.original_question.content}`;
+    console.log('formattedQuestion')
+    console.log(formattedQuestion)
+    console.log('formattedQuestion')
     const questionHeight = doc.heightOfString(formattedQuestion, { width: doc.page.width });
     let totalHeight = questionHeight;
 
@@ -78,9 +84,9 @@ class VersionToPdfConverter {
       doc.addPage();
     }
 
-
-
     doc.font(boldFont).text(formattedQuestion, features);
+    //const reversedQuestion = formattedQuestion.split('').reverse().join('')
+    //doc.font(boldFont).text(reversedQuestion, {align: 'right' });
     doc.moveDown(0.5);
     if (image) {
       const pageWidth = doc.page.width;
@@ -92,12 +98,7 @@ class VersionToPdfConverter {
   }
 
   addFormattedAnswer = (answer, index, doc) => {
-    const text = `     ${hebrewAlphabets[index % hebrewAlphabets.length]}.${answer.original_answer.content}`;
-    
-    const formattedAnswer = this.reverseEnglishText(text)
-    console.log('formattedAnswer')
-    console.log(formattedAnswer)
-    console.log('formattedAnswer')
+    const formattedAnswer = `     ${hebrewAlphabets[index % hebrewAlphabets.length]}.${answer.original_answer.content}`;
     doc.font(regularFont).text(formattedAnswer, features);
     doc.moveDown(0.5);
   }

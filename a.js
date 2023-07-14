@@ -1,108 +1,74 @@
-// const fs = require('fs');
-// const PDFDocument = require('pdfkit');
-
-// const regularFont = 'fonts/DavidLibre-Regular.ttf';
-// const boldFont = 'fonts/DavidLibre-Bold.ttf';
-
-// const margins = {
-//   top: 50,
-//   bottom: 50,
-//   left: 72,
-//   right: 72
-// }
-
-// const print = () => {
-//   const doc = new PDFDocument({
-//     bufferPages: true
-//   });
-//   doc.font('fonts/Alef-Regular.ttf').fontSize(16);
-//   const filePath = `../hadas.pdf`;
-//   doc.pipe(fs.createWriteStream(filePath));
-
-//   const pageWidth = doc.page.width;
-//   const widthOfLine = doc.widthOfString('ראשון שני שלישי');
-//   const aWidth = doc.widthOfString(" ראשון");
-//   const bWidth = doc.widthOfString(" שני");
-//   const cWidth = doc.widthOfString("שלישי");
-//   const spaceWidth = (pageWidth - widthOfLine) / 2;
-//   const startA = spaceWidth + widthOfLine - aWidth;
-//   const startB = startA - bWidth;
-//   const startC = startB - cWidth;
-
-//   console.log('startA');
-//   console.log(startA);
-//   console.log('widthOfLine');
-//   console.log(widthOfLine);
-//   console.log('doc.page.width');
-//   console.log(doc.page.width);
-
-//   doc.fillColor('gray')
-//     .font(regularFont)
-//     .text(" ראשון", startA, 50, { features: ['rtla'] })
-//     .font(boldFont)
-//     .text(" שני", startB, 50, { features: ['rtla'] })
-//     .font(regularFont)
-//     .text("שלישי", startC, 50, { features: ['rtla'] });
-
-//   doc.end();
-
-// }
-
-// print();
-
-
-
-const fs = require('fs');
 const PDFDocument = require('pdfkit');
+const fs = require('fs');
 
-const regularFont = 'fonts/DavidLibre-Regular.ttf';
-const boldFont = 'fonts/DavidLibre-Bold.ttf';
+function generateAnswerSheetPDF(x, s, filePath) {
+  const doc = new PDFDocument();
 
-const margins = {
-  top: 50,
-  bottom: 50,
-  left: 72,
-  right: 72
-}
+  // Set up the PDF document
+  doc.pipe(fs.createWriteStream(filePath));
 
-function reverseEnglishText(str) {
-  // Split the string into an array of words
-  let words = str.split(' ');
+  const frameMargin = 10; // Margin around the content
+  const questionHeight = 20; // Height of each question row
+  const answerRadius = 5; // Radius of the circle representing an answer
 
-  // Iterate through each word
-  for (let i = 0; i < words.length; i++) {
-    // Check if the word contains only English letters
-    if (/^[A-Za-z]+$/.test(words[i])) {
-      // Reverse the characters of the word
-      words[i] = words[i].split('').reverse().join('');
+  const frameWidth = doc.page.width - frameMargin * 2; // Width of the frame
+  const frameHeight = doc.page.height - frameMargin * 2; // Height of the frame
+
+  // Draw the frame
+  doc.rect(frameMargin, frameMargin, frameWidth, frameHeight)
+    .lineWidth(3)
+    .stroke();
+
+  doc.lineWidth(1)
+  
+  // Write the version information inside the frame
+  doc.fontSize(12)
+    .text(`Version: ${s}`, frameMargin + 10, frameMargin + 10);
+
+  // Calculate the available content height within the frame
+  const availableHeight = frameHeight - 30;
+  const maxQuestions = Math.floor(availableHeight / questionHeight);
+
+  // Draw the questions and optional answers as circles
+  for (let i = 0; i < x.length && i < maxQuestions; i++) {
+    const numOptions = x[i][0]; // Get the number of options for the current question
+
+    // Calculate the starting position for each question row
+    const questionX = frameMargin + 10;
+    const questionY = frameMargin + 30 + i * questionHeight;
+
+    // Draw the question number
+    doc.fontSize(10)
+      .text(`Question ${i + 1}`, questionX, questionY);
+
+    // Draw the optional answers as circles
+    for (let j = 0; j < numOptions; j++) {
+      const circleX = questionX + 100 + j * 20; // X position of the circle
+      const circleY = questionY + 2; // Y position of the circle
+
+      doc.circle(circleX, circleY, answerRadius)
+        .stroke();
     }
   }
 
-  // Join the words back into a string
-  let reversedStr = words.join(' ');
-
-  return reversedStr;
+  // Finalize the PDF document
+  doc.end();
 }
 
-// const print = () => {
-//   const doc = new PDFDocument({
-//     bufferPages: true
-//   });
-//   doc.font('fonts/Alef-Regular.ttf').fontSize(16);
-//   const filePath = `../hadas.pdf`;
-//   doc.pipe(fs.createWriteStream(filePath));
-
-//   doc.text('הדס אופק', { features: ['rtla'], align: 'right' })
-//   doc.text('א,  hello', { features: ['rtla'], align: 'right', direction: 'rtl' })
-//   doc.text('hello', { features: ['rtla'], align: 'right' })
-
-//   doc.end();
-
-// }
-
-// print();
-
-const text = reverseEnglishText("ונדמל.ב react js")
 
 
-console.log(text)
+
+const array = [
+  [4],
+  [2],
+  [3],
+  [4],
+  [7],
+  [3],
+  [5],
+  [3],
+  [3],
+];
+const version = "abc123!@#abc";
+const filePath = '../answer_sheet.pdf';
+generateAnswerSheetPDF(array, version, filePath);

@@ -13,6 +13,7 @@
   "dependencies": {
     "archiver": "^5.3.1",
     "bcrypt": "^5.1.0",
+    "bidi-js": "^1.0.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "docx": "^8.0.3",
@@ -26,6 +27,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "pdfkit": "^0.13.0",
+    "puppeteer": "^20.7.2",
     "sequelize": "^6.28.0",
     "winston": "^3.9.0"
   },
